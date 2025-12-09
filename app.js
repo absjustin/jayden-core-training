@@ -84,19 +84,54 @@ function renderExercise() {
     
     const container = document.getElementById('exerciseContainer');
     
-    let html = `
-        <div class="exercise-card">
-            <div style="color: var(--accent); font-size: 1.2rem; font-weight: 600; text-transform: uppercase; margin-bottom: 10px;">
-                ${section.name}
-            </div>
+    // Left column: Demo and timer/reps
+    let leftColumn = `
+        <div class="exercise-demo-column">
+            <div class="section-name">${section.name}</div>
             <h2 class="exercise-name">${exercise.name}</h2>
             
             <div class="exercise-demo">
                 <div class="demo-placeholder">
-                    🎬 Exercise demonstration video will appear here
+                    🎬 Exercise demonstration<br>video will appear here
                 </div>
             </div>
-            
+    `;
+    
+    // Add timer or reps display
+    if (exercise.type === 'time') {
+        leftColumn += `
+            <div class="timer-display">
+                <div class="timer-circle">
+                    <div class="timer-number" id="timerDisplay">${exercise.duration}</div>
+                </div>
+                <div class="timer-label">SECONDS</div>
+            </div>
+        `;
+        timeRemaining = exercise.duration;
+    } else if (exercise.type === 'sets') {
+        leftColumn += `
+            <div class="timer-display">
+                <div class="timer-circle">
+                    <div class="timer-number" id="timerDisplay">${exercise.duration}</div>
+                </div>
+                <div class="timer-label">${exercise.sets} SETS × SECONDS</div>
+            </div>
+        `;
+        timeRemaining = exercise.duration;
+    } else if (exercise.type === 'reps') {
+        leftColumn += `
+            <div class="reps-display">
+                <div class="reps-number">${exercise.reps}</div>
+                <div class="reps-label">REPETITIONS</div>
+            </div>
+        `;
+    }
+    
+    leftColumn += `</div>`; // Close left column
+    
+    // Right column: Instructions and key points
+    const rightColumn = `
+        <div class="exercise-content-column">
             <div class="exercise-instructions">
                 <h4>How to do it:</h4>
                 <ul>
@@ -110,45 +145,10 @@ function renderExercise() {
                     ${exercise.keyPoints.map(point => `<li>${point}</li>`).join('')}
                 </ul>
             </div>
+        </div>
     `;
     
-    // Add timer if needed
-    if (exercise.type === 'time') {
-        html += `
-            <div class="timer-display">
-                <div class="timer-circle">
-                    <div class="timer-number" id="timerDisplay">${exercise.duration}</div>
-                </div>
-                <div class="timer-label">SECONDS</div>
-            </div>
-        `;
-        timeRemaining = exercise.duration;
-    } else if (exercise.type === 'sets') {
-        html += `
-            <div class="timer-display">
-                <div class="timer-circle">
-                    <div class="timer-number" id="timerDisplay">${exercise.duration}</div>
-                </div>
-                <div class="timer-label">SECONDS × ${exercise.sets} SETS</div>
-            </div>
-        `;
-        timeRemaining = exercise.duration;
-    } else if (exercise.type === 'reps') {
-        html += `
-            <div style="text-align: center; margin: 40px 0;">
-                <div style="font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: var(--primary);">
-                    ${exercise.reps}
-                </div>
-                <div style="font-size: 1.5rem; color: rgba(255, 255, 255, 0.7); text-transform: uppercase;">
-                    REPETITIONS
-                </div>
-            </div>
-        `;
-    }
-    
-    html += `</div>`;
-    
-    container.innerHTML = html;
+    container.innerHTML = leftColumn + rightColumn;
     
     // Reset timer state
     stopTimer();
@@ -248,13 +248,19 @@ function completeWorkout() {
     }
 }
 
+// Calendar State
+let currentCalendarMonth = 11; // December (0-indexed)
+let currentCalendarYear = 2025;
+
 // Calendar Rendering
 function renderCalendar() {
     const grid = document.getElementById('calendarGrid');
+    const monthYear = document.getElementById('calendarMonthYear');
     
-    // Get December 2025 and January-February 2026
-    const startDate = new Date('2025-12-01');
-    const endDate = new Date('2026-02-28');
+    // Update month/year display
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+    monthYear.textContent = `${monthNames[currentCalendarMonth]} ${currentCalendarYear}`;
     
     let html = '';
     
@@ -264,38 +270,62 @@ function renderCalendar() {
         html += `<div class="calendar-header">${day}</div>`;
     });
     
-    // Get first day of start month
-    const firstDay = new Date(startDate);
-    firstDay.setDate(1);
+    // Get first and last day of current month
+    const firstDay = new Date(currentCalendarYear, currentCalendarMonth, 1);
+    const lastDay = new Date(currentCalendarYear, currentCalendarMonth + 1, 0);
     const startDayOfWeek = firstDay.getDay();
+    const daysInMonth = lastDay.getDate();
+    
+    // Get today for highlighting
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
     
     // Add empty cells for days before month starts
     for (let i = 0; i < startDayOfWeek; i++) {
-        html += '<div class="calendar-day" style="opacity: 0.3;"></div>';
+        html += '<div class="calendar-day empty"></div>';
     }
     
-    // Add all days
-    const currentDate = new Date(firstDay);
-    while (currentDate <= endDate) {
+    // Add all days of the month
+    for (let day = 1; day <= daysInMonth; day++) {
+        const currentDate = new Date(currentCalendarYear, currentCalendarMonth, day);
         const dateStr = formatDate(currentDate);
         const workout = currentPlan ? currentPlan.workouts.find(w => w.date === dateStr) : null;
         const isCompleted = localStorage.getItem(`${dateStr}_completed`) === 'true';
         
+        const isToday = currentDate.getTime() === today.getTime();
+        
         let classes = 'calendar-day';
         if (workout) classes += ' has-workout';
         if (isCompleted) classes += ' completed';
+        if (isToday) classes += ' today';
         
         html += `
-            <div class="${classes}" onclick="${workout ? `loadWorkoutByDate('${dateStr}')` : ''}">
-                <div class="day-number">${currentDate.getDate()}</div>
+            <div class="${classes}" ${workout ? `onclick="loadWorkoutByDate('${dateStr}')"` : ''}>
+                <div class="day-number">${day}</div>
                 ${workout ? `<div class="day-workout">${workout.title}</div>` : ''}
             </div>
         `;
-        
-        currentDate.setDate(currentDate.getDate() + 1);
     }
     
     grid.innerHTML = html;
+}
+
+function previousMonth() {
+    currentCalendarMonth--;
+    if (currentCalendarMonth < 0) {
+        currentCalendarMonth = 11;
+        currentCalendarYear--;
+    }
+    renderCalendar();
+}
+
+function nextMonth() {
+    currentCalendarMonth++;
+    if (currentCalendarMonth > 11) {
+        currentCalendarMonth = 0;
+        currentCalendarYear++;
+    }
+    renderCalendar();
 }
 
 function loadWorkoutByDate(dateStr) {
@@ -411,3 +441,5 @@ window.nextExercise = nextExercise;
 window.previousExercise = previousExercise;
 window.completeWorkout = completeWorkout;
 window.loadWorkoutByDate = loadWorkoutByDate;
+window.previousMonth = previousMonth;
+window.nextMonth = nextMonth;
