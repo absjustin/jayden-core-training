@@ -54,7 +54,7 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            padding: 20px;
+            padding: clamp(15px, 2vh, 20px);
             z-index: 1;
             max-width: 1600px;
             margin: 0 auto;
@@ -199,17 +199,18 @@
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
             border-radius: 15px;
-            padding: 15px 20px;
-            margin-bottom: 15px;
+            padding: clamp(12px, 2vh, 15px) clamp(15px, 3vw, 20px);
+            margin-bottom: clamp(10px, 2vh, 15px);
             border: 2px solid rgba(0, 168, 232, 0.3);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-shrink: 0;
         }
 
         .workout-title {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.8rem;
+            font-size: clamp(1.3rem, 3vh, 1.8rem);
             color: var(--primary);
             margin-bottom: 5px;
             letter-spacing: 2px;
@@ -217,7 +218,7 @@
 
         .workout-phase {
             color: var(--accent);
-            font-size: 1rem;
+            font-size: clamp(0.85rem, 1.8vh, 1rem);
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -228,7 +229,8 @@
             display: grid;
             grid-template-columns: 1fr 1.2fr;
             gap: 20px;
-            height: calc(100vh - 260px);
+            flex: 1;
+            min-height: 0;
             overflow: hidden;
         }
 
@@ -236,12 +238,13 @@
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(10px);
             border-radius: 15px;
-            padding: 20px;
+            padding: clamp(12px, 2vh, 15px);
             border: 3px solid var(--primary);
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: clamp(10px, 1.5vh, 12px);
             overflow-y: auto;
+            min-height: 0;
         }
 
         .exercise-demo-column::-webkit-scrollbar {
@@ -261,9 +264,10 @@
         .exercise-content-column {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: clamp(10px, 1.5vh, 12px);
             overflow-y: auto;
             padding-right: 10px;
+            min-height: 0;
         }
 
         .exercise-content-column::-webkit-scrollbar {
@@ -282,54 +286,58 @@
 
         .section-name {
             color: var(--accent);
-            font-size: 1rem;
+            font-size: clamp(0.8rem, 1.5vh, 0.9rem);
             font-weight: 700;
             text-transform: uppercase;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             letter-spacing: 1px;
+            flex-shrink: 0;
         }
 
         .exercise-name {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.5rem;
+            font-size: clamp(1.5rem, 3vh, 2rem);
             color: var(--text-light);
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             letter-spacing: 2px;
             text-transform: uppercase;
             line-height: 1;
+            flex-shrink: 0;
         }
 
         .exercise-demo {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
-            padding: 20px;
+            padding: 15px;
             border: 2px dashed rgba(0, 168, 232, 0.4);
-            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 200px;
-            max-height: 300px;
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
         }
 
         .demo-placeholder {
             text-align: center;
             color: rgba(255, 255, 255, 0.6);
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-style: italic;
+            line-height: 1.4;
         }
 
         .exercise-instructions {
             background: rgba(0, 168, 232, 0.1);
             border-left: 4px solid var(--primary);
-            padding: 20px;
+            padding: clamp(12px, 2vh, 15px);
             border-radius: 10px;
+            flex-shrink: 0;
         }
 
         .exercise-instructions h4 {
             color: var(--primary);
-            margin-bottom: 12px;
-            font-size: 1.3rem;
+            margin-bottom: 10px;
+            font-size: clamp(1rem, 2vh, 1.2rem);
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -340,11 +348,11 @@
         }
 
         .exercise-instructions li {
-            padding: 10px 0;
-            padding-left: 30px;
+            padding: clamp(6px, 1vh, 8px) 0;
+            padding-left: 28px;
             position: relative;
-            line-height: 1.7;
-            font-size: 1.1rem;
+            line-height: 1.6;
+            font-size: clamp(0.95rem, 1.8vh, 1.05rem);
         }
 
         .exercise-instructions li::before {
@@ -353,21 +361,22 @@
             left: 0;
             color: var(--accent);
             font-weight: bold;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
         }
 
         /* Timer Display */
         .timer-display {
             text-align: center;
+            flex-shrink: 0;
         }
 
         .timer-circle {
-            width: 180px;
-            height: 180px;
-            margin: 0 auto 15px;
+            width: min(160px, 20vh);
+            height: min(160px, 20vh);
+            margin: 0 auto 12px;
             border-radius: 50%;
             background: radial-gradient(circle, rgba(0, 168, 232, 0.2) 0%, transparent 70%);
-            border: 6px solid var(--primary);
+            border: 5px solid var(--primary);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -377,32 +386,33 @@
 
         .timer-number {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 3.5rem;
+            font-size: clamp(2.5rem, 5vh, 3rem);
             color: var(--text-light);
             text-shadow: 0 0 30px rgba(0, 168, 232, 0.8);
         }
 
         .timer-label {
-            font-size: 1rem;
+            font-size: clamp(0.8rem, 1.5vh, 0.9rem);
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             color: rgba(255, 255, 255, 0.7);
         }
 
         .reps-display {
             text-align: center;
-            margin: 15px 0;
+            margin: 10px 0;
+            flex-shrink: 0;
         }
 
         .reps-number {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.5rem;
+            font-size: clamp(1.8rem, 4vh, 2.2rem);
             color: var(--primary);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .reps-label {
-            font-size: 1rem;
+            font-size: clamp(0.8rem, 1.5vh, 0.9rem);
             color: rgba(255, 255, 255, 0.7);
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -412,14 +422,15 @@
         .exercise-controls {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 8px;
+            margin-top: clamp(10px, 2vh, 15px);
             flex-wrap: wrap;
+            flex-shrink: 0;
         }
 
         .btn {
-            padding: 12px 25px;
-            font-size: 0.95rem;
+            padding: clamp(8px, 1.5vh, 10px) clamp(18px, 3vw, 22px);
+            font-size: clamp(0.85rem, 1.5vh, 0.9rem);
             font-weight: 700;
             border: none;
             border-radius: 50px;
