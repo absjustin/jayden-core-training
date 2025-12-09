@@ -228,7 +228,8 @@
             display: grid;
             grid-template-columns: 1fr 1.2fr;
             gap: 20px;
-            height: calc(100vh - 380px);
+            height: calc(100vh - 260px);
+            overflow: hidden;
         }
 
         .exercise-demo-column {
@@ -240,6 +241,21 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
+            overflow-y: auto;
+        }
+
+        .exercise-demo-column::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .exercise-demo-column::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .exercise-demo-column::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
         }
 
         .exercise-content-column {
@@ -292,7 +308,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 250px;
+            min-height: 200px;
+            max-height: 300px;
         }
 
         .demo-placeholder {
@@ -345,9 +362,9 @@
         }
 
         .timer-circle {
-            width: 200px;
-            height: 200px;
-            margin: 0 auto 20px;
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 15px;
             border-radius: 50%;
             background: radial-gradient(circle, rgba(0, 168, 232, 0.2) 0%, transparent 70%);
             border: 6px solid var(--primary);
@@ -360,13 +377,13 @@
 
         .timer-number {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 4rem;
+            font-size: 3.5rem;
             color: var(--text-light);
             text-shadow: 0 0 30px rgba(0, 168, 232, 0.8);
         }
 
         .timer-label {
-            font-size: 1.1rem;
+            font-size: 1rem;
             text-transform: uppercase;
             letter-spacing: 2px;
             color: rgba(255, 255, 255, 0.7);
@@ -374,35 +391,35 @@
 
         .reps-display {
             text-align: center;
-            margin: 20px 0;
+            margin: 15px 0;
         }
 
         .reps-number {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 3rem;
+            font-size: 2.5rem;
             color: var(--primary);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .reps-label {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: rgba(255, 255, 255, 0.7);
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        /* Control Buttons */
-        .controls {
+        /* Control Buttons - Now in content column */
+        .exercise-controls {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin: 15px 0 10px 0;
+            gap: 10px;
+            margin-top: 20px;
             flex-wrap: wrap;
         }
 
         .btn {
-            padding: 12px 30px;
-            font-size: 1rem;
+            padding: 12px 25px;
+            font-size: 0.95rem;
             font-weight: 700;
             border: none;
             border-radius: 50px;
@@ -410,7 +427,7 @@
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: var(--shadow);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .btn-primary {
@@ -685,7 +702,8 @@
             }
             
             .exercise-demo {
-                min-height: 200px;
+                min-height: 180px;
+                max-height: 250px;
             }
             
             .timer-circle {
@@ -695,6 +713,14 @@
             
             .timer-number {
                 font-size: 3rem;
+            }
+            
+            .exercise-controls {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
             }
         }
 
@@ -737,6 +763,10 @@
             .calendar-nav-btn {
                 padding: 8px 15px;
                 font-size: 0.9rem;
+            }
+            
+            .exercise-controls {
+                gap: 8px;
             }
         }
 
@@ -827,14 +857,7 @@
             </div>
 
             <div class="exercise-container" id="exerciseContainer">
-                <!-- Will be populated by JavaScript -->
-            </div>
-
-            <div class="controls">
-                <button class="btn btn-secondary" onclick="previousExercise()">← Previous</button>
-                <button class="btn btn-primary" id="startStopBtn" onclick="toggleTimer()">Start</button>
-                <button class="btn btn-secondary" onclick="nextExercise()">Next →</button>
-                <button class="btn btn-success" onclick="completeWorkout()">✓ Complete</button>
+                <!-- Will be populated by JavaScript with controls in right column -->
             </div>
         </div>
 

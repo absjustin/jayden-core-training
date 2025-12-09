@@ -145,6 +145,13 @@ function renderExercise() {
                     ${exercise.keyPoints.map(point => `<li>${point}</li>`).join('')}
                 </ul>
             </div>
+            
+            <div class="exercise-controls">
+                <button class="btn btn-secondary" onclick="previousExercise()">← Prev</button>
+                <button class="btn btn-primary" id="startStopBtn" onclick="toggleTimer()">Start</button>
+                <button class="btn btn-secondary" onclick="nextExercise()">Next →</button>
+                <button class="btn btn-success" onclick="completeWorkout()">✓ Complete</button>
+            </div>
         </div>
     `;
     
