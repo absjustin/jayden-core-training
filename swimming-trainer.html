@@ -283,38 +283,13 @@
             text-transform: uppercase;
         }
 
-        /* View Selector */
+        /* View Selector - HIDDEN (using hamburger menu instead) */
         .view-selector {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 10px 0;
-            flex-wrap: wrap;
+            display: none !important;
         }
 
         .view-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid var(--primary);
-            color: var(--text-light);
-            padding: 8px 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .view-btn:hover {
-            background: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 168, 232, 0.4);
-        }
-
-        .view-btn.active {
-            background: var(--primary);
-            box-shadow: 0 0 20px rgba(0, 168, 232, 0.6);
+            display: none !important;
         }
 
         /* View containers */
@@ -420,6 +395,41 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
+        }
+
+        /* Workout Controls Bar - Fixed at Top */
+        .workout-controls-bar {
+            position: fixed;
+            top: 70px;
+            left: 75px;
+            right: 15px;
+            z-index: 800;
+            background: rgba(0, 77, 107, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 10px 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-control {
+            padding: 10px 20px !important;
+            font-size: 0.9rem !important;
+            flex: 1;
+            max-width: 150px;
+        }
+
+        /* Adjust workout view padding for fixed controls */
+        #workoutView .workout-header {
+            margin-top: 60px;
+        }
+
+        /* Hide controls in exercise content (they're now at top) */
+        .exercise-controls {
+            display: none !important;
         }
 
         /* Two-column Exercise Layout */
@@ -911,9 +921,23 @@
                 font-size: 1.1rem;
             }
 
+            .workout-controls-bar {
+                top: 65px;
+                left: 15px;
+                right: 15px;
+                padding: 8px 10px;
+                gap: 8px;
+            }
+
+            .btn-control {
+                padding: 8px 12px !important;
+                font-size: 0.85rem !important;
+                min-width: 70px;
+            }
+
             .exercise-container {
                 grid-template-columns: 1fr;
-                height: calc(100vh - 100px);
+                height: calc(100vh - 170px); /* Account for control bar */
             }
             
             .exercise-demo-column {
@@ -969,8 +993,25 @@
                 padding-top: 65px;
             }
 
+            .workout-controls-bar {
+                top: 58px;
+                left: 10px;
+                right: 10px;
+                padding: 6px 8px;
+                gap: 5px;
+                flex-wrap: wrap;
+            }
+
+            .btn-control {
+                padding: 8px 10px !important;
+                font-size: 0.75rem !important;
+                flex: 1;
+                min-width: 65px;
+                max-width: none;
+            }
+
             .exercise-container {
-                height: calc(100vh - 90px);
+                height: calc(100vh - 160px); /* Account for control bar on mobile */
             }
 
             .menu-panel {
@@ -1138,6 +1179,14 @@
 
         <!-- Workout View -->
         <div id="workoutView" class="view">
+            <!-- Fixed control bar at top -->
+            <div class="workout-controls-bar" id="workoutControlsBar" style="display: none;">
+                <button class="btn btn-secondary btn-control" onclick="previousExercise()">← Prev</button>
+                <button class="btn btn-primary btn-control" id="startStopBtn" onclick="toggleTimer()">Start</button>
+                <button class="btn btn-secondary btn-control" onclick="nextExercise()">Next →</button>
+                <button class="btn btn-success btn-control" onclick="completeWorkout()">✓ Complete</button>
+            </div>
+
             <button class="back-btn" onclick="showView('plans')">← Back to Plans</button>
             
             <div class="workout-header">

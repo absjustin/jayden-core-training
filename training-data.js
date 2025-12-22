@@ -3,7 +3,7 @@ const TRAINING_PLANS = {
     'core-bosu-9week': {
         name: '9-Week Core + BOSU Training',
         description: 'Complete swimming-specific core strength program',
-        startDate: '2025-12-15',
+        startDate: '2025-12-22',
         phases: [
             {
                 name: 'Foundation Phase',
@@ -26,7 +26,7 @@ const TRAINING_PLANS = {
             {
                 week: 1,
                 day: 1,
-                date: '2025-12-15',
+                date: '2025-12-22',
                 phase: 'Foundation Phase',
                 title: 'Week 1 - Day 1',
                 sections: [
@@ -120,7 +120,7 @@ const TRAINING_PLANS = {
             {
                 week: 1,
                 day: 3,
-                date: '2025-12-17',
+                date: '2025-12-24',
                 phase: 'Foundation Phase',
                 title: 'Week 1 - Day 2',
                 sections: [
@@ -214,7 +214,7 @@ const TRAINING_PLANS = {
             {
                 week: 1,
                 day: 5,
-                date: '2025-12-19',
+                date: '2025-12-26',
                 phase: 'Foundation Phase',
                 title: 'Week 1 - Day 3 + BOSU Intro',
                 sections: [
@@ -329,7 +329,7 @@ const TRAINING_PLANS = {
             {
                 week: 2,
                 day: 1,
-                date: '2025-12-22',
+                date: '2025-12-29',
                 phase: 'Foundation Phase',
                 title: 'Week 2 - Day 1',
                 sections: [
@@ -363,7 +363,7 @@ const TRAINING_PLANS = {
             {
                 week: 2,
                 day: 3,
-                date: '2025-12-24',
+                date: '2025-12-31',
                 phase: 'Foundation Phase',
                 title: 'Week 2 - Day 2',
                 sections: [
@@ -397,7 +397,7 @@ const TRAINING_PLANS = {
             {
                 week: 2,
                 day: 5,
-                date: '2025-12-26',
+                date: '2026-01-02',
                 phase: 'Foundation Phase',
                 title: 'Week 2 - Day 3',
                 sections: [
@@ -432,7 +432,7 @@ const TRAINING_PLANS = {
             {
                 week: 3,
                 day: 1,
-                date: '2025-12-29',
+                date: '2026-01-05',
                 phase: 'Foundation Phase',
                 title: 'Week 3 - Day 1',
                 sections: [
@@ -466,7 +466,7 @@ const TRAINING_PLANS = {
             {
                 week: 3,
                 day: 3,
-                date: '2025-12-31',
+                date: '2026-01-07',
                 phase: 'Foundation Phase',
                 title: 'Week 3 - Day 2',
                 sections: [
@@ -500,7 +500,7 @@ const TRAINING_PLANS = {
             {
                 week: 3,
                 day: 5,
-                date: '2026-01-02',
+                date: '2026-01-09',
                 phase: 'Foundation Phase',
                 title: 'Week 3 - Day 3',
                 sections: [
@@ -535,7 +535,7 @@ const TRAINING_PLANS = {
             {
                 week: 4,
                 day: 1,
-                date: '2026-01-05',
+                date: '2026-01-12',
                 phase: 'Swimming-Specific Phase',
                 title: 'Week 4 - Day 1',
                 sections: [
@@ -569,7 +569,7 @@ const TRAINING_PLANS = {
             {
                 week: 4,
                 day: 3,
-                date: '2026-01-07',
+                date: '2026-01-14',
                 phase: 'Swimming-Specific Phase',
                 title: 'Week 4 - Day 2',
                 sections: [
@@ -604,7 +604,7 @@ const TRAINING_PLANS = {
             {
                 week: 4,
                 day: 5,
-                date: '2026-01-09',
+                date: '2026-01-16',
                 phase: 'Swimming-Specific Phase',
                 title: 'Week 4 - Day 3',
                 sections: [
@@ -640,7 +640,7 @@ const TRAINING_PLANS = {
             {
                 week: 5,
                 day: 1,
-                date: '2026-01-12',
+                date: '2026-01-19',
                 phase: 'Swimming-Specific Phase',
                 title: 'Week 5 - Day 1 + Flat BOSU',
                 sections: [
@@ -676,7 +676,7 @@ const TRAINING_PLANS = {
             {
                 week: 5,
                 day: 3,
-                date: '2026-01-14',
+                date: '2026-01-21',
                 phase: 'Swimming-Specific Phase',
                 title: 'Week 5 - Day 2',
                 sections: [
@@ -712,7 +712,7 @@ const TRAINING_PLANS = {
             {
                 week: 5,
                 day: 5,
-                date: '2026-01-16',
+                date: '2026-01-23',
                 phase: 'Swimming-Specific Phase',
                 title: 'Week 5 - Day 3',
                 sections: [
@@ -749,7 +749,7 @@ const TRAINING_PLANS = {
             {
                 week: 6,
                 day: 1,
-                date: '2026-01-19',
+                date: '2026-01-26',
                 phase: 'Swimming-Specific Phase',
                 title: 'Week 6 - Day 1',
                 sections: [
@@ -785,7 +785,7 @@ const TRAINING_PLANS = {
             {
                 week: 6,
                 day: 3,
-                date: '2026-01-21',
+                date: '2026-01-28',
                 phase: 'Swimming-Specific Phase',
                 title: 'Week 6 - Day 2',
                 sections: [
@@ -821,7 +821,7 @@ const TRAINING_PLANS = {
             {
                 week: 6,
                 day: 5,
-                date: '2026-01-23',
+                date: '2026-01-30',
                 phase: 'Swimming-Specific Phase',
                 title: 'Week 6 - Day 3',
                 sections: [
@@ -858,7 +858,7 @@ const TRAINING_PLANS = {
             {
                 week: 7,
                 day: 1,
-                date: '2026-01-26',
+                date: '2026-02-02',
                 phase: 'Advanced Power Phase',
                 title: 'Week 7 - Day 1',
                 sections: [
@@ -893,7 +893,7 @@ const TRAINING_PLANS = {
             {
                 week: 7,
                 day: 3,
-                date: '2026-01-28',
+                date: '2026-02-04',
                 phase: 'Advanced Power Phase',
                 title: 'Week 7 - Day 2',
                 sections: [
@@ -928,7 +928,7 @@ const TRAINING_PLANS = {
             {
                 week: 7,
                 day: 5,
-                date: '2026-01-30',
+                date: '2026-02-06',
                 phase: 'Advanced Power Phase',
                 title: 'Week 7 - Day 3',
                 sections: [
@@ -965,7 +965,7 @@ const TRAINING_PLANS = {
             {
                 week: 8,
                 day: 1,
-                date: '2026-02-02',
+                date: '2026-02-09',
                 phase: 'Advanced Power Phase',
                 title: 'Week 8 - Day 1',
                 sections: [
@@ -1001,7 +1001,7 @@ const TRAINING_PLANS = {
             {
                 week: 8,
                 day: 3,
-                date: '2026-02-04',
+                date: '2026-02-11',
                 phase: 'Advanced Power Phase',
                 title: 'Week 8 - Day 2',
                 sections: [
@@ -1037,7 +1037,7 @@ const TRAINING_PLANS = {
             {
                 week: 8,
                 day: 5,
-                date: '2026-02-06',
+                date: '2026-02-13',
                 phase: 'Advanced Power Phase',
                 title: 'Week 8 - Day 3',
                 sections: [
@@ -1074,7 +1074,7 @@ const TRAINING_PLANS = {
             {
                 week: 9,
                 day: 1,
-                date: '2026-02-09',
+                date: '2026-02-16',
                 phase: 'Advanced Power Phase',
                 title: 'Week 9 - Day 1',
                 sections: [
@@ -1110,7 +1110,7 @@ const TRAINING_PLANS = {
             {
                 week: 9,
                 day: 3,
-                date: '2026-02-11',
+                date: '2026-02-18',
                 phase: 'Advanced Power Phase',
                 title: 'Week 9 - Day 2',
                 sections: [
@@ -1146,7 +1146,7 @@ const TRAINING_PLANS = {
             {
                 week: 9,
                 day: 5,
-                date: '2026-02-13',
+                date: '2026-02-20',
                 phase: 'Advanced Power Phase',
                 title: 'Week 9 - Day 3 - FINAL WORKOUT!',
                 sections: [

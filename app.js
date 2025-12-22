@@ -21,6 +21,12 @@ function showView(viewName) {
     document.querySelectorAll('.view').forEach(view => view.classList.remove('active'));
     document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
     
+    // Hide workout controls bar if not in workout view
+    const controlBar = document.getElementById('workoutControlsBar');
+    if (controlBar) {
+        controlBar.style.display = viewName === 'workout' ? 'flex' : 'none';
+    }
+    
     // Show selected view
     document.getElementById(viewName + 'View').classList.add('active');
     event.target.classList.add('active');
@@ -157,10 +163,19 @@ function renderExercise() {
     
     container.innerHTML = leftColumn + rightColumn;
     
+    // Show the fixed control bar at top
+    const controlBar = document.getElementById('workoutControlsBar');
+    if (controlBar) {
+        controlBar.style.display = 'flex';
+    }
+    
     // Reset timer state
     stopTimer();
     isTimerRunning = false;
-    document.getElementById('startStopBtn').textContent = 'Start';
+    const startBtn = document.getElementById('startStopBtn');
+    if (startBtn) {
+        startBtn.textContent = 'Start';
+    }
 }
 
 // Timer Functions
