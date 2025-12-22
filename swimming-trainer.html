@@ -12,6 +12,200 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Exo+2:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Hamburger Menu */
+        .menu-toggle {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1001;
+            background: var(--primary);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu-toggle:hover {
+            background: var(--secondary);
+            transform: scale(1.05);
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* Slide-out Menu Panel */
+        .menu-panel {
+            position: fixed;
+            top: 0;
+            left: -320px;
+            width: 320px;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            z-index: 1000;
+            transition: left 0.3s ease;
+            overflow-y: auto;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+            padding: 80px 20px 20px 20px;
+        }
+
+        .menu-panel.open {
+            left: 0;
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .menu-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .menu-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .menu-header h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .menu-header .subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .menu-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .menu-nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .menu-nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .menu-nav-btn.active {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .menu-nav-btn::before {
+            content: '';
+            font-size: 1.3rem;
+        }
+
+        .menu-nav-btn[data-view="plans"]::before {
+            content: '📋';
+        }
+
+        .menu-nav-btn[data-view="calendar"]::before {
+            content: '📅';
+        }
+
+        .menu-nav-btn[data-view="progress"]::before {
+            content: '📊';
+        }
+
+        /* Compact page title */
+        .page-title {
+            position: fixed;
+            top: 15px;
+            left: 75px;
+            right: 15px;
+            z-index: 900;
+            background: rgba(0, 168, 232, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-title h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            color: white;
+            margin: 0;
+            flex: 1;
+        }
+
+        .page-title .subtitle {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Adjust container for new header */
+        .container {
+            padding-top: 75px; /* Space for compact title */
+        }
+
+        /* Old header - hide it */
+        header {
+            display: none;
+        }
+
+        /* Old view selector - hide it */
+        .view-selector {
+            display: none;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -236,6 +430,7 @@
             flex: 1;
             min-height: 0;
             overflow: hidden;
+            height: calc(100vh - 110px); /* Maximized height with compact header */
         }
 
         .exercise-demo-column {
@@ -707,9 +902,18 @@
 
         /* Responsive */
         @media (max-width: 1024px) {
+            .menu-panel {
+                width: 280px;
+                left: -280px;
+            }
+
+            .page-title h2 {
+                font-size: 1.1rem;
+            }
+
             .exercise-container {
                 grid-template-columns: 1fr;
-                height: auto;
+                height: calc(100vh - 100px);
             }
             
             .exercise-demo-column {
@@ -740,6 +944,50 @@
         }
 
         @media (max-width: 768px) {
+            .menu-toggle {
+                width: 45px;
+                height: 45px;
+                top: 12px;
+                left: 12px;
+            }
+
+            .menu-toggle span {
+                width: 22px;
+            }
+
+            .page-title {
+                left: 65px;
+                padding: 10px 15px;
+                top: 12px;
+            }
+
+            .page-title h2 {
+                font-size: 1rem;
+            }
+
+            .container {
+                padding-top: 65px;
+            }
+
+            .exercise-container {
+                height: calc(100vh - 90px);
+            }
+
+            .menu-panel {
+                width: 260px;
+                left: -260px;
+                padding: 70px 15px 15px 15px;
+            }
+
+            .menu-header h1 {
+                font-size: 1.6rem;
+            }
+
+            .menu-nav-btn {
+                padding: 12px 15px;
+                font-size: 1rem;
+            }
+
             .calendar {
                 gap: 5px;
                 padding: 15px;
@@ -833,6 +1081,34 @@
     </style>
 </head>
 <body>
+    <!-- Hamburger Menu Toggle -->
+    <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+
+    <!-- Slide-out Menu Panel -->
+    <div class="menu-panel" id="menuPanel">
+        <div class="menu-header">
+            <h1>🏊 CORE TRAINING</h1>
+            <div class="subtitle">Jayden's Swimming Program</div>
+        </div>
+        <nav class="menu-nav">
+            <button class="menu-nav-btn active" data-view="plans" onclick="navigateTo('plans')">Training Plans</button>
+            <button class="menu-nav-btn" data-view="calendar" onclick="navigateTo('calendar')">Calendar</button>
+            <button class="menu-nav-btn" data-view="progress" onclick="navigateTo('progress')">Progress</button>
+        </nav>
+    </div>
+
+    <!-- Compact Page Title -->
+    <div class="page-title">
+        <h2 id="pageTitle">Training Plans</h2>
+    </div>
+
     <div class="container">
         <header>
             <h1>🏊 CORE TRAINING</h1>
@@ -920,6 +1196,58 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Menu toggle functions
+        function toggleMenu() {
+            const menuPanel = document.getElementById('menuPanel');
+            const menuOverlay = document.getElementById('menuOverlay');
+            const menuToggle = document.getElementById('menuToggle');
+            
+            menuPanel.classList.toggle('open');
+            menuOverlay.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+        }
+
+        function closeMenu() {
+            const menuPanel = document.getElementById('menuPanel');
+            const menuOverlay = document.getElementById('menuOverlay');
+            const menuToggle = document.getElementById('menuToggle');
+            
+            menuPanel.classList.remove('open');
+            menuOverlay.classList.remove('active');
+            menuToggle.classList.remove('active');
+        }
+
+        function navigateTo(view) {
+            // Update menu button states
+            document.querySelectorAll('.menu-nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-view="${view}"]`).classList.add('active');
+            
+            // Update page title
+            const titles = {
+                'plans': 'Training Plans',
+                'calendar': 'Calendar',
+                'progress': 'Progress'
+            };
+            document.getElementById('pageTitle').textContent = titles[view];
+            
+            // Close menu
+            closeMenu();
+            
+            // Navigate to view (this will be handled by existing showView function)
+            showView(view);
+        }
+
+        // Close menu when clicking outside or pressing Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeMenu();
+            }
+        });
+    </script>
 
     <script src="training-data.js"></script>
     <script src="app.js"></script>
