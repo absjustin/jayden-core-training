@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jayden's Poolside Workout Guide</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, Helvetica, sans-serif; font-size: 9.5pt; line-height: 1.35; color: #000; background: white; }
+        .print-header { text-align: center; padding: 0.3rem; border-bottom: 2px solid #000; margin-bottom: 0.5rem; }
+        .print-header h1 { font-size: 14pt; margin-bottom: 0.1rem; }
+        .print-header .subtitle { font-size: 8.5pt; color: #333; }
+        .page { page-break-after: always; padding: 0.4in; min-height: 10in; }
+        .page:last-child { page-break-after: auto; }
+        .phase-header { border: 2px solid #000; padding: 0.4rem 0.8rem; margin-bottom: 0.4rem; display: flex; justify-content: space-between; align-items: center; }
+        .phase-header h2 { font-size: 12pt; }
+        .week-indicator { font-size: 10pt; font-weight: bold; }
+        .equipment-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem; padding: 0.3rem; border: 1px solid #999; }
+        .equipment-grid::before { content: "Equipment: "; font-weight: bold; font-size: 8pt; }
+        .equipment-item { display: flex; align-items: center; gap: 0.15rem; font-size: 8pt; }
+        .checkbox { width: 10px; height: 10px; border: 1px solid #000; }
+        .workout-section { margin-bottom: 0.5rem; border: 1px solid #000; }
+        .section-header { background: #eee; padding: 0.25rem 0.5rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid #000; }
+        .section-time { border: 1px solid #000; padding: 0.1rem 0.35rem; font-size: 8pt; font-weight: bold; }
+        .section-title { font-weight: bold; font-size: 9.5pt; }
+        .stroke-label { margin-left: auto; font-weight: bold; font-size: 9pt; text-transform: uppercase; }
+        .section-body { padding: 0.3rem 0.5rem; }
+        .workout-set { font-family: 'Courier New', monospace; font-size: 8.5pt; padding: 0.15rem 0; border-bottom: 1px dotted #ccc; }
+        .workout-set:last-child { border-bottom: none; }
+        .coaching-cue { border: 1px solid #000; padding: 0.2rem 0.4rem; margin-top: 0.25rem; font-size: 8pt; background: #f5f5f5; }
+        .total-time { text-align: right; font-size: 8pt; margin-top: 0.3rem; padding-top: 0.2rem; border-top: 1px solid #000; font-weight: bold; }
+        .times-table { width: 100%; border-collapse: collapse; font-size: 8pt; margin-bottom: 0.5rem; }
+        .times-table th, .times-table td { border: 1px solid #000; padding: 0.2rem 0.3rem; text-align: center; }
+        .times-table th { background: #eee; font-weight: bold; }
+        .times-table td:first-child { text-align: left; font-weight: bold; }
+        .aaa-col { background: #ddd !important; font-weight: bold; }
+        .best-col { min-width: 50px; }
+        .cues-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; margin-bottom: 0.5rem; }
+        .cue-card { border: 1px solid #000; padding: 0.35rem; }
+        .cue-card h4 { font-size: 9pt; margin-bottom: 0.15rem; border-bottom: 1px solid #000; padding-bottom: 0.15rem; }
+        .cue-card ul { font-size: 7.5pt; padding-left: 0.8rem; margin: 0; }
+        .cue-card li { margin-bottom: 0.1rem; }
+        .tracking-table { width: 100%; border-collapse: collapse; font-size: 8pt; }
+        .tracking-table th, .tracking-table td { border: 1px solid #000; padding: 0.3rem; text-align: center; height: 22px; }
+        .tracking-table th { background: #eee; }
+        .golf-formula { border: 1px solid #000; padding: 0.35rem; text-align: center; font-size: 8.5pt; margin-top: 0.4rem; }
+        @media print {
+            .no-print { display: none !important; }
+            .page { padding: 0.3in; }
+        }
+        .print-buttons { position: fixed; top: 1rem; right: 1rem; display: flex; gap: 0.5rem; z-index: 100; }
+        .print-btn { padding: 0.6rem 1.2rem; border: 1px solid #000; background: #fff; font-family: inherit; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
+        .print-btn:hover { background: #eee; }
+    </style>
+</head>
+<body>
+    <div class="print-buttons no-print">
+        <button class="print-btn" onclick="window.print()">Print All</button>
+        <a href="index.html" class="print-btn">Back to App</a>
+    </div>
+
+    <!-- PHASE 1 WEEK 1: FREESTYLE -->
+    <div class="page">
+        <div class="print-header"><h1>Jayden's Training Guide</h1><div class="subtitle">Phase 1: Foundation | January - February 2026 | 60 Minutes</div></div>
+        <div class="phase-header"><h2>Phase 1: Foundation</h2><span class="week-indicator">Week 1: FREESTYLE</span></div>
+        <div class="equipment-grid"><div class="equipment-item"><div class="checkbox"></div> Fins</div><div class="equipment-item"><div class="checkbox"></div> Snorkel</div><div class="equipment-item"><div class="checkbox"></div> Kickboard</div><div class="equipment-item"><div class="checkbox"></div> Pull Buoy</div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">10 min</span><span class="section-title">WARM-UP</span></div><div class="section-body"><div class="workout-set">4 x 50 Choice swim - easy, long strokes</div><div class="workout-set">4 x 25 Kick (no board) - streamline, tight core</div><div class="coaching-cue"><strong>Cue:</strong> "Squeeze belly button to spine"</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">10 min</span><span class="section-title">KICK DEVELOPMENT</span></div><div class="section-body"><div class="workout-set">With fins: 4 x 50 Flutter kick on back - hands at sides</div><div class="workout-set">With kickboard: 4 x 25 Breaststroke kick - pause 2 sec in streamline</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">20 min</span><span class="section-title">STROKE TECHNIQUE</span><span class="stroke-label">Freestyle</span></div><div class="section-body"><div class="workout-set">With snorkel: 4 x 50 Catch-up drill (thumb to thumb)</div><div class="workout-set">4 x 25 Fingertip drag (high elbow recovery)</div><div class="workout-set">4 x 50 6-kick switch drill (6 kicks side, 3 strokes, switch)</div><div class="workout-set">4 x 25 Fist drill (feel water with forearms)</div><div class="workout-set">4 x 25 Full stroke - COUNT STROKES and write down</div><div class="coaching-cue"><strong>Cue:</strong> "Reach and roll - long strokes, rotate shoulders"</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">10 min</span><span class="section-title">TURN STATION</span></div><div class="section-body"><div class="workout-set">8 x 25 with FAST turns (flip: tight ball, fast spin)</div><div class="workout-set">4 x wall push-offs into streamline, hold for 5 kicks</div><div class="coaching-cue"><strong>Cue:</strong> "Be a torpedo - tight and straight"</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">10 min</span><span class="section-title">COOL DOWN</span></div><div class="section-body"><div class="workout-set">200 easy choice + 4 x 25 drill of choice</div></div></div>
+        <div class="total-time">Total: 60 minutes</div>
+    </div>
+
+    <!-- PHASE 1 WEEK 2: BACKSTROKE -->
+    <div class="page">
+        <div class="print-header"><h1>Jayden's Training Guide</h1><div class="subtitle">Phase 1: Foundation | January - February 2026 | 60 Minutes</div></div>
+        <div class="phase-header"><h2>Phase 1: Foundation</h2><span class="week-indicator">Week 2: BACKSTROKE</span></div>
+        <div class="equipment-grid"><div class="equipment-item"><div class="checkbox"></div> Fins</div><div class="equipment-item"><div class="checkbox"></div> Snorkel</div><div class="equipment-item"><div class="checkbox"></div> Kickboard</div><div class="equipment-item"><div class="checkbox"></div> Pull Buoy</div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">10 min</span><span class="section-title">WARM-UP</span></div><div class="section-body"><div class="workout-set">4 x 50 Choice swim - easy, long strokes</div><div class="workout-set">4 x 25 Kick (no board) - streamline, tight core</div><div class="coaching-cue"><strong>Cue:</strong> "Squeeze belly button to spine"</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">10 min</span><span class="section-title">KICK DEVELOPMENT</span></div><div class="section-body"><div class="workout-set">With fins: 4 x 50 Flutter kick on back - hands at sides</div><div class="workout-set">With kickboard: 4 x 25 Breaststroke kick - pause 2 sec in streamline</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">20 min</span><span class="section-title">STROKE TECHNIQUE</span><span class="stroke-label">Backstroke</span></div><div class="section-body"><div class="workout-set">4 x 50 One-arm backstroke (25 right arm / 25 left arm)</div><div class="workout-set">4 x 25 Spin drill (6 kicks on back, 3 strokes, repeat)</div><div class="workout-set">4 x 50 Double-arm backstroke (both arms together)</div><div class="workout-set">4 x 25 Cup-of-water drill (keep head perfectly still)</div><div class="workout-set">4 x 25 Full stroke - COUNT STROKES and write down</div><div class="coaching-cue"><strong>Cue:</strong> "Pinky in, thumb out - belly button to sky"</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">10 min</span><span class="section-title">TURN STATION</span></div><div class="section-body"><div class="workout-set">8 x 25 with FAST turns (flip: tight ball, fast spin)</div><div class="workout-set">4 x wall push-offs into streamline, hold for 5 kicks</div><div class="coaching-cue"><strong>Cue:</strong> "Be a torpedo - tight and straight"</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">10 min</span><span class="section-title">COOL DOWN</span></div><div class="section-body"><div class="workout-set">200 easy choice + 4 x 25 drill of choice</div></div></div>
+        <div class="total-time">Total: 60 minutes</div>
+    </div>
+
+    <!-- PHASE 1 WEEK 3: BREASTSTROKE -->
+    <div class="page">
+        <div class="print-header"><h1>Jayden's Training Guide</h1><div class="subtitle">Phase 1: Foundation | January - February 2026 | 60 Minutes</div></div>
+        <div class="phase-header"><h2>Phase 1: Foundation</h2><span class="week-indicator">Week 3: BREASTSTROKE</span></div>
+        <div class="equipment-grid"><div class="equipment-item"><div class="checkbox"></div> Fins</div><div class="equipment-item"><div class="checkbox"></div> Snorkel</div><div class="equipment-item"><div class="checkbox"></div> Kickboard</div><div class="equipment-item"><div class="checkbox"></div> Pull Buoy</div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">10 min</span><span class="section-title">WARM-UP</span></div><div class="section-body"><div class="workout-set">4 x 50 Choice swim - easy, long strokes</div><div class="workout-set">4 x 25 Kick (no board) - streamline, tight core</div><div class="coaching-cue"><strong>Cue:</strong> "Squeeze belly button to spine"</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">10 min</span><span class="section-title">KICK DEVELOPMENT</span></div><div class="section-body"><div class="workout-set">With fins: 4 x 50 Flutter kick on back - hands at sides</div><div class="workout-set">With kickboard: 4 x 25 Breaststroke kick - pause 2 sec in streamline</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">20 min</span><span class="section-title">STROKE TECHNIQUE</span><span class="stroke-label">Breaststroke</span></div><div class="section-body"><div class="workout-set">4 x 50 Two kicks, one pull drill (extra glide time)</div><div class="workout-set">4 x 25 Pull only with pull buoy (heart shape pull)</div><div class="workout-set">4 x 50 Glide counting drill (count 1-2-3 in streamline)</div><div class="workout-set">4 x 25 Kick on back, hands on thighs (knees stay underwater)</div><div class="workout-set">4 x 25 Full stroke - COUNT STROKES and write down</div><div class="coaching-cue"><strong>Cue:</strong> "Heart shape pull, hide behind hands, shoot forward"</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">10 min</span><span class="section-title">TURN STATION</span></div><div class="section-body"><div class="workout-set">8 x 25 with FAST turns (open: touch-tuck-explode)</div><div class="workout-set">4 x wall push-offs into streamline, hold for 5 kicks</div><div class="coaching-cue"><strong>Cue:</strong> "Be a torpedo - tight and straight"</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">10 min</span><span class="section-title">COOL DOWN</span></div><div class="section-body"><div class="workout-set">200 easy choice + 4 x 25 drill of choice</div></div></div>
+        <div class="total-time">Total: 60 minutes</div>
+    </div>
+
+    <!-- PHASE 1 WEEK 4: BUTTERFLY -->
+    <div class="page">
+        <div class="print-header"><h1>Jayden's Training Guide</h1><div class="subtitle">Phase 1: Foundation | January - February 2026 | 60 Minutes</div></div>
+        <div class="phase-header"><h2>Phase 1: Foundation</h2><span class="week-indicator">Week 4: BUTTERFLY</span></div>
+        <div class="equipment-grid"><div class="equipment-item"><div class="checkbox"></div> Fins</div><div class="equipment-item"><div class="checkbox"></div> Snorkel</div><div class="equipment-item"><div class="checkbox"></div> Kickboard</div><div class="equipment-item"><div class="checkbox"></div> Pull Buoy</div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">10 min</span><span class="section-title">WARM-UP</span></div><div class="section-body"><div class="workout-set">4 x 50 Choice swim - easy, long strokes</div><div class="workout-set">4 x 25 Kick (no board) - streamline, tight core</div><div class="coaching-cue"><strong>Cue:</strong> "Squeeze belly button to spine"</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">10 min</span><span class="section-title">KICK DEVELOPMENT</span></div><div class="section-body"><div class="workout-set">With fins: 4 x 50 Flutter kick on back - hands at sides</div><div class="workout-set">With kickboard: 4 x 25 Breaststroke kick - pause 2 sec in streamline</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">20 min</span><span class="section-title">STROKE TECHNIQUE</span><span class="stroke-label">Butterfly</span></div><div class="section-body"><div class="workout-set">With fins: 4 x 50 Single-arm fly (breathe to the side)</div><div class="workout-set">4 x 25 3-3-3 drill (3 right, 3 left, 3 both arms)</div><div class="workout-set">With fins: 4 x 50 Body dolphins, arms at sides (press chest, pop hips)</div><div class="workout-set">4 x 25 2-2-2 drill (2 right, 2 left, 2 both arms)</div><div class="workout-set">4 x 25 Full stroke - COUNT STROKES and write down</div><div class="coaching-cue"><strong>Cue:</strong> "Press chest, pop hips - throw hands forward not down"</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">10 min</span><span class="section-title">TURN STATION</span></div><div class="section-body"><div class="workout-set">8 x 25 with FAST turns (open: touch-tuck-explode)</div><div class="workout-set">4 x wall push-offs into streamline, hold for 5 kicks</div><div class="coaching-cue"><strong>Cue:</strong> "Be a torpedo - tight and straight"</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">10 min</span><span class="section-title">COOL DOWN</span></div><div class="section-body"><div class="workout-set">200 easy choice + 4 x 25 drill of choice</div></div></div>
+        <div class="total-time">Total: 60 minutes</div>
+    </div>
+
+    <!-- PHASE 2 WEEK 1: FREESTYLE -->
+    <div class="page">
+        <div class="print-header"><h1>Jayden's Training Guide</h1><div class="subtitle">Phase 2: Build | March - April 2026 | 60 Minutes</div></div>
+        <div class="phase-header"><h2>Phase 2: Build</h2><span class="week-indicator">Week 1: FREESTYLE</span></div>
+        <div class="equipment-grid"><div class="equipment-item"><div class="checkbox"></div> Tempo Trainer</div><div class="equipment-item"><div class="checkbox"></div> Resistance Belt</div><div class="equipment-item"><div class="checkbox"></div> Paddles</div><div class="equipment-item"><div class="checkbox"></div> Pull Buoy</div><div class="equipment-item"><div class="checkbox"></div> Fins</div><div class="equipment-item"><div class="checkbox"></div> Snorkel</div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">8 min</span><span class="section-title">WARM-UP</span></div><div class="section-body"><div class="workout-set">300 swim (100 FR / 100 choice / 100 FR)</div><div class="workout-set">4 x 25 build to fast</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">12 min</span><span class="section-title">TEMPO TRAINER</span><span class="stroke-label">Freestyle</span></div><div class="section-body"><div class="workout-set">4 x 50 Freestyle at comfortable pace - note the beeps</div><div class="workout-set">4 x 25 at tempo minus 0.05 - match hand entry to beep</div><div class="workout-set">4 x 25 at tempo minus 0.10 - keep stroke count same</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">20 min</span><span class="section-title">STROKE TECHNIQUE</span><span class="stroke-label">Freestyle</span></div><div class="section-body"><div class="workout-set">With snorkel: 4 x 50 Catch-up drill (thumb to thumb)</div><div class="workout-set">4 x 25 Fingertip drag (high elbow recovery)</div><div class="workout-set">4 x 50 6-kick switch drill</div><div class="workout-set">4 x 25 Fist drill (feel water with forearms)</div><div class="workout-set">4 x 25 Full stroke - COUNT STROKES</div><div class="coaching-cue"><strong>Cue:</strong> "Reach and roll - rotate shoulders"</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">13 min</span><span class="section-title">POWER + GOLF</span></div><div class="section-body"><div class="workout-set">With belt: 4 x 25 FAST freestyle (rest 30 sec)</div><div class="workout-set">With paddles: 4 x 50 pull - high elbow catch</div><div class="workout-set">GOLF: 4 x 50 freestyle - Time + Strokes = Score (lower is better)</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">7 min</span><span class="section-title">COOL DOWN</span></div><div class="section-body"><div class="workout-set">200 easy + 4 x 25 easy backstroke</div></div></div>
+        <div class="total-time">Total: 60 minutes</div>
+    </div>
+
+    <!-- PHASE 2 WEEK 2: BACKSTROKE -->
+    <div class="page">
+        <div class="print-header"><h1>Jayden's Training Guide</h1><div class="subtitle">Phase 2: Build | March - April 2026 | 60 Minutes</div></div>
+        <div class="phase-header"><h2>Phase 2: Build</h2><span class="week-indicator">Week 2: BACKSTROKE</span></div>
+        <div class="equipment-grid"><div class="equipment-item"><div class="checkbox"></div> Tempo Trainer</div><div class="equipment-item"><div class="checkbox"></div> Resistance Belt</div><div class="equipment-item"><div class="checkbox"></div> Fins</div><div class="equipment-item"><div class="checkbox"></div> Pull Buoy</div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">8 min</span><span class="section-title">WARM-UP</span></div><div class="section-body"><div class="workout-set">300 swim (100 FR / 100 choice / 100 FR)</div><div class="workout-set">4 x 25 build to fast</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">12 min</span><span class="section-title">TEMPO TRAINER</span><span class="stroke-label">Backstroke</span></div><div class="section-body"><div class="workout-set">4 x 50 Backstroke at comfortable pace - note the beeps</div><div class="workout-set">4 x 25 at tempo minus 0.05 - match hand entry to beep</div><div class="workout-set">4 x 25 at tempo minus 0.10 - keep stroke count same</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">20 min</span><span class="section-title">STROKE TECHNIQUE</span><span class="stroke-label">Backstroke</span></div><div class="section-body"><div class="workout-set">4 x 50 One-arm backstroke (25 right / 25 left)</div><div class="workout-set">4 x 25 Spin drill (6 kicks, 3 strokes)</div><div class="workout-set">4 x 50 Double-arm backstroke</div><div class="workout-set">4 x 25 Cup-of-water drill</div><div class="workout-set">4 x 25 Full stroke - COUNT STROKES</div><div class="coaching-cue"><strong>Cue:</strong> "Pinky in, thumb out - belly button to sky"</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">13 min</span><span class="section-title">POWER + GOLF</span></div><div class="section-body"><div class="workout-set">With belt: 4 x 25 FAST backstroke (rest 30 sec)</div><div class="workout-set">With fins: 4 x 50 backstroke - focus on rotation</div><div class="workout-set">GOLF: 4 x 50 backstroke - Time + Strokes = Score</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">7 min</span><span class="section-title">COOL DOWN</span></div><div class="section-body"><div class="workout-set">200 easy + 4 x 25 easy freestyle</div></div></div>
+        <div class="total-time">Total: 60 minutes</div>
+    </div>
+
+    <!-- PHASE 2 WEEK 3: BREASTSTROKE -->
+    <div class="page">
+        <div class="print-header"><h1>Jayden's Training Guide</h1><div class="subtitle">Phase 2: Build | March - April 2026 | 60 Minutes</div></div>
+        <div class="phase-header"><h2>Phase 2: Build</h2><span class="week-indicator">Week 3: BREASTSTROKE</span></div>
+        <div class="equipment-grid"><div class="equipment-item"><div class="checkbox"></div> Tempo Trainer</div><div class="equipment-item"><div class="checkbox"></div> Resistance Belt</div><div class="equipment-item"><div class="checkbox"></div> Pull Buoy</div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">8 min</span><span class="section-title">WARM-UP</span></div><div class="section-body"><div class="workout-set">300 swim (100 FR / 100 choice / 100 FR)</div><div class="workout-set">4 x 25 build to fast</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">12 min</span><span class="section-title">TEMPO TRAINER</span><span class="stroke-label">Breaststroke</span></div><div class="section-body"><div class="workout-set">4 x 50 Breaststroke at comfortable pace - note the beeps</div><div class="workout-set">4 x 25 at tempo minus 0.05 - match timing to beep</div><div class="workout-set">4 x 25 at tempo minus 0.10 - keep stroke count same</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">20 min</span><span class="section-title">STROKE TECHNIQUE</span><span class="stroke-label">Breaststroke</span></div><div class="section-body"><div class="workout-set">4 x 50 Two kicks, one pull drill</div><div class="workout-set">4 x 25 Pull only with pull buoy</div><div class="workout-set">4 x 50 Glide counting (1-2-3 in streamline)</div><div class="workout-set">4 x 25 Kick on back (knees underwater)</div><div class="workout-set">4 x 25 Full stroke - COUNT STROKES</div><div class="coaching-cue"><strong>Cue:</strong> "Heart shape pull, shoot forward like torpedo"</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">13 min</span><span class="section-title">POWER + GOLF</span></div><div class="section-body"><div class="workout-set">With belt: 4 x 25 FAST breaststroke (rest 30 sec)</div><div class="workout-set">4 x 50 breaststroke - focus on powerful kick</div><div class="workout-set">GOLF: 4 x 50 breaststroke - Time + Strokes = Score</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">7 min</span><span class="section-title">COOL DOWN</span></div><div class="section-body"><div class="workout-set">200 easy + 4 x 25 easy backstroke</div></div></div>
+        <div class="total-time">Total: 60 minutes</div>
+    </div>
+
+    <!-- PHASE 2 WEEK 4: BUTTERFLY -->
+    <div class="page">
+        <div class="print-header"><h1>Jayden's Training Guide</h1><div class="subtitle">Phase 2: Build | March - April 2026 | 60 Minutes</div></div>
+        <div class="phase-header"><h2>Phase 2: Build</h2><span class="week-indicator">Week 4: BUTTERFLY</span></div>
+        <div class="equipment-grid"><div class="equipment-item"><div class="checkbox"></div> Tempo Trainer</div><div class="equipment-item"><div class="checkbox"></div> Resistance Belt</div><div class="equipment-item"><div class="checkbox"></div> Fins</div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">8 min</span><span class="section-title">WARM-UP</span></div><div class="section-body"><div class="workout-set">300 swim (100 FR / 100 choice / 100 FR)</div><div class="workout-set">4 x 25 build to fast</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">12 min</span><span class="section-title">TEMPO TRAINER</span><span class="stroke-label">Butterfly</span></div><div class="section-body"><div class="workout-set">With fins: 4 x 50 Butterfly at comfortable pace - note the beeps</div><div class="workout-set">4 x 25 at tempo minus 0.05 - match timing to beep</div><div class="workout-set">4 x 25 at tempo minus 0.10 - keep stroke count same</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">20 min</span><span class="section-title">STROKE TECHNIQUE</span><span class="stroke-label">Butterfly</span></div><div class="section-body"><div class="workout-set">With fins: 4 x 50 Single-arm fly (breathe to side)</div><div class="workout-set">4 x 25 3-3-3 drill</div><div class="workout-set">With fins: 4 x 50 Body dolphins (arms at sides)</div><div class="workout-set">4 x 25 2-2-2 drill</div><div class="workout-set">4 x 25 Full stroke - COUNT STROKES</div><div class="coaching-cue"><strong>Cue:</strong> "Press chest, pop hips - throw hands forward"</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">13 min</span><span class="section-title">POWER + GOLF</span></div><div class="section-body"><div class="workout-set">With belt: 4 x 25 FAST butterfly (rest 45 sec)</div><div class="workout-set">With fins: 4 x 50 butterfly - focus on rhythm</div><div class="workout-set">GOLF: 4 x 50 butterfly - Time + Strokes = Score</div></div></div>
+        <div class="workout-section"><div class="section-header"><span class="section-time">7 min</span><span class="section-title">COOL DOWN</span></div><div class="section-body"><div class="workout-set">200 easy + 4 x 25 easy backstroke</div></div></div>
+        <div class="total-time">Total: 60 minutes</div>
+    </div>
+
+    <!-- AAA TIME STANDARDS -->
+    <div class="page">
+        <div class="print-header"><h1>Jayden's Training Guide</h1><div class="subtitle">AAA Time Standards | 10 and Under Boys | 2024-2028</div></div>
+        <h3 style="margin-bottom:0.3rem;font-size:10pt;border-bottom:1px solid #000;padding-bottom:0.2rem;">Short Course Yards (SCY) - PNS Championship</h3>
+        <table class="times-table"><thead><tr><th>Event</th><th>B</th><th>BB</th><th>A</th><th>AA</th><th class="aaa-col">AAA</th><th>AAAA</th><th class="best-col">My Best</th></tr></thead><tbody>
+        <tr><td>50 Free</td><td>38.19</td><td>34.59</td><td>31.09</td><td>29.89</td><td class="aaa-col">28.69</td><td>27.49</td><td class="best-col"></td></tr>
+        <tr><td>100 Free</td><td>1:27.99</td><td>1:18.89</td><td>1:09.79</td><td>1:06.79</td><td class="aaa-col">1:03.79</td><td>1:00.69</td><td class="best-col"></td></tr>
+        <tr><td>200 Free</td><td>3:09.49</td><td>2:50.59</td><td>2:31.59</td><td>2:25.29</td><td class="aaa-col">2:18.99</td><td>2:12.69</td><td class="best-col"></td></tr>
+        <tr><td>500 Free</td><td>8:24.29</td><td>7:33.79</td><td>6:43.39</td><td>6:26.59</td><td class="aaa-col">6:09.79</td><td>5:52.99</td><td class="best-col"></td></tr>
+        <tr><td>50 Back</td><td>48.29</td><td>42.89</td><td>37.59</td><td>35.79</td><td class="aaa-col">33.99</td><td>32.19</td><td class="best-col"></td></tr>
+        <tr><td>100 Back</td><td>1:40.69</td><td>1:30.09</td><td>1:19.59</td><td>1:16.09</td><td class="aaa-col">1:12.49</td><td>1:08.99</td><td class="best-col"></td></tr>
+        <tr><td>50 Breast</td><td>53.39</td><td>47.69</td><td>42.09</td><td>40.19</td><td class="aaa-col">38.29</td><td>36.39</td><td class="best-col"></td></tr>
+        <tr><td>100 Breast</td><td>1:54.09</td><td>1:42.29</td><td>1:30.59</td><td>1:26.59</td><td class="aaa-col">1:22.69</td><td>1:18.79</td><td class="best-col"></td></tr>
+        <tr><td>50 Fly</td><td>46.49</td><td>41.29</td><td>35.99</td><td>34.29</td><td class="aaa-col">32.59</td><td>30.79</td><td class="best-col"></td></tr>
+        <tr><td>100 Fly</td><td>1:53.49</td><td>1:38.99</td><td>1:24.39</td><td>1:19.49</td><td class="aaa-col">1:14.59</td><td>1:09.79</td><td class="best-col"></td></tr>
+        <tr><td>100 IM</td><td>1:39.69</td><td>1:29.69</td><td>1:19.69</td><td>1:16.39</td><td class="aaa-col">1:13.09</td><td>1:09.79</td><td class="best-col"></td></tr>
+        <tr><td>200 IM</td><td>3:38.59</td><td>3:15.99</td><td>2:53.49</td><td>2:45.89</td><td class="aaa-col">2:38.39</td><td>2:30.89</td><td class="best-col"></td></tr>
+        </tbody></table>
+        <h3 style="margin:0.5rem 0 0.3rem;font-size:10pt;border-bottom:1px solid #000;padding-bottom:0.2rem;">Long Course Meters (LCM) - Western Zone Championship</h3>
+        <table class="times-table"><thead><tr><th>Event</th><th>B</th><th>BB</th><th>A</th><th>AA</th><th class="aaa-col">AAA</th><th>AAAA</th><th class="best-col">My Best</th></tr></thead><tbody>
+        <tr><td>50 Free</td><td>43.89</td><td>39.79</td><td>35.69</td><td>34.39</td><td class="aaa-col">32.99</td><td>31.59</td><td class="best-col"></td></tr>
+        <tr><td>100 Free</td><td>1:40.99</td><td>1:30.59</td><td>1:20.19</td><td>1:16.69</td><td class="aaa-col">1:13.19</td><td>1:09.79</td><td class="best-col"></td></tr>
+        <tr><td>200 Free</td><td>3:36.69</td><td>3:14.99</td><td>2:53.39</td><td>2:46.09</td><td class="aaa-col">2:38.89</td><td>2:31.69</td><td class="best-col"></td></tr>
+        <tr><td>400 Free</td><td>7:38.29</td><td>6:52.49</td><td>6:06.59</td><td>5:51.39</td><td class="aaa-col">5:36.09</td><td>5:20.79</td><td class="best-col"></td></tr>
+        <tr><td>50 Back</td><td>55.39</td><td>49.29</td><td>43.09</td><td>41.09</td><td class="aaa-col">38.99</td><td>36.99</td><td class="best-col"></td></tr>
+        <tr><td>100 Back</td><td>1:56.69</td><td>1:44.49</td><td>1:32.29</td><td>1:28.19</td><td class="aaa-col">1:24.09</td><td>1:19.99</td><td class="best-col"></td></tr>
+        <tr><td>50 Breast</td><td>1:00.89</td><td>54.39</td><td>47.89</td><td>45.79</td><td class="aaa-col">43.59</td><td>41.49</td><td class="best-col"></td></tr>
+        <tr><td>100 Breast</td><td>2:12.89</td><td>1:59.19</td><td>1:45.49</td><td>1:40.89</td><td class="aaa-col">1:36.29</td><td>1:31.69</td><td class="best-col"></td></tr>
+        <tr><td>50 Fly</td><td>52.29</td><td>46.39</td><td>40.59</td><td>38.59</td><td class="aaa-col">36.59</td><td>34.69</td><td class="best-col"></td></tr>
+        <tr><td>100 Fly</td><td>2:09.49</td><td>1:52.89</td><td>1:36.19</td><td>1:30.69</td><td class="aaa-col">1:25.09</td><td>1:19.59</td><td class="best-col"></td></tr>
+        <tr><td>200 IM</td><td>4:09.49</td><td>3:43.69</td><td>3:17.89</td><td>3:09.39</td><td class="aaa-col">3:00.79</td><td>2:52.19</td><td class="best-col"></td></tr>
+        </tbody></table>
+    </div>
+
+    <!-- COACHING CUES & TRACKING -->
+    <div class="page">
+        <div class="print-header"><h1>Jayden's Training Guide</h1><div class="subtitle">Quick Reference | Coaching Cues and Tracking</div></div>
+        <h3 style="margin-bottom:0.3rem;font-size:10pt;border-bottom:1px solid #000;padding-bottom:0.2rem;">Coaching Cues</h3>
+        <div class="cues-grid">
+            <div class="cue-card"><h4>Freestyle</h4><ul><li>"Reach and roll"</li><li>"Push water past pocket"</li><li>"Fingertip drag"</li><li>"Head down, hips up"</li></ul></div>
+            <div class="cue-card"><h4>Backstroke</h4><ul><li>"Pinky in, thumb out"</li><li>"Belly button to sky"</li><li>"Paint the ceiling"</li><li>"Kick from hips"</li></ul></div>
+            <div class="cue-card"><h4>Breaststroke</h4><ul><li>"Heart shape" pull</li><li>"Heels to butt, snap"</li><li>"Hide behind hands"</li><li>"Shoot like torpedo"</li></ul></div>
+            <div class="cue-card"><h4>Butterfly</h4><ul><li>"Throw hands forward"</li><li>"Press chest, pop hips"</li><li>"Dolphin from chest"</li><li>"Big kick in, small out"</li></ul></div>
+            <div class="cue-card"><h4>Turns</h4><ul><li>"Tight ball, fast spin"</li><li>"Touch-tuck-explode"</li><li>"Push off on side"</li><li>"5 dolphin kicks min"</li></ul></div>
+            <div class="cue-card"><h4>Finishes</h4><ul><li>"Head down, drive!"</li><li>"Lunge at wall!"</li><li>"No gliding in"</li><li>"Sprint through touch"</li></ul></div>
+        </div>
+        <div style="margin-bottom:0.4rem;"><h3 style="font-size:10pt;border-bottom:1px solid #000;padding-bottom:0.2rem;">Stroke Count and Tempo Tracking</h3></div>
+        <p style="font-size:8pt;margin-bottom:0.2rem;"><strong>Distances:</strong> Freestyle = 50, 100, 200 | Backstroke, Breaststroke, Butterfly = 50, 100</p>
+        <table class="tracking-table"><thead><tr><th>Date</th><th>Stroke</th><th>Distance</th><th>Count</th><th>Tempo</th><th>Time</th><th>Golf Score</th></tr></thead><tbody>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        </tbody></table>
+        <div class="golf-formula"><strong>Golf Score Formula:</strong> Time (seconds) + Stroke Count = Golf Score | Lower is Better</div>
+    </div>
+</body>
+</html>

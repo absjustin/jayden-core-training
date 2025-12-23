@@ -1,0 +1,2411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jayden's Swim Training Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066FF;
+            --secondary: #00D4AA;
+            --accent: #FF6B35;
+            --dark: #0A1628;
+            --light: #F0F4F8;
+            --card: #FFFFFF;
+            --text: #1A2B3C;
+            --muted: #6B7C8C;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --aaa: #FFD700;
+            --aa: #C0C0C0;
+            --a: #CD7F32;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, var(--dark) 0%, #1a2d4a 100%);
+            min-height: 100vh;
+            color: var(--text);
+        }
+
+        /* Navigation */
+        .nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--dark);
+        }
+
+        .logo-text span {
+            color: var(--primary);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .nav-tab {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--muted);
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .nav-tab:hover {
+            background: var(--light);
+            color: var(--text);
+        }
+
+        .nav-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #0052cc);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 102, 255, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Main Content */
+        .main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Dashboard Header */
+        .dashboard-header {
+            background: linear-gradient(135deg, var(--card), #f8fafc);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .swimmer-info h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .swimmer-info h1 span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .swimmer-meta {
+            display: flex;
+            gap: 2rem;
+            color: var(--muted);
+            font-size: 1rem;
+        }
+
+        .swimmer-meta strong {
+            color: var(--text);
+        }
+
+        .goal-badges {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .goal-badge {
+            background: var(--light);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 140px;
+        }
+
+        .goal-badge-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .goal-badge-label {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        .goal-badge-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-title-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        /* Time Standards Table */
+        .time-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .time-table th,
+        .time-table td {
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid var(--light);
+        }
+
+        .time-table th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .time-table th:first-child,
+        .time-table td:first-child {
+            text-align: left;
+        }
+
+        .time-table tr:hover {
+            background: #f8fafc;
+        }
+
+        .event-name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .time-aaa {
+            color: #B8860B;
+            font-weight: 700;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .time-input {
+            width: 100px;
+            padding: 0.5rem;
+            border: 2px solid var(--light);
+            border-radius: 8px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .time-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+        }
+
+        .time-diff {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+        }
+
+        .time-diff.positive {
+            background: #FEE2E2;
+            color: var(--danger);
+        }
+
+        .time-diff.negative {
+            background: #D1FAE5;
+            color: var(--success);
+        }
+
+        .time-diff.achieved {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #1a1a1a;
+            font-weight: 700;
+        }
+
+        /* Phase Cards */
+        .phase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .phase-card {
+            background: var(--card);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+        }
+
+        .phase-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .phase-header {
+            padding: 1.5rem;
+            color: white;
+        }
+
+        .phase-card:nth-child(1) .phase-header {
+            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+        }
+
+        .phase-card:nth-child(2) .phase-header {
+            background: linear-gradient(135deg, #8B5CF6, #6D28D9);
+        }
+
+        .phase-card:nth-child(3) .phase-header {
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+        }
+
+        .phase-card:nth-child(4) .phase-header {
+            background: linear-gradient(135deg, #10B981, #059669);
+        }
+
+        .phase-number {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-bottom: 0.25rem;
+        }
+
+        .phase-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-dates {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .phase-body {
+            padding: 1.5rem;
+        }
+
+        .phase-focus {
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin-bottom: 1rem;
+        }
+
+        .phase-focus strong {
+            color: var(--text);
+        }
+
+        .phase-equipment {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .equipment-tag {
+            padding: 0.35rem 0.75rem;
+            background: var(--light);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        /* Workout Section */
+        .workout-container {
+            background: var(--card);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .workout-header {
+            background: linear-gradient(135deg, var(--primary), #0052cc);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .workout-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .workout-selectors {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .workout-phase-select,
+        .workout-week-select {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .phase-btn,
+        .week-btn {
+            padding: 0.5rem 0.75rem;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: transparent;
+            color: white;
+            border-radius: 8px;
+            font-family: inherit;
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .phase-btn:hover,
+        .phase-btn.active,
+        .week-btn:hover,
+        .week-btn.active {
+            background: white;
+            color: var(--primary);
+            border-color: white;
+        }
+
+        .workout-body {
+            padding: 2rem;
+        }
+
+        .workout-section {
+            margin-bottom: 2rem;
+        }
+
+        .workout-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .workout-section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-time {
+            background: var(--light);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .workout-set {
+            background: var(--light);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.95rem;
+        }
+
+        .workout-note {
+            color: var(--muted);
+            font-style: italic;
+            font-family: 'Outfit', sans-serif;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .coaching-cue {
+            background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--warning);
+            margin-top: 1rem;
+        }
+
+        .coaching-cue-label {
+            font-weight: 700;
+            color: #92400E;
+            font-size: 0.85rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .coaching-cue-text {
+            color: #78350F;
+        }
+
+        /* Stroke Count Tracker */
+        .tracking-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 900px) {
+            .tracking-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tracking-card {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 1.25rem;
+            overflow: hidden;
+        }
+
+        .tracking-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .tracking-stroke {
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .tracking-entries {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .tracking-entry-header {
+            display: grid;
+            grid-template-columns: 70px repeat(3, 1fr);
+            gap: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #E5E7EB;
+            margin-bottom: 0.25rem;
+        }
+
+        .tracking-entry-header span {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        .tracking-entry-header span:first-child {
+            text-align: left;
+        }
+
+        .tracking-entry {
+            display: grid;
+            grid-template-columns: 70px repeat(3, 1fr);
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .tracking-entry label {
+            font-size: 0.85rem;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        .tracking-entry input {
+            width: 100%;
+            min-width: 0;
+            padding: 0.5rem 0.25rem;
+            border: 2px solid #E5E7EB;
+            border-radius: 6px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .tracking-entry input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Print Styles */
+        .print-only {
+            display: none;
+        }
+
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+
+            .nav, .nav-actions, .btn, .phase-btn, 
+            .no-print, .workout-phase-select {
+                display: none !important;
+            }
+
+            .print-only {
+                display: block !important;
+            }
+
+            .main {
+                max-width: 100% !important;
+                padding: 0 !important;
+            }
+
+            .card, .phase-card, .workout-container {
+                break-inside: avoid;
+                box-shadow: none !important;
+                border: 1px solid #ccc;
+            }
+
+            .phase-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .workout-header {
+                background: #333 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .page {
+                display: block !important;
+                page-break-after: always;
+            }
+
+            .time-table {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Coaching Cues Reference */
+        .cues-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .cue-card {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+
+        .cue-stroke {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cue-stroke-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .cue-list {
+            list-style: none;
+        }
+
+        .cue-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #E5E7EB;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .cue-list li:last-child {
+            border-bottom: none;
+        }
+
+        /* Equipment Schedule */
+        .equipment-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .equipment-table th,
+        .equipment-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--light);
+        }
+
+        .equipment-table th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .equipment-name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .equipment-phases {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .phase-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .phase-dot.active {
+            background: var(--success);
+        }
+
+        .phase-dot.inactive {
+            background: #E5E7EB;
+            color: var(--muted);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-inner {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-tabs {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .dashboard-header {
+                grid-template-columns: 1fr;
+            }
+
+            .goal-badges {
+                justify-content: center;
+            }
+
+            .swimmer-info h1 {
+                font-size: 1.75rem;
+            }
+
+            .workout-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-top: 1rem;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--light);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-inner">
+            <div class="logo">
+                <div class="logo-icon">🏊</div>
+                <div class="logo-text">Jayden's <span>Swim Hub</span></div>
+            </div>
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-page="dashboard">Dashboard</button>
+                <button class="nav-tab" data-page="workouts">Workouts</button>
+                <button class="nav-tab" data-page="times">Time Standards</button>
+                <button class="nav-tab" data-page="tracking">Tracking</button>
+                <button class="nav-tab" data-page="cues">Coaching Cues</button>
+            </div>
+            <div class="nav-actions no-print">
+                <button class="btn btn-outline" onclick="window.print()">🖨️ Print</button>
+                <button class="btn btn-primary" onclick="saveAllData()">💾 Save Progress</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main">
+        <!-- Dashboard Page -->
+        <div id="dashboard" class="page active">
+            <div class="dashboard-header">
+                <div class="swimmer-info">
+                    <h1>Welcome back, <span>Jayden!</span></h1>
+                    <div class="swimmer-meta">
+                        <span>Age: <strong>10</strong> (10 & Under)</span>
+                        <span>Specialty: <strong>Breaststroke</strong></span>
+                        <span>Team: <strong>PNS</strong></span>
+                    </div>
+                </div>
+                <div class="goal-badges">
+                    <div class="goal-badge">
+                        <div class="goal-badge-icon">🎯</div>
+                        <div class="goal-badge-label">Primary Goal</div>
+                        <div class="goal-badge-value">AAA Cuts</div>
+                    </div>
+                    <div class="goal-badge">
+                        <div class="goal-badge-icon">🏆</div>
+                        <div class="goal-badge-label">July Meet</div>
+                        <div class="goal-badge-value">PNS Champs</div>
+                    </div>
+                    <div class="goal-badge">
+                        <div class="goal-badge-icon">⭐</div>
+                        <div class="goal-badge-label">August Goal</div>
+                        <div class="goal-badge-value">Zone Team</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Training Phases -->
+            <h2 style="color: white; margin-bottom: 1.5rem; font-size: 1.5rem;">Training Phases</h2>
+            <div class="phase-grid">
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <div class="phase-number">Phase 1</div>
+                        <div class="phase-name">Foundation</div>
+                        <div class="phase-dates">January - February 2026</div>
+                    </div>
+                    <div class="phase-body">
+                        <div class="phase-focus">
+                            <strong>Focus:</strong> Perfect technique, body position, stroke count awareness
+                        </div>
+                        <div class="phase-equipment">
+                            <span class="equipment-tag">🦶 Fins</span>
+                            <span class="equipment-tag">🤿 Snorkel</span>
+                            <span class="equipment-tag">📋 Kickboard</span>
+                            <span class="equipment-tag">🎈 Pull Buoy</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <div class="phase-number">Phase 2</div>
+                        <div class="phase-name">Build</div>
+                        <div class="phase-dates">March - April 2026</div>
+                    </div>
+                    <div class="phase-body">
+                        <div class="phase-focus">
+                            <strong>Focus:</strong> Power development, tempo training, race mechanics
+                        </div>
+                        <div class="phase-equipment">
+                            <span class="equipment-tag">⏱️ Tempo Trainer</span>
+                            <span class="equipment-tag">🪂 Parachute</span>
+                            <span class="equipment-tag">🏋️ Resistance Belt</span>
+                            <span class="equipment-tag">🖐️ Paddles</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <div class="phase-number">Phase 3</div>
+                        <div class="phase-name">Race Prep</div>
+                        <div class="phase-dates">May - June 2026</div>
+                    </div>
+                    <div class="phase-body">
+                        <div class="phase-focus">
+                            <strong>Focus:</strong> Race simulation, speed work, turns & finishes
+                        </div>
+                        <div class="phase-equipment">
+                            <span class="equipment-tag">🦵 Hydro Hip</span>
+                            <span class="equipment-tag">🐬 Hydro Fin</span>
+                            <span class="equipment-tag">💪 Forearm Fulcrum</span>
+                            <span class="equipment-tag">⏱️ Tempo Trainer</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <div class="phase-number">Phase 4</div>
+                        <div class="phase-name">Championship</div>
+                        <div class="phase-dates">July 2026</div>
+                    </div>
+                    <div class="phase-body">
+                        <div class="phase-focus">
+                            <strong>Focus:</strong> Sharpen, taper, confidence building
+                        </div>
+                        <div class="phase-equipment">
+                            <span class="equipment-tag">🎯 Race Feel</span>
+                            <span class="equipment-tag">🧠 Mental Prep</span>
+                            <span class="equipment-tag">⚡ Speed Work</span>
+                            <span class="equipment-tag">🏁 Race Starts</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="card-title-icon">📊</div>
+                        AAA Progress Overview
+                    </div>
+                </div>
+                <div id="progress-overview">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Workouts Page -->
+        <div id="workouts" class="page">
+            <div class="workout-container">
+                <div class="workout-header">
+                    <div>
+                        <div class="workout-title">Weekly Training Session (60 min)</div>
+                        <div id="workout-week-label" style="font-size: 0.9rem; opacity: 0.9; margin-top: 0.25rem;">Week 1: Freestyle Focus</div>
+                    </div>
+                    <div class="workout-selectors no-print">
+                        <div class="workout-phase-select">
+                            <span style="font-size: 0.8rem; opacity: 0.8; margin-right: 0.5rem;">Phase:</span>
+                            <button class="phase-btn active" data-phase="1">1</button>
+                            <button class="phase-btn" data-phase="2">2</button>
+                            <button class="phase-btn" data-phase="3">3</button>
+                            <button class="phase-btn" data-phase="4">4</button>
+                        </div>
+                        <div class="workout-week-select">
+                            <span style="font-size: 0.8rem; opacity: 0.8; margin-right: 0.5rem;">Week:</span>
+                            <button class="week-btn active" data-week="1">🏊 FR</button>
+                            <button class="week-btn" data-week="2">🔙 BK</button>
+                            <button class="week-btn" data-week="3">🐸 BR</button>
+                            <button class="week-btn" data-week="4">🦋 FL</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="workout-body" id="workout-content">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Weekly Stroke Rotation Reference -->
+            <div class="card" style="margin-top: 2rem;">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="card-title-icon">🔄</div>
+                        Weekly Stroke Rotation
+                    </div>
+                </div>
+                <p style="color: var(--muted); margin-bottom: 1rem;">Each week focuses on a different stroke's technique drills. Use the Week selector above to see the specific drills:</p>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+                    <div class="tracking-card">
+                        <strong>Week 1</strong><br>
+                        <span style="color: var(--primary); font-size: 1.25rem;">🏊 Freestyle</span>
+                    </div>
+                    <div class="tracking-card">
+                        <strong>Week 2</strong><br>
+                        <span style="color: var(--primary); font-size: 1.25rem;">🔙 Backstroke</span>
+                    </div>
+                    <div class="tracking-card">
+                        <strong>Week 3</strong><br>
+                        <span style="color: var(--primary); font-size: 1.25rem;">🐸 Breaststroke</span>
+                    </div>
+                    <div class="tracking-card">
+                        <strong>Week 4</strong><br>
+                        <span style="color: var(--primary); font-size: 1.25rem;">🦋 Butterfly</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Time Standards Page -->
+        <div id="times" class="page">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="card-title-icon">🏅</div>
+                        USA Swimming Time Standards - 10 & Under Boys
+                    </div>
+                    <div class="no-print">
+                        <select id="course-select" style="padding: 0.5rem 1rem; border-radius: 8px; border: 2px solid var(--light);">
+                            <option value="scy">Short Course Yards (SCY)</option>
+                            <option value="lcm">Long Course Meters (LCM)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="scy-times">
+                    <h3 style="margin-bottom: 1rem; color: var(--primary);">Short Course Yards (PNS Championship)</h3>
+                    <table class="time-table">
+                        <thead>
+                            <tr>
+                                <th>Event</th>
+                                <th>B</th>
+                                <th>BB</th>
+                                <th>A</th>
+                                <th>AA</th>
+                                <th style="background: linear-gradient(135deg, #FFD700, #FFA500); color: #1a1a1a;">AAA</th>
+                                <th>AAAA</th>
+                                <th>Your Best</th>
+                                <th>To AAA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="event-name">50 Free</td>
+                                <td>38.19</td>
+                                <td>34.59</td>
+                                <td>31.09</td>
+                                <td>29.89</td>
+                                <td class="time-aaa">28.69</td>
+                                <td>27.49</td>
+                                <td><input type="text" class="time-input" data-event="50FR-SCY" placeholder="--"></td>
+                                <td class="diff-cell" data-event="50FR-SCY" data-target="28.69"></td>
+                            </tr>
+                            <tr>
+                                <td class="event-name">100 Free</td>
+                                <td>1:27.99</td>
+                                <td>1:18.89</td>
+                                <td>1:09.79</td>
+                                <td>1:06.79</td>
+                                <td class="time-aaa">1:03.79</td>
+                                <td>1:00.69</td>
+                                <td><input type="text" class="time-input" data-event="100FR-SCY" placeholder="--"></td>
+                                <td class="diff-cell" data-event="100FR-SCY" data-target="63.79"></td>
+                            </tr>
+                            <tr>
+                                <td class="event-name">200 Free</td>
+                                <td>3:09.49</td>
+                                <td>2:50.59</td>
+                                <td>2:31.59</td>
+                                <td>2:25.29</td>
+                                <td class="time-aaa">2:18.99</td>
+                                <td>2:12.69</td>
+                                <td><input type="text" class="time-input" data-event="200FR-SCY" placeholder="--"></td>
+                                <td class="diff-cell" data-event="200FR-SCY" data-target="138.99"></td>
+                            </tr>
+                            <tr>
+                                <td class="event-name">500 Free</td>
+                                <td>8:24.29</td>
+                                <td>7:33.79</td>
+                                <td>6:43.39</td>
+                                <td>6:26.59</td>
+                                <td class="time-aaa">6:09.79</td>
+                                <td>5:52.99</td>
+                                <td><input type="text" class="time-input" data-event="500FR-SCY" placeholder="--"></td>
+                                <td class="diff-cell" data-event="500FR-SCY" data-target="369.79"></td>
+                            </tr>
+                            <tr>
+                                <td class="event-name">50 Back</td>
+                                <td>48.29</td>
+                                <td>42.89</td>
+                                <td>37.59</td>
+                                <td>35.79</td>
+                                <td class="time-aaa">33.99</td>
+                                <td>32.19</td>
+                                <td><input type="text" class="time-input" data-event="50BK-SCY" placeholder="--"></td>
+                                <td class="diff-cell" data-event="50BK-SCY" data-target="33.99"></td>
+                            </tr>
+                            <tr>
+                                <td class="event-name">100 Back</td>
+                                <td>1:40.69</td>
+                                <td>1:30.09</td>
+                                <td>1:19.59</td>
+                                <td>1:16.09</td>
+                                <td class="time-aaa">1:12.49</td>
+                                <td>1:08.99</td>
+                                <td><input type="text" class="time-input" data-event="100BK-SCY" placeholder="--"></td>
+                                <td class="diff-cell" data-event="100BK-SCY" data-target="72.49"></td>
+                            </tr>
+                            <tr>
+                                <td class="event-name">50 Breast</td>
+                                <td>53.39</td>
+                                <td>47.69</td>
+                                <td>42.09</td>
+                                <td>40.19</td>
+                                <td class="time-aaa">38.29</td>
+                                <td>36.39</td>
+                                <td><input type="text" class="time-input" data-event="50BR-SCY" placeholder="--"></td>
+                                <td class="diff-cell" data-event="50BR-SCY" data-target="38.29"></td>
+                            </tr>
+                            <tr>
+                                <td class="event-name">100 Breast</td>
+                                <td>1:54.09</td>
+                                <td>1:42.29</td>
+                                <td>1:30.59</td>
+                                <td>1:26.59</td>
+                                <td class="time-aaa">1:22.69</td>
+                                <td>1:18.79</td>
+                                <td><input type="text" class="time-input" data-event="100BR-SCY" placeholder="--"></td>
+                                <td class="diff-cell" data-event="100BR-SCY" data-target="82.69"></td>
+                            </tr>
+                            <tr>
+                                <td class="event-name">50 Fly</td>
+                                <td>46.49</td>
+                                <td>41.29</td>
+                                <td>35.99</td>
+                                <td>34.29</td>
+                                <td class="time-aaa">32.59</td>
+                                <td>30.79</td>
+                                <td><input type="text" class="time-input" data-event="50FL-SCY" placeholder="--"></td>
+                                <td class="diff-cell" data-event="50FL-SCY" data-target="32.59"></td>
+                            </tr>
+                            <tr>
+                                <td class="event-name">100 Fly</td>
+                                <td>1:53.49</td>
+                                <td>1:38.99</td>
+                                <td>1:24.39</td>
+                                <td>1:19.49</td>
+                                <td class="time-aaa">1:14.59</td>
+                                <td>1:09.79</td>
+                                <td><input type="text" class="time-input" data-event="100FL-SCY" placeholder="--"></td>
+                                <td class="diff-cell" data-event="100FL-SCY" data-target="74.59"></td>
+                            </tr>
+                            <tr>
+                                <td class="event-name">100 IM</td>
+                                <td>1:39.69</td>
+                                <td>1:29.69</td>
+                                <td>1:19.69</td>
+                                <td>1:16.39</td>
+                                <td class="time-aaa">1:13.09</td>
+                                <td>1:09.79</td>
+                                <td><input type="text" class="time-input" data-event="100IM-SCY" placeholder="--"></td>
+                                <td class="diff-cell" data-event="100IM-SCY" data-target="73.09"></td>
+                            </tr>
+                            <tr>
+                                <td class="event-name">200 IM</td>
+                                <td>3:38.59</td>
+                                <td>3:15.99</td>
+                                <td>2:53.49</td>
+                                <td>2:45.89</td>
+                                <td class="time-aaa">2:38.39</td>
+                                <td>2:30.89</td>
+                                <td><input type="text" class="time-input" data-event="200IM-SCY" placeholder="--"></td>
+                                <td class="diff-cell" data-event="200IM-SCY" data-target="158.39"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="lcm-times" style="display: none;">
+                    <h3 style="margin-bottom: 1rem; color: var(--primary);">Long Course Meters (Western Zone Championship)</h3>
+                    <table class="time-table">
+                        <thead>
+                            <tr>
+                                <th>Event</th>
+                                <th>B</th>
+                                <th>BB</th>
+                                <th>A</th>
+                                <th>AA</th>
+                                <th style="background: linear-gradient(135deg, #FFD700, #FFA500); color: #1a1a1a;">AAA</th>
+                                <th>AAAA</th>
+                                <th>Your Best</th>
+                                <th>To AAA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="event-name">50 Free</td>
+                                <td>43.89</td>
+                                <td>39.79</td>
+                                <td>35.69</td>
+                                <td>34.39</td>
+                                <td class="time-aaa">32.99</td>
+                                <td>31.59</td>
+                                <td><input type="text" class="time-input" data-event="50FR-LCM" placeholder="--"></td>
+                                <td class="diff-cell" data-event="50FR-LCM" data-target="32.99"></td>
+                            </tr>
+                            <tr>
+                                <td class="event-name">100 Free</td>
+                                <td>1:40.99</td>
+                                <td>1:30.59</td>
+                                <td>1:20.19</td>
+                                <td>1:16.69</td>
+                                <td class="time-aaa">1:13.19</td>
+                                <td>1:09.79</td>
+                                <td><input type="text" class="time-input" data-event="100FR-LCM" placeholder="--"></td>
+                                <td class="diff-cell" data-event="100FR-LCM" data-target="73.19"></td>
+                            </tr>
+                            <tr>
+                                <td class="event-name">200 Free</td>
+                                <td>3:36.69</td>
+                                <td>3:14.99</td>
+                                <td>2:53.39</td>
+                                <td>2:46.09</td>
+                                <td class="time-aaa">2:38.89</td>
+                                <td>2:31.69</td>
+                                <td><input type="text" class="time-input" data-event="200FR-LCM" placeholder="--"></td>
+                                <td class="diff-cell" data-event="200FR-LCM" data-target="158.89"></td>
+                            </tr>
+                            <tr>
+                                <td class="event-name">400 Free</td>
+                                <td>7:38.29</td>
+                                <td>6:52.49</td>
+                                <td>6:06.59</td>
+                                <td>5:51.39</td>
+                                <td class="time-aaa">5:36.09</td>
+                                <td>5:20.79</td>
+                                <td><input type="text" class="time-input" data-event="400FR-LCM" placeholder="--"></td>
+                                <td class="diff-cell" data-event="400FR-LCM" data-target="336.09"></td>
+                            </tr>
+                            <tr>
+                                <td class="event-name">50 Back</td>
+                                <td>55.39</td>
+                                <td>49.29</td>
+                                <td>43.09</td>
+                                <td>41.09</td>
+                                <td class="time-aaa">38.99</td>
+                                <td>36.99</td>
+                                <td><input type="text" class="time-input" data-event="50BK-LCM" placeholder="--"></td>
+                                <td class="diff-cell" data-event="50BK-LCM" data-target="38.99"></td>
+                            </tr>
+                            <tr>
+                                <td class="event-name">100 Back</td>
+                                <td>1:56.69</td>
+                                <td>1:44.49</td>
+                                <td>1:32.29</td>
+                                <td>1:28.19</td>
+                                <td class="time-aaa">1:24.09</td>
+                                <td>1:19.99</td>
+                                <td><input type="text" class="time-input" data-event="100BK-LCM" placeholder="--"></td>
+                                <td class="diff-cell" data-event="100BK-LCM" data-target="84.09"></td>
+                            </tr>
+                            <tr>
+                                <td class="event-name">50 Breast</td>
+                                <td>1:00.89</td>
+                                <td>54.39</td>
+                                <td>47.89</td>
+                                <td>45.79</td>
+                                <td class="time-aaa">43.59</td>
+                                <td>41.49</td>
+                                <td><input type="text" class="time-input" data-event="50BR-LCM" placeholder="--"></td>
+                                <td class="diff-cell" data-event="50BR-LCM" data-target="43.59"></td>
+                            </tr>
+                            <tr>
+                                <td class="event-name">100 Breast</td>
+                                <td>2:12.89</td>
+                                <td>1:59.19</td>
+                                <td>1:45.49</td>
+                                <td>1:40.89</td>
+                                <td class="time-aaa">1:36.29</td>
+                                <td>1:31.69</td>
+                                <td><input type="text" class="time-input" data-event="100BR-LCM" placeholder="--"></td>
+                                <td class="diff-cell" data-event="100BR-LCM" data-target="96.29"></td>
+                            </tr>
+                            <tr>
+                                <td class="event-name">50 Fly</td>
+                                <td>52.29</td>
+                                <td>46.39</td>
+                                <td>40.59</td>
+                                <td>38.59</td>
+                                <td class="time-aaa">36.59</td>
+                                <td>34.69</td>
+                                <td><input type="text" class="time-input" data-event="50FL-LCM" placeholder="--"></td>
+                                <td class="diff-cell" data-event="50FL-LCM" data-target="36.59"></td>
+                            </tr>
+                            <tr>
+                                <td class="event-name">100 Fly</td>
+                                <td>2:09.49</td>
+                                <td>1:52.89</td>
+                                <td>1:36.19</td>
+                                <td>1:30.69</td>
+                                <td class="time-aaa">1:25.09</td>
+                                <td>1:19.59</td>
+                                <td><input type="text" class="time-input" data-event="100FL-LCM" placeholder="--"></td>
+                                <td class="diff-cell" data-event="100FL-LCM" data-target="85.09"></td>
+                            </tr>
+                            <tr>
+                                <td class="event-name">200 IM</td>
+                                <td>4:09.49</td>
+                                <td>3:43.69</td>
+                                <td>3:17.89</td>
+                                <td>3:09.39</td>
+                                <td class="time-aaa">3:00.79</td>
+                                <td>2:52.19</td>
+                                <td><input type="text" class="time-input" data-event="200IM-LCM" placeholder="--"></td>
+                                <td class="diff-cell" data-event="200IM-LCM" data-target="180.79"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tracking Page -->
+        <div id="tracking" class="page">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="card-title-icon">📝</div>
+                        Stroke Count & Tempo Tracking
+                    </div>
+                </div>
+                <p style="color: var(--muted); margin-bottom: 1.5rem;">
+                    Track your stroke counts and tempo settings to find your optimal efficiency. Lower stroke count = more efficient swimming!
+                </p>
+
+                <div class="tracking-grid">
+                    <div class="tracking-card">
+                        <div class="tracking-card-header">
+                            <span class="tracking-stroke">🏊 Freestyle</span>
+                        </div>
+                        <div class="tracking-entries">
+                            <div class="tracking-entry-header">
+                                <span>Distance</span>
+                                <span>Count</span>
+                                <span>Tempo</span>
+                                <span>Time</span>
+                            </div>
+                            <div class="tracking-entry">
+                                <label>50 yds</label>
+                                <input type="number" id="fr-50-count" placeholder="--" min="1" max="100">
+                                <input type="text" id="fr-50-tempo" placeholder="--">
+                                <input type="text" id="fr-50-time" placeholder="--">
+                            </div>
+                            <div class="tracking-entry">
+                                <label>100 yds</label>
+                                <input type="number" id="fr-100-count" placeholder="--" min="1" max="150">
+                                <input type="text" id="fr-100-tempo" placeholder="--">
+                                <input type="text" id="fr-100-time" placeholder="--">
+                            </div>
+                            <div class="tracking-entry">
+                                <label>200 yds</label>
+                                <input type="number" id="fr-200-count" placeholder="--" min="1" max="300">
+                                <input type="text" id="fr-200-tempo" placeholder="--">
+                                <input type="text" id="fr-200-time" placeholder="--">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tracking-card">
+                        <div class="tracking-card-header">
+                            <span class="tracking-stroke">🔙 Backstroke</span>
+                        </div>
+                        <div class="tracking-entries">
+                            <div class="tracking-entry-header">
+                                <span>Distance</span>
+                                <span>Count</span>
+                                <span>Tempo</span>
+                                <span>Time</span>
+                            </div>
+                            <div class="tracking-entry">
+                                <label>50 yds</label>
+                                <input type="number" id="bk-50-count" placeholder="--" min="1" max="100">
+                                <input type="text" id="bk-50-tempo" placeholder="--">
+                                <input type="text" id="bk-50-time" placeholder="--">
+                            </div>
+                            <div class="tracking-entry">
+                                <label>100 yds</label>
+                                <input type="number" id="bk-100-count" placeholder="--" min="1" max="150">
+                                <input type="text" id="bk-100-tempo" placeholder="--">
+                                <input type="text" id="bk-100-time" placeholder="--">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tracking-card">
+                        <div class="tracking-card-header">
+                            <span class="tracking-stroke">🐸 Breaststroke</span>
+                        </div>
+                        <div class="tracking-entries">
+                            <div class="tracking-entry-header">
+                                <span>Distance</span>
+                                <span>Count</span>
+                                <span>Tempo</span>
+                                <span>Time</span>
+                            </div>
+                            <div class="tracking-entry">
+                                <label>50 yds</label>
+                                <input type="number" id="br-50-count" placeholder="--" min="1" max="100">
+                                <input type="text" id="br-50-tempo" placeholder="--">
+                                <input type="text" id="br-50-time" placeholder="--">
+                            </div>
+                            <div class="tracking-entry">
+                                <label>100 yds</label>
+                                <input type="number" id="br-100-count" placeholder="--" min="1" max="150">
+                                <input type="text" id="br-100-tempo" placeholder="--">
+                                <input type="text" id="br-100-time" placeholder="--">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tracking-card">
+                        <div class="tracking-card-header">
+                            <span class="tracking-stroke">🦋 Butterfly</span>
+                        </div>
+                        <div class="tracking-entries">
+                            <div class="tracking-entry-header">
+                                <span>Distance</span>
+                                <span>Count</span>
+                                <span>Tempo</span>
+                                <span>Time</span>
+                            </div>
+                            <div class="tracking-entry">
+                                <label>50 yds</label>
+                                <input type="number" id="fl-50-count" placeholder="--" min="1" max="100">
+                                <input type="text" id="fl-50-tempo" placeholder="--">
+                                <input type="text" id="fl-50-time" placeholder="--">
+                            </div>
+                            <div class="tracking-entry">
+                                <label>100 yds</label>
+                                <input type="number" id="fl-100-count" placeholder="--" min="1" max="150">
+                                <input type="text" id="fl-100-tempo" placeholder="--">
+                                <input type="text" id="fl-100-time" placeholder="--">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Golf Score Calculator -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="card-title-icon">⛳</div>
+                        Golf Score Calculator
+                    </div>
+                </div>
+                <p style="color: var(--muted); margin-bottom: 1rem;">
+                    Golf Score = Time (seconds) + Stroke Count. Lower is better!
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Time (seconds)</label>
+                        <input type="number" id="golf-time" style="width: 100%; padding: 0.75rem; border: 2px solid var(--light); border-radius: 8px; font-size: 1rem;" placeholder="e.g., 45">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Stroke Count</label>
+                        <input type="number" id="golf-strokes" style="width: 100%; padding: 0.75rem; border: 2px solid var(--light); border-radius: 8px; font-size: 1rem;" placeholder="e.g., 32">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Golf Score</label>
+                        <div id="golf-result" style="padding: 0.75rem; background: var(--light); border-radius: 8px; font-size: 1.5rem; font-weight: 700; color: var(--primary); text-align: center;">--</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coaching Cues Page -->
+        <div id="cues" class="page">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="card-title-icon">💡</div>
+                        Coaching Cues Reference
+                    </div>
+                </div>
+                <p style="color: var(--muted); margin-bottom: 1.5rem;">
+                    Quick reference cues to remember during practice. Use these to help Jayden focus on key technique points!
+                </p>
+
+                <div class="cues-grid">
+                    <div class="cue-card">
+                        <div class="cue-stroke">
+                            <div class="cue-stroke-icon">🏊</div>
+                            Freestyle
+                        </div>
+                        <ul class="cue-list">
+                            <li>"Reach and roll" - extend and rotate shoulders</li>
+                            <li>"Push water past your pocket" - finish each stroke</li>
+                            <li>"Fingertip drag" - high elbow recovery</li>
+                            <li>"Head down, hips up" - body position</li>
+                            <li>"Grab and throw" - powerful catch</li>
+                        </ul>
+                    </div>
+
+                    <div class="cue-card">
+                        <div class="cue-stroke">
+                            <div class="cue-stroke-icon">🔙</div>
+                            Backstroke
+                        </div>
+                        <ul class="cue-list">
+                            <li>"Pinky first in, thumb first out"</li>
+                            <li>"Belly button to the sky"</li>
+                            <li>"Paint the ceiling" - arm recovery</li>
+                            <li>"Rotate like a rotisserie chicken"</li>
+                            <li>"Kick from your hips, not knees"</li>
+                        </ul>
+                    </div>
+
+                    <div class="cue-card">
+                        <div class="cue-stroke">
+                            <div class="cue-stroke-icon">🐸</div>
+                            Breaststroke
+                        </div>
+                        <ul class="cue-list">
+                            <li>"Heart shape" - pull pattern</li>
+                            <li>"Heels to butt, snap together, glide"</li>
+                            <li>"Hide behind your hands" - recovery</li>
+                            <li>"Pull, breathe, kick, glide" - timing</li>
+                            <li>"Shoot forward like a torpedo"</li>
+                        </ul>
+                    </div>
+
+                    <div class="cue-card">
+                        <div class="cue-stroke">
+                            <div class="cue-stroke-icon">🦋</div>
+                            Butterfly
+                        </div>
+                        <ul class="cue-list">
+                            <li>"Throw your hands forward, not down"</li>
+                            <li>"Press your chest, pop your hips"</li>
+                            <li>"Dolphin from your chest"</li>
+                            <li>"Big kick in, small kick out"</li>
+                            <li>"Eyes down on entry"</li>
+                        </ul>
+                    </div>
+
+                    <div class="cue-card">
+                        <div class="cue-stroke">
+                            <div class="cue-stroke-icon">🔄</div>
+                            Turns
+                        </div>
+                        <ul class="cue-list">
+                            <li>"Tight ball, fast spin" - flip turns</li>
+                            <li>"Touch-tuck-explode" - open turns</li>
+                            <li>"Push off on your side" - free/back</li>
+                            <li>"Streamline is free speed!"</li>
+                            <li>"5 dolphin kicks minimum"</li>
+                        </ul>
+                    </div>
+
+                    <div class="cue-card">
+                        <div class="cue-stroke">
+                            <div class="cue-stroke-icon">🏁</div>
+                            Finishes
+                        </div>
+                        <ul class="cue-list">
+                            <li>"Head down, drive through!" - FR/BK</li>
+                            <li>"Lunge at the wall!" - BR/FL</li>
+                            <li>"No gliding into the wall"</li>
+                            <li>"Sprint through the touch"</li>
+                            <li>"Two hands, same time" - BR/FL</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Equipment Guide -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="card-title-icon">🎒</div>
+                        Equipment Guide
+                    </div>
+                </div>
+                <table class="equipment-table">
+                    <thead>
+                        <tr>
+                            <th>Equipment</th>
+                            <th>Primary Use</th>
+                            <th>Phases</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="equipment-name">🦶 Fins</td>
+                            <td>Leg strength, body position, fly/back drills</td>
+                            <td>
+                                <div class="equipment-phases">
+                                    <span class="phase-dot active">1</span>
+                                    <span class="phase-dot active">2</span>
+                                    <span class="phase-dot active">3</span>
+                                    <span class="phase-dot inactive">4</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="equipment-name">🤿 Snorkel</td>
+                            <td>Body position, eliminate breathing issues</td>
+                            <td>
+                                <div class="equipment-phases">
+                                    <span class="phase-dot active">1</span>
+                                    <span class="phase-dot active">2</span>
+                                    <span class="phase-dot inactive">3</span>
+                                    <span class="phase-dot inactive">4</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="equipment-name">📋 Kickboard</td>
+                            <td>Isolated kick work</td>
+                            <td>
+                                <div class="equipment-phases">
+                                    <span class="phase-dot active">1</span>
+                                    <span class="phase-dot active">2</span>
+                                    <span class="phase-dot active">3</span>
+                                    <span class="phase-dot active">4</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="equipment-name">🎈 Pull Buoy</td>
+                            <td>Isolate upper body, body position</td>
+                            <td>
+                                <div class="equipment-phases">
+                                    <span class="phase-dot active">1</span>
+                                    <span class="phase-dot active">2</span>
+                                    <span class="phase-dot active">3</span>
+                                    <span class="phase-dot inactive">4</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="equipment-name">🖐️ Paddles</td>
+                            <td>Catch strength (use sparingly)</td>
+                            <td>
+                                <div class="equipment-phases">
+                                    <span class="phase-dot inactive">1</span>
+                                    <span class="phase-dot active">2</span>
+                                    <span class="phase-dot active">3</span>
+                                    <span class="phase-dot inactive">4</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="equipment-name">⏱️ Tempo Trainer</td>
+                            <td>Race pace training, stroke rate</td>
+                            <td>
+                                <div class="equipment-phases">
+                                    <span class="phase-dot inactive">1</span>
+                                    <span class="phase-dot active">2</span>
+                                    <span class="phase-dot active">3</span>
+                                    <span class="phase-dot active">4</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="equipment-name">🪂 Parachute</td>
+                            <td>Power development, resistance</td>
+                            <td>
+                                <div class="equipment-phases">
+                                    <span class="phase-dot inactive">1</span>
+                                    <span class="phase-dot active">2</span>
+                                    <span class="phase-dot active">3</span>
+                                    <span class="phase-dot inactive">4</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="equipment-name">🏋️ Resistance Belt</td>
+                            <td>Power development</td>
+                            <td>
+                                <div class="equipment-phases">
+                                    <span class="phase-dot inactive">1</span>
+                                    <span class="phase-dot active">2</span>
+                                    <span class="phase-dot active">3</span>
+                                    <span class="phase-dot inactive">4</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="equipment-name">💪 Forearm Fulcrum</td>
+                            <td>Catch position awareness</td>
+                            <td>
+                                <div class="equipment-phases">
+                                    <span class="phase-dot inactive">1</span>
+                                    <span class="phase-dot active">2</span>
+                                    <span class="phase-dot active">3</span>
+                                    <span class="phase-dot inactive">4</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="equipment-name">🦵 Hydro Hip</td>
+                            <td>Hip-driven swimming, core</td>
+                            <td>
+                                <div class="equipment-phases">
+                                    <span class="phase-dot inactive">1</span>
+                                    <span class="phase-dot inactive">2</span>
+                                    <span class="phase-dot active">3</span>
+                                    <span class="phase-dot inactive">4</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="equipment-name">🐬 Hydro Fin</td>
+                            <td>Hip-driven swimming</td>
+                            <td>
+                                <div class="equipment-phases">
+                                    <span class="phase-dot inactive">1</span>
+                                    <span class="phase-dot inactive">2</span>
+                                    <span class="phase-dot active">3</span>
+                                    <span class="phase-dot inactive">4</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Stroke-specific technique drills (20 minutes each)
+        const strokeDrills = {
+            freestyle: {
+                name: "🏊 FREESTYLE",
+                time: "20 min",
+                sets: [
+                    "With snorkel: 4 x 50 Catch-up drill",
+                    "→ Touch thumb to thumb before next stroke",
+                    "4 x 25 Fingertip drag drill",
+                    "→ Drag fingertips along water surface, high elbow",
+                    "4 x 50 6-kick switch drill",
+                    "→ 6 kicks on side, 3 strokes, 6 kicks other side",
+                    "4 x 25 Fist drill (closed fists)",
+                    "→ Feel the water with your forearms",
+                    "4 x 25 Full stroke - COUNT STROKES",
+                    "→ Write down after each! Goal: 1 fewer stroke next 25"
+                ],
+                cue: { label: "Focus", text: "\"Reach and roll - long strokes, rotate your shoulders\"" }
+            },
+            backstroke: {
+                name: "🔙 BACKSTROKE",
+                time: "20 min",
+                sets: [
+                    "4 x 50 One-arm backstroke",
+                    "→ 25 right arm only / 25 left arm only, other arm at side",
+                    "4 x 25 Spin drill",
+                    "→ 6 kicks on back, 3 strokes, 6 kicks, repeat",
+                    "4 x 50 Double-arm backstroke",
+                    "→ Both arms move together, focus on hip rotation",
+                    "4 x 25 Cup-of-water drill",
+                    "→ Imagine balancing cup on forehead - keep head still!",
+                    "4 x 25 Full stroke - COUNT STROKES",
+                    "→ Write down after each! Goal: 1 fewer stroke next 25"
+                ],
+                cue: { label: "Focus", text: "\"Pinky first in, thumb first out - belly button to the sky\"" }
+            },
+            breaststroke: {
+                name: "🐸 BREASTSTROKE",
+                time: "20 min",
+                sets: [
+                    "4 x 50 2 kicks, 1 pull drill",
+                    "→ Extra glide time, feel the streamline",
+                    "4 x 25 Pull only with pull buoy",
+                    "→ Focus on \"heart shape\" pull, shoot hands forward",
+                    "4 x 50 Glide counting drill",
+                    "→ Count \"1-2-3\" in streamline after each kick",
+                    "4 x 25 Kick on back (hands on thighs)",
+                    "→ Knees stay underwater! Heels to butt, snap together",
+                    "4 x 25 Full stroke - COUNT STROKES",
+                    "→ Write down after each! Goal: 1 fewer stroke next 25"
+                ],
+                cue: { label: "Focus", text: "\"Heart shape pull, hide behind your hands, shoot forward\"" }
+            },
+            butterfly: {
+                name: "🦋 BUTTERFLY",
+                time: "20 min",
+                sets: [
+                    "With fins: 4 x 50 Single-arm fly",
+                    "→ 25 right arm / 25 left arm, breathe to the side",
+                    "4 x 25 3-3-3 drill",
+                    "→ 3 strokes right, 3 strokes left, 3 strokes both",
+                    "With fins: 4 x 50 Body dolphins (arms at sides)",
+                    "→ Press chest down, pop hips up - feel the wave",
+                    "4 x 25 2-2-2 drill",
+                    "→ 2 strokes right, 2 strokes left, 2 strokes both",
+                    "4 x 25 Full stroke - COUNT STROKES",
+                    "→ Write down after each! Goal: fewer = more efficient"
+                ],
+                cue: { label: "Focus", text: "\"Press chest, pop hips - throw hands FORWARD not down\"" }
+            }
+        };
+
+        // Week names for display
+        const weekNames = {
+            1: { name: "Week 1", stroke: "freestyle", label: "Freestyle Focus" },
+            2: { name: "Week 2", stroke: "backstroke", label: "Backstroke Focus" },
+            3: { name: "Week 3", stroke: "breaststroke", label: "Breaststroke Focus" },
+            4: { name: "Week 4", stroke: "butterfly", label: "Butterfly Focus" }
+        };
+
+        // Workout data for each phase (non-stroke-specific parts)
+        const workouts = {
+            1: {
+                name: "Foundation Phase",
+                dates: "January - February 2026",
+                color: "#3B82F6",
+                sections: {
+                    before: [
+                        {
+                            title: "WARM-UP",
+                            time: "10 min",
+                            sets: [
+                                "4 x 50 Choice swim - easy, think about long strokes",
+                                "4 x 25 Kick (no board) - streamline position, tight core"
+                            ],
+                            cue: { label: "Focus", text: "\"Squeeze your belly button to your spine\"" }
+                        },
+                        {
+                            title: "KICK DEVELOPMENT",
+                            time: "10 min",
+                            sets: [
+                                "With fins: 4 x 50 Flutter kick on back - hands at sides, chin neutral",
+                                "→ Count kicks per 25 (find YOUR number)",
+                                "With kickboard: 4 x 25 Breaststroke kick - pause 2 sec in streamline",
+                                "→ Focus: heels to butt, snap together, glide"
+                            ]
+                        }
+                    ],
+                    after: [
+                        {
+                            title: "TURN STATION",
+                            time: "10 min",
+                            sets: [
+                                "8 x 25 with FAST turns",
+                                "→ Flip turns (FR/BK): tight ball, fast spin, push off on back/side",
+                                "→ Open turns (BR/FL): touch-tuck-explode, chin down",
+                                "4 x wall push-offs into streamline - hold for 5 kicks"
+                            ],
+                            cue: { label: "Remember", text: "\"Be a torpedo - tight and straight!\"" }
+                        },
+                        {
+                            title: "COOL DOWN",
+                            time: "10 min",
+                            sets: [
+                                "200 easy choice",
+                                "4 x 25 drill of choice - super smooth"
+                            ]
+                        }
+                    ]
+                }
+            },
+            2: {
+                name: "Build Phase",
+                dates: "March - April 2026",
+                color: "#8B5CF6",
+                sections: {
+                    before: [
+                        {
+                            title: "WARM-UP",
+                            time: "8 min",
+                            sets: [
+                                "300 swim (100 FR / 100 choice / 100 FR)",
+                                "4 x 25 build to fast (start easy, finish FAST)"
+                            ]
+                        },
+                        {
+                            title: "TEMPO TRAINER",
+                            time: "12 min",
+                            sets: [
+                                "Finding YOUR tempo (use this week's stroke):",
+                                "4 x 50 @ comfortable pace - note the beeps",
+                                "4 x 25 @ tempo minus 0.05 (slightly faster)",
+                                "→ Match your hand entry to each beep",
+                                "4 x 25 @ tempo minus 0.10 (faster!)",
+                                "→ Can you keep stroke count the same?"
+                            ],
+                            note: "Record: Tempo + Stroke Count for each 25"
+                        }
+                    ],
+                    after: [
+                        {
+                            title: "POWER BUILDING",
+                            time: "15 min",
+                            sets: [
+                                "With resistance belt (or parachute):",
+                                "4 x 25 FAST (this week's stroke) - fight the drag! Rest 30 sec",
+                                "With paddles + pull buoy:",
+                                "4 x 50 pull - high elbow catch",
+                                "With fins + Forearm Fulcrum:",
+                                "4 x 25 - feel the catch position"
+                            ],
+                            cue: { label: "Cue", text: "\"Grab the water and push it past your hip\"" }
+                        },
+                        {
+                            title: "STROKE COUNT CHALLENGE (Golf)",
+                            time: "10 min",
+                            sets: [
+                                "4 x 50 (this week's stroke)",
+                                "Golf Score = TIME + STROKES",
+                                "Example: 45 seconds + 32 strokes = 77 golf score",
+                                "→ Goal: Lower your score each 50!"
+                            ],
+                            note: "Write down each score - track improvement!"
+                        },
+                        {
+                            title: "COOL DOWN",
+                            time: "7 min",
+                            sets: [
+                                "200 easy",
+                                "4 x 25 easy backstroke"
+                            ]
+                        }
+                    ]
+                }
+            },
+            3: {
+                name: "Race Prep Phase",
+                dates: "May - June 2026",
+                color: "#F59E0B",
+                sections: {
+                    before: [
+                        {
+                            title: "WARM-UP",
+                            time: "8 min",
+                            sets: [
+                                "200 choice",
+                                "4 x 50: 25 drill / 25 build"
+                            ]
+                        },
+                        {
+                            title: "RACE PACE SET",
+                            time: "15 min",
+                            sets: [
+                                "Using tempo trainer @ GOAL race tempo:",
+                                "8 x 25 (this week's stroke) @ race pace",
+                                "→ First 4: with fins (learn the speed)",
+                                "→ Last 4: no fins (hold the speed!)",
+                                "→ Rest: 20 sec between each",
+                                "2 x 50 @ race pace (no fins)",
+                                "→ Goal: Keep stroke count same on 2nd 25!"
+                            ]
+                        }
+                    ],
+                    after: [
+                        {
+                            title: "SPEED & POWER",
+                            time: "12 min",
+                            sets: [
+                                "With Hydro Hip + Hydro Fin:",
+                                "4 x 25 fly kick (feel hip drive)",
+                                "4 x 25 (this week's stroke) - accelerate hips",
+                                "With parachute:",
+                                "4 x 25 RACE STROKE - 100% effort",
+                                "→ Rest 45 sec"
+                            ],
+                            cue: { label: "Remember", text: "\"This makes the race feel EASY!\"" }
+                        },
+                        {
+                            title: "TURN & FINISH WORK",
+                            time: "10 min",
+                            sets: [
+                                "6 x from flags → Sprint in → Perfect turn → Sprint out",
+                                "→ Use this week's stroke",
+                                "6 x finish practice (start at flags):",
+                                "→ FR/BK: Head down, drive through!",
+                                "→ BR/FL: Lunge at the wall!"
+                            ]
+                        },
+                        {
+                            title: "COOL DOWN",
+                            time: "7 min",
+                            sets: [
+                                "200 easy backstroke",
+                                "Mental rehearsal: See yourself touching the wall first"
+                            ]
+                        }
+                    ]
+                }
+            },
+            4: {
+                name: "Championship Phase",
+                dates: "July 2026",
+                color: "#10B981",
+                sections: {
+                    before: [
+                        {
+                            title: "WARM-UP",
+                            time: "10 min",
+                            sets: [
+                                "300 easy mix",
+                                "4 x 25 choice drill"
+                            ],
+                            note: "LIGHTER volume - quality over quantity!"
+                        }
+                    ],
+                    after: [
+                        {
+                            title: "RACE FEEL",
+                            time: "15 min",
+                            sets: [
+                                "NO resistance equipment - just feel speed!",
+                                "4 x 25 (this week's stroke) @ race pace - check stroke count",
+                                "2 x 50 @ race pace - even splits",
+                                "2 x 25 SPRINT - 100%!"
+                            ],
+                            cue: { label: "Focus", text: "\"Feel the speed!\"" }
+                        },
+                        {
+                            title: "PERFECT TURNS & STARTS",
+                            time: "12 min",
+                            sets: [
+                                "4 x dive + breakout + first 3 strokes",
+                                "→ Use this week's stroke",
+                                "4 x turn practice - Into wall FAST, off wall TIGHT",
+                                "2 x finish practice - last 10 yards only"
+                            ]
+                        },
+                        {
+                            title: "MENTAL REHEARSAL SWIM",
+                            time: "8 min",
+                            sets: [
+                                "1 x 200 IM easy",
+                                "→ Visualize your race during each stroke",
+                                "→ See the start, the turns, the finish",
+                                "→ Feel yourself swimming FAST and winning"
+                            ]
+                        },
+                        {
+                            title: "COOL DOWN",
+                            time: "15 min",
+                            sets: [
+                                "Easy swimming",
+                                "Stretching in water"
+                            ],
+                            cue: { label: "Remember", text: "\"You're ready. Trust your training!\"" }
+                        }
+                    ]
+                }
+            }
+        };
+
+        // Current selections
+        let currentPhase = 1;
+        let currentWeek = 1;
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navigation
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                    this.classList.add('active');
+                    document.getElementById(this.dataset.page).classList.add('active');
+                });
+            });
+
+            // Phase buttons
+            document.querySelectorAll('.phase-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.phase-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentPhase = parseInt(this.dataset.phase);
+                    renderWorkout(currentPhase, currentWeek);
+                });
+            });
+
+            // Week buttons
+            document.querySelectorAll('.week-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentWeek = parseInt(this.dataset.week);
+                    renderWorkout(currentPhase, currentWeek);
+                });
+            });
+
+            // Course selector
+            document.getElementById('course-select').addEventListener('change', function() {
+                document.getElementById('scy-times').style.display = this.value === 'scy' ? 'block' : 'none';
+                document.getElementById('lcm-times').style.display = this.value === 'lcm' ? 'block' : 'none';
+            });
+
+            // Time inputs - calculate difference
+            document.querySelectorAll('.time-input').forEach(input => {
+                input.addEventListener('input', function() {
+                    updateTimeDiff(this);
+                    saveAllData();
+                });
+            });
+
+            // Golf score calculator
+            document.getElementById('golf-time').addEventListener('input', calculateGolfScore);
+            document.getElementById('golf-strokes').addEventListener('input', calculateGolfScore);
+
+            // Tracking inputs
+            document.querySelectorAll('#tracking input').forEach(input => {
+                input.addEventListener('input', saveAllData);
+            });
+
+            // Load saved data
+            loadSavedData();
+
+            // Render initial workout
+            renderWorkout(1, 1);
+
+            // Update progress overview
+            updateProgressOverview();
+        });
+
+        function renderWorkout(phase, week) {
+            const workout = workouts[phase];
+            const weekInfo = weekNames[week];
+            const strokeDrill = strokeDrills[weekInfo.stroke];
+            const container = document.getElementById('workout-content');
+            
+            let html = `
+                <div class="print-only" style="margin-bottom: 1rem;">
+                    <div style="font-weight: 700; font-size: 1.25rem; color: ${workout.color};">${workout.name} - ${weekInfo.name}: ${weekInfo.label}</div>
+                    <div style="font-size: 0.9rem; color: #666;">${workout.dates}</div>
+                </div>
+            `;
+            
+            // Sections before stroke technique
+            workout.sections.before.forEach(section => {
+                html += renderSection(section);
+            });
+            
+            // Stroke-specific technique section
+            html += `
+                <div class="workout-section">
+                    <div class="workout-section-header">
+                        <span class="section-time">${strokeDrill.time}</span>
+                        <span class="section-title">STROKE TECHNIQUE - ${strokeDrill.name}</span>
+                    </div>
+                    ${strokeDrill.sets.map(set => `<div class="workout-set">${set}</div>`).join('')}
+                    ${strokeDrill.cue ? `
+                        <div class="coaching-cue">
+                            <div class="coaching-cue-label">💡 ${strokeDrill.cue.label}</div>
+                            <div class="coaching-cue-text">${strokeDrill.cue.text}</div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            // Sections after stroke technique
+            workout.sections.after.forEach(section => {
+                html += renderSection(section);
+            });
+            
+            container.innerHTML = html;
+            
+            // Update the header
+            document.getElementById('workout-week-label').textContent = `${weekInfo.name}: ${weekInfo.label}`;
+        }
+
+        function renderSection(section) {
+            return `
+                <div class="workout-section">
+                    <div class="workout-section-header">
+                        <span class="section-time">${section.time}</span>
+                        <span class="section-title">${section.title}</span>
+                    </div>
+                    ${section.sets.map(set => `<div class="workout-set">${set}</div>`).join('')}
+                    ${section.note ? `<div class="workout-note">📝 ${section.note}</div>` : ''}
+                    ${section.cue ? `
+                        <div class="coaching-cue">
+                            <div class="coaching-cue-label">💡 ${section.cue.label}</div>
+                            <div class="coaching-cue-text">${section.cue.text}</div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        function parseTime(timeStr) {
+            if (!timeStr || timeStr === '--') return null;
+            timeStr = timeStr.trim();
+            
+            if (timeStr.includes(':')) {
+                const parts = timeStr.split(':');
+                if (parts.length === 2) {
+                    return parseFloat(parts[0]) * 60 + parseFloat(parts[1]);
+                }
+            }
+            return parseFloat(timeStr);
+        }
+
+        function formatTime(seconds) {
+            if (seconds >= 60) {
+                const mins = Math.floor(seconds / 60);
+                const secs = (seconds % 60).toFixed(2);
+                return `${mins}:${secs.padStart(5, '0')}`;
+            }
+            return seconds.toFixed(2);
+        }
+
+        function updateTimeDiff(input) {
+            const event = input.dataset.event;
+            const diffCell = document.querySelector(`.diff-cell[data-event="${event}"]`);
+            const targetTime = parseFloat(diffCell.dataset.target);
+            const userTime = parseTime(input.value);
+            
+            if (userTime === null) {
+                diffCell.innerHTML = '';
+                return;
+            }
+            
+            const diff = userTime - targetTime;
+            
+            if (diff <= 0) {
+                diffCell.innerHTML = `<span class="time-diff achieved">🏅 AAA!</span>`;
+            } else {
+                diffCell.innerHTML = `<span class="time-diff positive">+${formatTime(diff)}</span>`;
+            }
+        }
+
+        function calculateGolfScore() {
+            const time = parseFloat(document.getElementById('golf-time').value) || 0;
+            const strokes = parseInt(document.getElementById('golf-strokes').value) || 0;
+            const result = document.getElementById('golf-result');
+            
+            if (time > 0 && strokes > 0) {
+                result.textContent = time + strokes;
+            } else {
+                result.textContent = '--';
+            }
+        }
+
+        function updateProgressOverview() {
+            const container = document.getElementById('progress-overview');
+            const events = ['50FR-SCY', '100FR-SCY', '50BK-SCY', '100BK-SCY', '50BR-SCY', '100BR-SCY', '50FL-SCY', '100FL-SCY', '100IM-SCY', '200IM-SCY'];
+            const eventNames = {
+                '50FR-SCY': '50 Free', '100FR-SCY': '100 Free',
+                '50BK-SCY': '50 Back', '100BK-SCY': '100 Back',
+                '50BR-SCY': '50 Breast', '100BR-SCY': '100 Breast',
+                '50FL-SCY': '50 Fly', '100FL-SCY': '100 Fly',
+                '100IM-SCY': '100 IM', '200IM-SCY': '200 IM'
+            };
+            
+            let achieved = 0;
+            let total = events.length;
+            
+            events.forEach(event => {
+                const input = document.querySelector(`.time-input[data-event="${event}"]`);
+                const diffCell = document.querySelector(`.diff-cell[data-event="${event}"]`);
+                if (input && diffCell && input.value) {
+                    const userTime = parseTime(input.value);
+                    const targetTime = parseFloat(diffCell.dataset.target);
+                    if (userTime && userTime <= targetTime) {
+                        achieved++;
+                    }
+                }
+            });
+            
+            const percentage = (achieved / total * 100).toFixed(0);
+            
+            container.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 2rem;">
+                    <div style="flex: 1;">
+                        <div class="progress-label">
+                            <span>AAA Cuts Achieved</span>
+                            <span><strong>${achieved}</strong> of ${total}</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${percentage}%"></div>
+                        </div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; font-weight: 800; color: var(--primary);">${percentage}%</div>
+                        <div style="color: var(--muted); font-size: 0.9rem;">Complete</div>
+                    </div>
+                </div>
+                <p style="margin-top: 1rem; color: var(--muted);">
+                    Enter your best times on the <strong>Time Standards</strong> page to track your progress toward AAA cuts!
+                </p>
+            `;
+        }
+
+        function saveAllData() {
+            const data = {
+                times: {},
+                tracking: {}
+            };
+            
+            // Save times
+            document.querySelectorAll('.time-input').forEach(input => {
+                if (input.value) {
+                    data.times[input.dataset.event] = input.value;
+                }
+            });
+            
+            // Save tracking data
+            document.querySelectorAll('#tracking input').forEach(input => {
+                if (input.value && input.id) {
+                    data.tracking[input.id] = input.value;
+                }
+            });
+            
+            localStorage.setItem('jaydenSwimData', JSON.stringify(data));
+            updateProgressOverview();
+        }
+
+        function loadSavedData() {
+            const saved = localStorage.getItem('jaydenSwimData');
+            if (!saved) return;
+            
+            const data = JSON.parse(saved);
+            
+            // Load times
+            if (data.times) {
+                Object.entries(data.times).forEach(([event, value]) => {
+                    const input = document.querySelector(`.time-input[data-event="${event}"]`);
+                    if (input) {
+                        input.value = value;
+                        updateTimeDiff(input);
+                    }
+                });
+            }
+            
+            // Load tracking data
+            if (data.tracking) {
+                Object.entries(data.tracking).forEach(([id, value]) => {
+                    const input = document.getElementById(id);
+                    if (input) {
+                        input.value = value;
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
