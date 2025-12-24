@@ -191,7 +191,7 @@
             border-radius: var(--radius-md);
             padding: 20px;
             display: grid;
-            grid-template-columns: 1fr 120px;
+            grid-template-columns: 140px 1fr;
             gap: 20px;
             align-items: center;
         }
@@ -223,15 +223,19 @@
         .exercise-tag.reps { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
         .exercise-tag.time { background: rgba(16, 185, 129, 0.15); color: #10b981; }
         .exercise-demo {
-            width: 120px;
-            height: 80px;
-            background: rgba(0, 0, 0, 0.05);
+            width: 140px;
+            height: 100px;
+            background: rgba(0, 0, 0, 0.03);
             border-radius: var(--radius-sm);
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-secondary);
-            font-size: 0.8rem;
+        }
+        .exercise-demo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         /* Timer */
@@ -375,7 +379,7 @@
                     <div class="timer-section">
                         <div class="timer-display" id="timer">0:30</div>
                         <div class="timer-controls">
-                            <button class="timer-btn start" onclick="toggleTimer()">Start</button>
+                            <button class="timer-btn start" id="timer-start-btn" onclick="toggleTimer()">Start</button>
                             <button class="timer-btn reset" onclick="resetTimer()">Reset</button>
                         </div>
                     </div>
@@ -404,9 +408,13 @@
                 </div>
                 <div class="workout-body">
                     <div class="calendar-header">
-                        <button class="calendar-nav" onclick="prevMonth()">←</button>
+                        <div class="calendar-nav">
+                            <button onclick="prevMonth()">←</button>
+                        </div>
                         <span class="calendar-month" id="calendar-month">January 2026</span>
-                        <button class="calendar-nav" onclick="nextMonth()">→</button>
+                        <div class="calendar-nav">
+                            <button onclick="nextMonth()">→</button>
+                        </div>
                     </div>
                     <div class="calendar-grid" id="calendar-grid"></div>
                 </div>
@@ -438,13 +446,50 @@
                         </div>
                     </div>
                     <h3 style="margin-bottom:16px;">Achievements</h3>
-                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;" id="achievements"></div>
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;" id="achievements">
+                        <div style="background:rgba(255,255,255,0.4);padding:16px;border-radius:12px;text-align:center;opacity:0.5;">
+                            <div style="font-size:2rem;">🌟</div>
+                            <div style="font-size:0.85rem;font-weight:600;">First Workout</div>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.4);padding:16px;border-radius:12px;text-align:center;opacity:0.5;">
+                            <div style="font-size:2rem;">🔥</div>
+                            <div style="font-size:0.85rem;font-weight:600;">3-Day Streak</div>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.4);padding:16px;border-radius:12px;text-align:center;opacity:0.5;">
+                            <div style="font-size:2rem;">💪</div>
+                            <div style="font-size:0.85rem;font-weight:600;">Week Complete</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // Exercise GIF URLs from GIPHY and other sources
+        const exerciseGifs = {
+            "Plank Hold": "https://media.giphy.com/media/xT8qBff8cRRFf7k2u4/giphy.gif",
+            "Dead Bug": "https://media.giphy.com/media/1qfDU4MJv9xoGtRKvh/giphy.gif",
+            "Superman Hold": "https://media.giphy.com/media/23hPPMRgPxbNBlPQe3/giphy.gif",
+            "BOSU Flutter Kicks": "https://media.giphy.com/media/l378zKVk7Eh3yHoJi/giphy.gif",
+            "BOSU Dolphin Kicks": "https://media.giphy.com/media/3oriNYQX2lC6dfW2Ji/giphy.gif",
+            "Glute Bridge": "https://media.giphy.com/media/1AfLx8dLTVoHK/giphy.gif",
+            "Bird Dog": "https://media.giphy.com/media/f8k9R6irVv8p2/giphy.gif",
+            "Hollow Body Hold": "https://media.giphy.com/media/xUOwGdA2o7E4TPJICQ/giphy.gif",
+            "TRX Plank": "https://media.giphy.com/media/xT8qBff8cRRFf7k2u4/giphy.gif",
+            "TRX Row": "https://media.giphy.com/media/YoWOIjnXT1NKIbFP9H/giphy.gif",
+            "TRX Y-Raise": "https://media.giphy.com/media/YoWOIjnXT1NKIbFP9H/giphy.gif",
+            "TRX Fallout": "https://media.giphy.com/media/xT8qBff8cRRFf7k2u4/giphy.gif",
+            "TRX Single-Leg Squat": "https://media.giphy.com/media/1qfKUnnLxHfgxGvSv0/giphy.gif",
+            "Streamline Plank": "https://media.giphy.com/media/xT8qBff8cRRFf7k2u4/giphy.gif",
+            "V-Sit Hold": "https://media.giphy.com/media/xUOwGdA2o7E4TPJICQ/giphy.gif",
+            "BOSU Flat-Side Balance": "https://media.giphy.com/media/l0ExdMHUDKteztyfe/giphy.gif",
+            "Streamline Hold": "https://media.giphy.com/media/xT8qBff8cRRFf7k2u4/giphy.gif",
+            "BOSU Explosive Dolphins": "https://media.giphy.com/media/3oriNYQX2lC6dfW2Ji/giphy.gif",
+            "BOSU Single-Leg Balance": "https://media.giphy.com/media/l0ExdMHUDKteztyfe/giphy.gif",
+            "Side Plank": "https://media.giphy.com/media/UvOcKPHrkKSLm/giphy.gif"
+        };
+
         // Exercise data for 9 weeks
         const exercises = {
             1: [
@@ -533,11 +578,16 @@
         let timerSeconds = 30;
         let timerInterval = null;
 
+        // Calendar state
+        let calendarYear = 2026;
+        let calendarMonth = 0; // January
+
         function showTab(tabId) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             event.target.classList.add('active');
             document.getElementById(tabId).classList.add('active');
+            if (tabId === 'calendar') renderCalendar();
         }
 
         function initWeekSelector() {
@@ -547,7 +597,7 @@
                 const phase = w <= 3 ? 1 : (w <= 6 ? 2 : 3);
                 const phaseClass = `phase${phase}`;
                 html += `
-                    <button class="week-btn ${phaseClass} ${w === 1 ? 'active' : ''}" onclick="selectWeek(${w})">
+                    <button class="week-btn ${phaseClass} ${w === 1 ? 'active' : ''}" onclick="selectWeek(${w}, this)">
                         <span class="week-num">${w}</span>
                         <span class="week-phase">Phase ${phase}</span>
                     </button>
@@ -556,11 +606,11 @@
             container.innerHTML = html;
         }
 
-        function selectWeek(week) {
+        function selectWeek(week, btn) {
             currentWeek = week;
             currentExercise = 0;
             document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
-            event.target.closest('.week-btn').classList.add('active');
+            btn.classList.add('active');
             renderWorkout();
         }
 
@@ -574,8 +624,12 @@
             const exList = exercises[currentWeek];
             let html = '';
             exList.forEach((ex, i) => {
+                const gifUrl = exerciseGifs[ex.name] || '';
                 html += `
                     <div class="exercise-card" style="${i === currentExercise ? 'border:2px solid var(--accent-green);' : ''}">
+                        <div class="exercise-demo">
+                            ${gifUrl ? `<img src="${gifUrl}" alt="${ex.name}" onerror="this.style.display='none'; this.parentNode.innerHTML='Demo';">` : 'Demo'}
+                        </div>
                         <div class="exercise-info">
                             <h3>${ex.name}</h3>
                             <p>${ex.desc}</p>
@@ -584,7 +638,6 @@
                                 <span class="exercise-tag">× ${ex.reps} sets</span>
                             </div>
                         </div>
-                        <div class="exercise-demo">Demo</div>
                     </div>
                 `;
             });
@@ -604,18 +657,17 @@
             if (timerRunning) {
                 clearInterval(timerInterval);
                 timerRunning = false;
-                document.querySelector('.timer-btn.start').textContent = 'Start';
+                document.getElementById('timer-start-btn').textContent = 'Start';
             } else {
                 timerRunning = true;
-                document.querySelector('.timer-btn.start').textContent = 'Pause';
+                document.getElementById('timer-start-btn').textContent = 'Pause';
                 timerInterval = setInterval(() => {
                     timerSeconds--;
                     updateTimerDisplay();
                     if (timerSeconds <= 0) {
                         clearInterval(timerInterval);
                         timerRunning = false;
-                        document.querySelector('.timer-btn.start').textContent = 'Start';
-                        // Move to next exercise
+                        document.getElementById('timer-start-btn').textContent = 'Start';
                         if (currentExercise < exercises[currentWeek].length - 1) {
                             currentExercise++;
                             renderWorkout();
@@ -631,13 +683,87 @@
             timerRunning = false;
             timerSeconds = 30;
             updateTimerDisplay();
-            document.querySelector('.timer-btn.start').textContent = 'Start';
+            document.getElementById('timer-start-btn').textContent = 'Start';
         }
 
         function updateTimerDisplay() {
             const mins = Math.floor(timerSeconds / 60);
             const secs = timerSeconds % 60;
             document.getElementById('timer').textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Calendar functions
+        function renderCalendar() {
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                               'July', 'August', 'September', 'October', 'November', 'December'];
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            
+            document.getElementById('calendar-month').textContent = `${monthNames[calendarMonth]} ${calendarYear}`;
+            
+            const firstDay = new Date(calendarYear, calendarMonth, 1);
+            const lastDay = new Date(calendarYear, calendarMonth + 1, 0);
+            const startDayOfWeek = firstDay.getDay();
+            const daysInMonth = lastDay.getDate();
+            
+            // Previous month days
+            const prevMonthLastDay = new Date(calendarYear, calendarMonth, 0).getDate();
+            
+            let html = '';
+            
+            // Day headers
+            dayNames.forEach(d => {
+                html += `<div class="calendar-day-header">${d}</div>`;
+            });
+            
+            // Previous month fill
+            for (let i = startDayOfWeek - 1; i >= 0; i--) {
+                html += `<div class="calendar-day other-month">${prevMonthLastDay - i}</div>`;
+            }
+            
+            // Current month days
+            const today = new Date();
+            for (let d = 1; d <= daysInMonth; d++) {
+                const isToday = (d === today.getDate() && 
+                                calendarMonth === today.getMonth() && 
+                                calendarYear === today.getFullYear());
+                
+                // Check if this is a training day (Mon, Wed, Fri)
+                const currentDate = new Date(calendarYear, calendarMonth, d);
+                const dayOfWeek = currentDate.getDay();
+                const isTrainingDay = (dayOfWeek === 1 || dayOfWeek === 3 || dayOfWeek === 5);
+                
+                let classes = 'calendar-day';
+                if (isToday) classes += ' today';
+                if (isTrainingDay && calendarMonth >= 0 && calendarMonth <= 2) classes += ' has-workout';
+                
+                html += `<div class="${classes}">${d}</div>`;
+            }
+            
+            // Next month fill
+            const remainingDays = 42 - (startDayOfWeek + daysInMonth);
+            for (let d = 1; d <= remainingDays; d++) {
+                html += `<div class="calendar-day other-month">${d}</div>`;
+            }
+            
+            document.getElementById('calendar-grid').innerHTML = html;
+        }
+
+        function prevMonth() {
+            calendarMonth--;
+            if (calendarMonth < 0) {
+                calendarMonth = 11;
+                calendarYear--;
+            }
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            calendarMonth++;
+            if (calendarMonth > 11) {
+                calendarMonth = 0;
+                calendarYear++;
+            }
+            renderCalendar();
         }
 
         // Initialize

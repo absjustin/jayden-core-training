@@ -213,7 +213,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
+        .resource-icon.youtube { background: rgba(255, 0, 0, 0.1); }
+        .resource-icon.book { background: rgba(139, 92, 246, 0.1); }
 
         /* Practical Section */
         .practical-box {
@@ -303,6 +306,19 @@
             font-size: 0.85rem;
             color: var(--text-secondary);
         }
+
+        /* Video embed */
+        .video-embed {
+            margin-top: 16px;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            background: #000;
+        }
+        .video-embed iframe {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border: none;
+        }
     </style>
 </head>
 <body>
@@ -362,18 +378,25 @@
                         <div class="topic-card">
                             <h4>Study Resources</h4>
                             <div class="resources-grid">
-                                <a href="#" class="resource-link">
-                                    <span class="resource-icon">▶</span>
-                                    <span>"The Science of Swimming" - Real Engineering</span>
+                                <a href="https://www.youtube.com/watch?v=8nB1N-_GXJM" target="_blank" class="resource-link">
+                                    <span class="resource-icon youtube">▶</span>
+                                    <span>Swim Smooth - Body Position</span>
                                 </a>
-                                <a href="#" class="resource-link">
-                                    <span class="resource-icon">▶</span>
-                                    <span>"Swimming Faster" - Dr. Gary Hall Sr.</span>
+                                <a href="https://www.youtube.com/watch?v=kWQi7QL-kho" target="_blank" class="resource-link">
+                                    <span class="resource-icon youtube">▶</span>
+                                    <span>The Race Club - Breaststroke</span>
                                 </a>
-                                <a href="#" class="resource-link">
-                                    <span class="resource-icon">📖</span>
-                                    <span>Swimming Fastest by Maglischo, Ch. 1-2</span>
+                                <a href="https://www.youtube.com/@theraborist" target="_blank" class="resource-link">
+                                    <span class="resource-icon youtube">▶</span>
+                                    <span>Skills NT Swimming Channel</span>
                                 </a>
+                                <a href="https://www.amazon.com/Swimming-Fastest-Ernest-W-Maglischo/dp/0736031804" target="_blank" class="resource-link">
+                                    <span class="resource-icon book">📖</span>
+                                    <span>Swimming Fastest - Maglischo</span>
+                                </a>
+                            </div>
+                            <div class="video-embed">
+                                <iframe src="https://www.youtube.com/embed/kWQi7QL-kho" allowfullscreen></iframe>
                             </div>
                         </div>
                         <div class="practical-box">
@@ -403,6 +426,19 @@
                                 <li><strong>Acceleration through the pull</strong> is more important than raw power</li>
                                 <li><strong>The forearm</strong> is as important as the hand for propulsion</li>
                             </ul>
+                        </div>
+                        <div class="topic-card">
+                            <h4>Video Resources</h4>
+                            <div class="resources-grid">
+                                <a href="https://www.youtube.com/watch?v=oGPbFr5wGOM" target="_blank" class="resource-link">
+                                    <span class="resource-icon youtube">▶</span>
+                                    <span>Rebecca Soni - Breaststroke Drills</span>
+                                </a>
+                                <a href="https://www.youtube.com/@TheRaceClub" target="_blank" class="resource-link">
+                                    <span class="resource-icon youtube">▶</span>
+                                    <span>The Race Club Channel</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -442,6 +478,22 @@
                                 <li>Head: completely still, water line at ears</li>
                             </ul>
                         </div>
+                        <div class="topic-card">
+                            <h4>Video Resources</h4>
+                            <div class="resources-grid">
+                                <a href="https://www.youtube.com/watch?v=s5G20bFLUKY" target="_blank" class="resource-link">
+                                    <span class="resource-icon youtube">▶</span>
+                                    <span>Freestyle Technique - GTN</span>
+                                </a>
+                                <a href="https://www.youtube.com/watch?v=mWBq7F_O7sg" target="_blank" class="resource-link">
+                                    <span class="resource-icon youtube">▶</span>
+                                    <span>Backstroke Tips - Fitter & Faster</span>
+                                </a>
+                            </div>
+                            <div class="video-embed">
+                                <iframe src="https://www.youtube.com/embed/s5G20bFLUKY" allowfullscreen></iframe>
+                            </div>
+                        </div>
                     </div>
                     <div class="week-section">
                         <div class="week-header">
@@ -465,6 +517,19 @@
                                 <li>Arms: wide entry, keyhole pull, exit past hips</li>
                                 <li>Breathing: chin forward (not up)</li>
                             </ul>
+                        </div>
+                        <div class="topic-card">
+                            <h4>Video Resources</h4>
+                            <div class="resources-grid">
+                                <a href="https://www.youtube.com/watch?v=kWQi7QL-kho" target="_blank" class="resource-link">
+                                    <span class="resource-icon youtube">▶</span>
+                                    <span>The Race Club - Breaststroke</span>
+                                </a>
+                                <a href="https://www.youtube.com/watch?v=oGPbFr5wGOM" target="_blank" class="resource-link">
+                                    <span class="resource-icon youtube">▶</span>
+                                    <span>Rebecca Soni Drills</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -502,6 +567,19 @@
                                 <li><strong>Avoid overtraining</strong> - Young bodies recover differently</li>
                                 <li><strong>Keep it fun</strong> - Burnout is the biggest threat</li>
                             </ul>
+                        </div>
+                        <div class="topic-card">
+                            <h4>Resources</h4>
+                            <div class="resources-grid">
+                                <a href="https://www.usaswimming.org/coaches/coaching-education" target="_blank" class="resource-link">
+                                    <span class="resource-icon">🏊</span>
+                                    <span>USA Swimming - LTAD Materials</span>
+                                </a>
+                                <a href="https://www.youtube.com/@FitterandFaster" target="_blank" class="resource-link">
+                                    <span class="resource-icon youtube">▶</span>
+                                    <span>Fitter & Faster Channel</span>
+                                </a>
+                            </div>
                         </div>
                         <div class="practical-box">
                             <h5>Reality Check</h5>
@@ -562,9 +640,10 @@
                         <div class="topic-card">
                             <h4>Equipment Needed</h4>
                             <ul>
-                                <li>Smartphone in waterproof pouch (~$15)</li>
+                                <li>Smartphone in waterproof pouch (~$15 on Amazon)</li>
                                 <li>Goggles strap camera (optional, ~$40)</li>
                                 <li>Slow-motion capability (most modern phones)</li>
+                                <li>Apps: Hudl Technique (free), Coach's Eye (paid)</li>
                             </ul>
                         </div>
                     </div>
@@ -594,6 +673,15 @@
                                 <li><strong>Entry:</strong> streamline position, single entry hole</li>
                                 <li><strong>Underwater:</strong> dolphin kicks, breakout before 15m</li>
                             </ul>
+                        </div>
+                        <div class="topic-card">
+                            <h4>Video Resources</h4>
+                            <div class="resources-grid">
+                                <a href="https://www.youtube.com/watch?v=3o7LPvP8iSs" target="_blank" class="resource-link">
+                                    <span class="resource-icon youtube">▶</span>
+                                    <span>Racing Starts - Skills NT</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                     <div class="week-section">
@@ -663,19 +751,31 @@
                         <div class="topic-card">
                             <h4>Essential Books</h4>
                             <ul>
-                                <li><strong>Swimming Fastest</strong> by Ernest Maglischo</li>
+                                <li><strong>Swimming Fastest</strong> by Ernest Maglischo - The bible</li>
                                 <li><strong>The Swimming Drill Book</strong> by Ruben Guzman</li>
                                 <li><strong>Championship Swim Training</strong> by Bill Sweetenham</li>
                             </ul>
                         </div>
                         <div class="topic-card">
-                            <h4>YouTube Channels</h4>
-                            <ul>
-                                <li>Race Club (Gary Hall Sr.) - Elite technique</li>
-                                <li>Fitter & Faster - Age-group content</li>
-                                <li>Swim Smooth - Drills and common errors</li>
-                                <li>Skills NT - Beginner-friendly</li>
-                            </ul>
+                            <h4>YouTube Channels to Follow</h4>
+                            <div class="resources-grid">
+                                <a href="https://www.youtube.com/@TheRaceClub" target="_blank" class="resource-link">
+                                    <span class="resource-icon youtube">▶</span>
+                                    <span>The Race Club</span>
+                                </a>
+                                <a href="https://www.youtube.com/@FitterandFaster" target="_blank" class="resource-link">
+                                    <span class="resource-icon youtube">▶</span>
+                                    <span>Fitter & Faster</span>
+                                </a>
+                                <a href="https://www.youtube.com/@SwimSmooth" target="_blank" class="resource-link">
+                                    <span class="resource-icon youtube">▶</span>
+                                    <span>Swim Smooth</span>
+                                </a>
+                                <a href="https://www.youtube.com/@theraborist" target="_blank" class="resource-link">
+                                    <span class="resource-icon youtube">▶</span>
+                                    <span>Skills NT</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
