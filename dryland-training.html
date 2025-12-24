@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dryland Training | Jayden's Training Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --glass-bg: rgba(255, 255, 255, 0.72);
@@ -15,6 +15,8 @@
             --text-primary: #1d1d1f;
             --text-secondary: #86868b;
             --accent-green: #34c759;
+            --accent-orange: #ff9500;
+            --accent-red: #ff3b30;
             --bg-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
             --radius-lg: 24px;
             --radius-md: 16px;
@@ -71,7 +73,7 @@
         .nav-title { font-weight: 600; font-size: 1.1rem; }
 
         .container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 0 24px 60px;
         }
@@ -109,35 +111,6 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        .workout-card {
-            background: var(--glass-bg-dark);
-            backdrop-filter: var(--blur);
-            -webkit-backdrop-filter: var(--blur);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: var(--glass-shadow);
-            margin-bottom: 24px;
-        }
-        .workout-header {
-            padding: 24px 32px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .workout-title h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-        }
-        .workout-title p {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
-        .workout-body { padding: 24px 32px; }
-
         /* Week selector */
         .week-grid {
             display: grid;
@@ -151,8 +124,8 @@
         .week-btn {
             background: var(--glass-bg);
             backdrop-filter: var(--blur);
-            border: 1px solid var(--glass-border);
-            padding: 16px 8px;
+            border: 2px solid transparent;
+            padding: 14px 8px;
             border-radius: var(--radius-md);
             font-family: inherit;
             font-size: 0.85rem;
@@ -181,76 +154,202 @@
             margin-top: 4px;
         }
 
-        /* Exercise cards */
-        .exercise-grid {
-            display: grid;
-            gap: 16px;
+        /* Main workout card */
+        .workout-card {
+            background: var(--glass-bg-dark);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--glass-shadow);
+            margin-bottom: 24px;
         }
-        .exercise-card {
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: var(--radius-md);
-            padding: 20px;
-            display: grid;
-            grid-template-columns: 140px 1fr;
-            gap: 20px;
+        .workout-header {
+            padding: 20px 32px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            display: flex;
+            justify-content: space-between;
             align-items: center;
         }
-        @media (max-width: 600px) {
-            .exercise-card { grid-template-columns: 1fr; }
-        }
-        .exercise-info h3 {
-            font-size: 1.1rem;
+        .workout-title h2 {
+            font-size: 1.4rem;
             font-weight: 600;
-            margin-bottom: 8px;
+            letter-spacing: -0.02em;
         }
-        .exercise-info p {
-            font-size: 0.9rem;
+        .workout-title p {
+            font-size: 0.85rem;
             color: var(--text-secondary);
-            line-height: 1.5;
+            margin-top: 2px;
         }
-        .exercise-meta {
+
+        /* Progress indicator */
+        .progress-dots {
             display: flex;
-            gap: 12px;
-            margin-top: 12px;
+            gap: 8px;
         }
-        .exercise-tag {
-            font-size: 0.8rem;
-            padding: 4px 10px;
-            background: white;
-            border-radius: 20px;
-            font-weight: 500;
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
         }
-        .exercise-tag.reps { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
-        .exercise-tag.time { background: rgba(16, 185, 129, 0.15); color: #10b981; }
-        .exercise-demo {
-            width: 140px;
-            height: 100px;
-            background: rgba(0, 0, 0, 0.03);
-            border-radius: var(--radius-sm);
+        .progress-dot.completed { background: var(--accent-green); }
+        .progress-dot.current { 
+            background: var(--accent-orange); 
+            transform: scale(1.2);
+            box-shadow: 0 0 0 4px rgba(255, 149, 0, 0.2);
+        }
+
+        /* Exercise display - horizontal split */
+        .exercise-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 450px;
+        }
+        @media (max-width: 768px) {
+            .exercise-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Left side - Demo */
+        .exercise-demo-side {
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.02);
+            border-right: 1px solid rgba(0, 0, 0, 0.06);
+        }
+        @media (max-width: 768px) {
+            .exercise-demo-side {
+                border-right: none;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+                padding: 24px;
+            }
+        }
+        .exercise-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+        }
+        .demo-frame {
+            width: 100%;
+            max-width: 320px;
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: var(--radius-lg);
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
-        .exercise-demo img {
+        .demo-frame img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
+        .demo-placeholder {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 20px;
+        }
 
-        /* Timer */
+        /* Right side - Info & Timer */
+        .exercise-info-side {
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-section {
+            margin-bottom: 24px;
+        }
+        .info-section h4 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+        .hint-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+            list-style: none;
+            padding: 0;
+        }
+        .hint-text li {
+            margin-bottom: 8px;
+            padding-left: 8px;
+        }
+
+        /* Sets & Reps display */
+        .sets-reps {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-box {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .stat-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Timer section */
         .timer-section {
             background: rgba(255, 255, 255, 0.6);
             border-radius: var(--radius-md);
-            padding: 32px;
+            padding: 24px;
             text-align: center;
-            margin-bottom: 24px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         .timer-display {
             font-family: 'JetBrains Mono', monospace;
             font-size: 4rem;
             font-weight: 700;
             color: var(--text-primary);
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+        .timer-display.countdown {
+            color: var(--accent-orange);
+        }
+        .timer-display.running {
+            color: var(--accent-green);
+        }
+        .timer-display.finished {
+            color: var(--accent-red);
+        }
+        .timer-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
             margin-bottom: 20px;
         }
         .timer-controls {
@@ -259,7 +358,7 @@
             gap: 12px;
         }
         .timer-btn {
-            padding: 12px 32px;
+            padding: 14px 32px;
             border: none;
             border-radius: var(--radius-sm);
             font-family: inherit;
@@ -268,33 +367,66 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        .timer-btn.start { background: var(--accent-green); color: white; }
-        .timer-btn.reset { background: rgba(0, 0, 0, 0.1); color: var(--text-primary); }
-        .timer-btn:hover { transform: scale(1.02); }
+        .timer-btn.start { 
+            background: var(--accent-green); 
+            color: white; 
+        }
+        .timer-btn.start:hover { 
+            background: #2db84d; 
+            transform: scale(1.02);
+        }
+        .timer-btn.pause { 
+            background: var(--accent-orange); 
+            color: white; 
+        }
+        .timer-btn.reset { 
+            background: rgba(0, 0, 0, 0.08); 
+            color: var(--text-primary); 
+        }
+        .timer-btn.reset:hover { 
+            background: rgba(0, 0, 0, 0.12); 
+        }
+        .timer-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
 
-        /* Progress */
-        .progress-bar {
-            height: 8px;
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            margin-bottom: 24px;
-        }
-        .progress-fill {
-            height: 100%;
-            background: var(--accent-green);
-            border-radius: 4px;
-            transition: width 0.3s;
-        }
-        .progress-text {
+        /* Navigation buttons */
+        .exercise-nav {
             display: flex;
             justify-content: space-between;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
+            padding: 20px 32px;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+            background: rgba(255, 255, 255, 0.3);
+        }
+        .nav-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--text-primary);
+        }
+        .nav-btn:hover:not(:disabled) {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        .nav-btn.complete {
+            background: var(--accent-green);
+            color: white;
+        }
+        .nav-btn.complete:hover {
+            background: #2db84d;
         }
 
-        /* Calendar */
+        /* Calendar styles */
         .calendar-header {
             display: flex;
             justify-content: space-between;
@@ -344,6 +476,50 @@
         .calendar-day.today { background: var(--accent-green); color: white; font-weight: 600; }
         .calendar-day.has-workout { border: 2px solid var(--accent-green); }
         .calendar-day.completed { background: rgba(16, 185, 129, 0.2); }
+
+        /* Progress stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: rgba(255, 255, 255, 0.6);
+            padding: 24px;
+            border-radius: var(--radius-md);
+            text-align: center;
+        }
+        .stat-card .stat-value {
+            font-size: 2.5rem;
+        }
+
+        /* Achievements */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        .achievement {
+            background: rgba(255, 255, 255, 0.4);
+            padding: 16px;
+            border-radius: var(--radius-md);
+            text-align: center;
+            opacity: 0.5;
+            transition: all 0.3s;
+        }
+        .achievement.unlocked {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.6);
+        }
+        .achievement-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+        .achievement-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -372,27 +548,19 @@
                 <div class="workout-header">
                     <div class="workout-title">
                         <h2 id="workout-title">Week 1 Workout</h2>
-                        <p id="workout-subtitle">Foundation Phase • Session A</p>
+                        <p id="workout-subtitle">Foundation Phase</p>
                     </div>
+                    <div class="progress-dots" id="progress-dots"></div>
                 </div>
-                <div class="workout-body">
-                    <div class="timer-section">
-                        <div class="timer-display" id="timer">0:30</div>
-                        <div class="timer-controls">
-                            <button class="timer-btn start" id="timer-start-btn" onclick="toggleTimer()">Start</button>
-                            <button class="timer-btn reset" onclick="resetTimer()">Reset</button>
-                        </div>
-                    </div>
 
-                    <div class="progress-text">
-                        <span id="exercise-counter">Exercise 1 of 6</span>
-                        <span id="progress-percent">0%</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
-                    </div>
+                <div class="exercise-container" id="exercise-container">
+                    <!-- Will be populated by JS -->
+                </div>
 
-                    <div class="exercise-grid" id="exercise-list"></div>
+                <div class="exercise-nav">
+                    <button class="nav-btn" id="prev-btn" onclick="prevExercise()">← Previous</button>
+                    <button class="nav-btn complete" id="complete-btn" onclick="completeWorkout()">Complete Workout ✓</button>
+                    <button class="nav-btn" id="next-btn" onclick="nextExercise()">Next →</button>
                 </div>
             </div>
         </div>
@@ -406,7 +574,7 @@
                         <p>9-week program schedule</p>
                     </div>
                 </div>
-                <div class="workout-body">
+                <div style="padding: 32px;">
                     <div class="calendar-header">
                         <div class="calendar-nav">
                             <button onclick="prevMonth()">←</button>
@@ -430,34 +598,47 @@
                         <p>Track your training journey</p>
                     </div>
                 </div>
-                <div class="workout-body">
-                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;">
-                        <div style="background:rgba(255,255,255,0.6);padding:24px;border-radius:16px;text-align:center;">
-                            <div style="font-size:2.5rem;font-weight:700;" id="completed-count">0</div>
-                            <div style="font-size:0.85rem;color:var(--text-secondary);">Completed</div>
+                <div style="padding: 32px;">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="completed-count">0</div>
+                            <div class="stat-label">Workouts Completed</div>
                         </div>
-                        <div style="background:rgba(255,255,255,0.6);padding:24px;border-radius:16px;text-align:center;">
-                            <div style="font-size:2.5rem;font-weight:700;" id="streak-count">0</div>
-                            <div style="font-size:0.85rem;color:var(--text-secondary);">Day Streak</div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="streak-count">0</div>
+                            <div class="stat-label">Day Streak</div>
                         </div>
-                        <div style="background:rgba(255,255,255,0.6);padding:24px;border-radius:16px;text-align:center;">
-                            <div style="font-size:2.5rem;font-weight:700;" id="total-time">0</div>
-                            <div style="font-size:0.85rem;color:var(--text-secondary);">Minutes</div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="total-time">0</div>
+                            <div class="stat-label">Total Minutes</div>
                         </div>
                     </div>
-                    <h3 style="margin-bottom:16px;">Achievements</h3>
-                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;" id="achievements">
-                        <div style="background:rgba(255,255,255,0.4);padding:16px;border-radius:12px;text-align:center;opacity:0.5;">
-                            <div style="font-size:2rem;">🌟</div>
-                            <div style="font-size:0.85rem;font-weight:600;">First Workout</div>
+                    
+                    <h3 style="margin-bottom: 16px; font-size: 1.1rem;">Achievements</h3>
+                    <div class="achievements-grid" id="achievements">
+                        <div class="achievement" id="ach-first">
+                            <div class="achievement-icon">🌟</div>
+                            <div class="achievement-name">First Workout</div>
                         </div>
-                        <div style="background:rgba(255,255,255,0.4);padding:16px;border-radius:12px;text-align:center;opacity:0.5;">
-                            <div style="font-size:2rem;">🔥</div>
-                            <div style="font-size:0.85rem;font-weight:600;">3-Day Streak</div>
+                        <div class="achievement" id="ach-streak3">
+                            <div class="achievement-icon">🔥</div>
+                            <div class="achievement-name">3-Day Streak</div>
                         </div>
-                        <div style="background:rgba(255,255,255,0.4);padding:16px;border-radius:12px;text-align:center;opacity:0.5;">
-                            <div style="font-size:2rem;">💪</div>
-                            <div style="font-size:0.85rem;font-weight:600;">Week Complete</div>
+                        <div class="achievement" id="ach-week">
+                            <div class="achievement-icon">💪</div>
+                            <div class="achievement-name">Week Complete</div>
+                        </div>
+                        <div class="achievement" id="ach-phase1">
+                            <div class="achievement-icon">🏆</div>
+                            <div class="achievement-name">Phase 1 Done</div>
+                        </div>
+                        <div class="achievement" id="ach-streak7">
+                            <div class="achievement-icon">⚡</div>
+                            <div class="achievement-name">7-Day Streak</div>
+                        </div>
+                        <div class="achievement" id="ach-champion">
+                            <div class="achievement-icon">👑</div>
+                            <div class="achievement-name">9 Weeks Complete</div>
                         </div>
                     </div>
                 </div>
@@ -466,103 +647,103 @@
     </div>
 
     <script>
-        // Exercise GIF URLs from GIPHY and other sources
+        // Exercise GIF URLs
         const exerciseGifs = {
-            "Plank Hold": "https://media.giphy.com/media/xT8qBff8cRRFf7k2u4/giphy.gif",
-            "Dead Bug": "https://media.giphy.com/media/1qfDU4MJv9xoGtRKvh/giphy.gif",
-            "Superman Hold": "https://media.giphy.com/media/23hPPMRgPxbNBlPQe3/giphy.gif",
-            "BOSU Flutter Kicks": "https://media.giphy.com/media/l378zKVk7Eh3yHoJi/giphy.gif",
-            "BOSU Dolphin Kicks": "https://media.giphy.com/media/3oriNYQX2lC6dfW2Ji/giphy.gif",
-            "Glute Bridge": "https://media.giphy.com/media/1AfLx8dLTVoHK/giphy.gif",
-            "Bird Dog": "https://media.giphy.com/media/f8k9R6irVv8p2/giphy.gif",
-            "Hollow Body Hold": "https://media.giphy.com/media/xUOwGdA2o7E4TPJICQ/giphy.gif",
-            "TRX Plank": "https://media.giphy.com/media/xT8qBff8cRRFf7k2u4/giphy.gif",
-            "TRX Row": "https://media.giphy.com/media/YoWOIjnXT1NKIbFP9H/giphy.gif",
-            "TRX Y-Raise": "https://media.giphy.com/media/YoWOIjnXT1NKIbFP9H/giphy.gif",
-            "TRX Fallout": "https://media.giphy.com/media/xT8qBff8cRRFf7k2u4/giphy.gif",
-            "TRX Single-Leg Squat": "https://media.giphy.com/media/1qfKUnnLxHfgxGvSv0/giphy.gif",
-            "Streamline Plank": "https://media.giphy.com/media/xT8qBff8cRRFf7k2u4/giphy.gif",
+            "Plank Hold": "https://media4.giphy.com/media/d3mlADRlF7SMFQRy/giphy.gif",
+            "Dead Bug": "https://media2.giphy.com/media/aIyZ9Ra6pyo5ZOHQsm/giphy.gif",
+            "Superman Hold": "https://media2.giphy.com/media/hNng9AOyUHxvPiCUiv/giphy.gif",
+            "BOSU Flutter Kicks": null,
+            "BOSU Dolphin Kicks": null,
+            "Glute Bridge": "https://www.strengthlog.com/wp-content/uploads/2024/01/glute-bridge-with-band.gif",
+            "Bird Dog": "https://media.giphy.com/media/1qfKdcZlHD0nOZyIwe/giphy.gif",
+            "Hollow Body Hold": "https://www.strengthlog.com/wp-content/uploads/2025/03/hollow-hold.gif",
+            "TRX Plank": "https://recreation.truman.edu/files/2019/05/forearm-plank-where-legs-go-wide.gif",
+            "TRX Row": "https://recreation.truman.edu/files/2019/03/pull-to-chest.gif",
+            "Streamline Plank": "https://media4.giphy.com/media/d3mlADRlF7SMFQRy/giphy.gif",
             "V-Sit Hold": "https://media.giphy.com/media/xUOwGdA2o7E4TPJICQ/giphy.gif",
-            "BOSU Flat-Side Balance": "https://media.giphy.com/media/l0ExdMHUDKteztyfe/giphy.gif",
-            "Streamline Hold": "https://media.giphy.com/media/xT8qBff8cRRFf7k2u4/giphy.gif",
-            "BOSU Explosive Dolphins": "https://media.giphy.com/media/3oriNYQX2lC6dfW2Ji/giphy.gif",
-            "BOSU Single-Leg Balance": "https://media.giphy.com/media/l0ExdMHUDKteztyfe/giphy.gif",
-            "Side Plank": "https://media.giphy.com/media/UvOcKPHrkKSLm/giphy.gif"
+            "TRX Y-Raise": "https://recreation.truman.edu/files/2019/03/Y-Stand-to-Squat.gif",
+            "TRX Fallout": "https://recreation.truman.edu/files/2019/05/forearm-plank-where-legs-go-wide.gif",
+            "BOSU Flat-Side Balance": "https://recreation.truman.edu/files/2020/05/Blue-Balance-Reversed-Step-Up.gif",
+            "Streamline Hold": null,
+            "BOSU Explosive Dolphins": null,
+            "BOSU Single-Leg Balance": "https://recreation.truman.edu/files/2020/05/Blue-Balance-Reversed-Step-Up-Knee-Raise-and-Leg-Extension.gif",
+            "Side Plank": "https://media.post.rvohealth.io/wp-content/uploads/sites/2/2020/06/1.1.SidePlank.gif",
+            "TRX Single-Leg Squat": "https://recreation.truman.edu/files/2019/03/stand-to-squat.gif"
         };
 
-        // Exercise data for 9 weeks
+        // Exercise data with hints
         const exercises = {
             1: [
-                { name: "Plank Hold", type: "time", value: "20 sec", reps: 2, desc: "Forearms on ground, body straight like a board" },
-                { name: "Dead Bug", type: "reps", value: "8 each", reps: 2, desc: "Opposite arm and leg extend, keep back flat" },
-                { name: "Superman Hold", type: "time", value: "15 sec", reps: 2, desc: "Lift arms and legs off ground, squeeze glutes" },
-                { name: "BOSU Flutter Kicks", type: "time", value: "15 sec", reps: 2, desc: "Back on BOSU, arms in streamline, quick kicks" },
-                { name: "BOSU Dolphin Kicks", type: "reps", value: "8 reps", reps: 2, desc: "Same position, both legs together like dolphin" },
-                { name: "Glute Bridge", type: "reps", value: "10 reps", reps: 2, desc: "Feet on ground, lift hips, squeeze at top" }
+                { name: "Plank Hold", type: "time", value: 20, reps: 2, hints: ["Keep body straight like a board", "Don't let hips sag", "Look at the floor"] },
+                { name: "Dead Bug", type: "reps", value: "8 each", reps: 2, hints: ["Keep lower back pressed to floor", "Move opposite arm and leg", "Slow and controlled"] },
+                { name: "Superman Hold", type: "time", value: 15, reps: 2, hints: ["Lift arms and legs off ground", "Squeeze your glutes", "Keep neck neutral"] },
+                { name: "BOSU Flutter Kicks", type: "time", value: 15, reps: 2, hints: ["Back on BOSU dome", "Arms in streamline overhead", "Quick, small kicks"] },
+                { name: "BOSU Dolphin Kicks", type: "reps", value: "8 reps", reps: 2, hints: ["Both legs together", "Kick from the hips", "Keep core tight"] },
+                { name: "Glute Bridge", type: "reps", value: "10 reps", reps: 2, hints: ["Feet flat on ground", "Squeeze glutes at top", "Hold 2 seconds at top"] }
             ],
             2: [
-                { name: "Plank Hold", type: "time", value: "25 sec", reps: 2, desc: "Forearms on ground, body straight like a board" },
-                { name: "Dead Bug", type: "reps", value: "10 each", reps: 2, desc: "Opposite arm and leg extend, keep back flat" },
-                { name: "Superman Hold", type: "time", value: "20 sec", reps: 2, desc: "Lift arms and legs off ground, squeeze glutes" },
-                { name: "BOSU Flutter Kicks", type: "time", value: "20 sec", reps: 2, desc: "Back on BOSU, arms in streamline, quick kicks" },
-                { name: "BOSU Dolphin Kicks", type: "reps", value: "10 reps", reps: 2, desc: "Same position, both legs together like dolphin" },
-                { name: "Bird Dog", type: "reps", value: "8 each", reps: 2, desc: "On hands and knees, extend opposite arm and leg" }
+                { name: "Plank Hold", type: "time", value: 25, reps: 2, hints: ["Keep body straight like a board", "Don't let hips sag", "Look at the floor"] },
+                { name: "Dead Bug", type: "reps", value: "10 each", reps: 2, hints: ["Keep lower back pressed to floor", "Move opposite arm and leg", "Slow and controlled"] },
+                { name: "Superman Hold", type: "time", value: 20, reps: 2, hints: ["Lift arms and legs off ground", "Squeeze your glutes", "Keep neck neutral"] },
+                { name: "BOSU Flutter Kicks", type: "time", value: 20, reps: 2, hints: ["Back on BOSU dome", "Arms in streamline overhead", "Quick, small kicks"] },
+                { name: "BOSU Dolphin Kicks", type: "reps", value: "10 reps", reps: 2, hints: ["Both legs together", "Kick from the hips", "Keep core tight"] },
+                { name: "Bird Dog", type: "reps", value: "8 each", reps: 2, hints: ["On hands and knees", "Extend opposite arm and leg", "Keep back flat"] }
             ],
             3: [
-                { name: "Plank Hold", type: "time", value: "30 sec", reps: 3, desc: "Forearms on ground, body straight like a board" },
-                { name: "Dead Bug", type: "reps", value: "10 each", reps: 3, desc: "Opposite arm and leg extend, keep back flat" },
-                { name: "Superman Hold", type: "time", value: "20 sec", reps: 3, desc: "Lift arms and legs off ground, squeeze glutes" },
-                { name: "BOSU Flutter Kicks", type: "time", value: "20 sec", reps: 3, desc: "Back on BOSU, arms in streamline, quick kicks" },
-                { name: "BOSU Dolphin Kicks", type: "reps", value: "12 reps", reps: 2, desc: "Same position, both legs together like dolphin" },
-                { name: "Hollow Body Hold", type: "time", value: "15 sec", reps: 2, desc: "Lower back pressed down, arms and legs hover" }
+                { name: "Plank Hold", type: "time", value: 30, reps: 3, hints: ["Keep body straight like a board", "Don't let hips sag", "Look at the floor"] },
+                { name: "Dead Bug", type: "reps", value: "10 each", reps: 3, hints: ["Keep lower back pressed to floor", "Move opposite arm and leg", "Slow and controlled"] },
+                { name: "Superman Hold", type: "time", value: 20, reps: 3, hints: ["Lift arms and legs off ground", "Squeeze your glutes", "Keep neck neutral"] },
+                { name: "BOSU Flutter Kicks", type: "time", value: 20, reps: 3, hints: ["Back on BOSU dome", "Arms in streamline overhead", "Quick, small kicks"] },
+                { name: "BOSU Dolphin Kicks", type: "reps", value: "12 reps", reps: 2, hints: ["Both legs together", "Kick from the hips", "Keep core tight"] },
+                { name: "Hollow Body Hold", type: "time", value: 15, reps: 2, hints: ["Lower back pressed down", "Arms and legs hover off ground", "Like a banana shape"] }
             ],
             4: [
-                { name: "TRX Plank", type: "time", value: "20 sec", reps: 3, desc: "Feet in TRX straps, hold strong plank" },
-                { name: "TRX Row", type: "reps", value: "10 reps", reps: 2, desc: "Lean back, pull chest to hands, squeeze back" },
-                { name: "Streamline Plank", type: "time", value: "20 sec", reps: 2, desc: "Plank with arms extended overhead in streamline" },
-                { name: "BOSU Flutter Kicks", type: "time", value: "25 sec", reps: 3, desc: "Back on BOSU, arms in streamline, quick kicks" },
-                { name: "V-Sit Hold", type: "time", value: "15 sec", reps: 2, desc: "Balance on tailbone, legs and torso form V shape" },
-                { name: "Hollow Body Hold", type: "time", value: "20 sec", reps: 2, desc: "Lower back pressed down, arms and legs hover" }
+                { name: "TRX Plank", type: "time", value: 20, reps: 3, hints: ["Feet in TRX straps", "Hold strong plank position", "Don't let hips drop"] },
+                { name: "TRX Row", type: "reps", value: "10 reps", reps: 2, hints: ["Lean back, arms extended", "Pull chest to hands", "Squeeze shoulder blades"] },
+                { name: "Streamline Plank", type: "time", value: 20, reps: 2, hints: ["Arms extended overhead", "Like a swimming streamline", "Keep core super tight"] },
+                { name: "BOSU Flutter Kicks", type: "time", value: 25, reps: 3, hints: ["Back on BOSU dome", "Arms in streamline overhead", "Quick, small kicks"] },
+                { name: "V-Sit Hold", type: "time", value: 15, reps: 2, hints: ["Balance on tailbone", "Legs and torso form V shape", "Arms reach forward"] },
+                { name: "Hollow Body Hold", type: "time", value: 20, reps: 2, hints: ["Lower back pressed down", "Arms and legs hover off ground", "Like a banana shape"] }
             ],
             5: [
-                { name: "TRX Plank", type: "time", value: "25 sec", reps: 3, desc: "Feet in TRX straps, hold strong plank" },
-                { name: "TRX Row", type: "reps", value: "12 reps", reps: 2, desc: "Lean back, pull chest to hands, squeeze back" },
-                { name: "TRX Y-Raise", type: "reps", value: "10 reps", reps: 2, desc: "Arms form Y shape overhead, squeeze shoulder blades" },
-                { name: "BOSU Flutter Kicks", type: "time", value: "30 sec", reps: 3, desc: "Back on BOSU, arms in streamline, quick kicks" },
-                { name: "BOSU Flat-Side Balance", type: "time", value: "20 sec", reps: 2, desc: "Stand on flat side, hold streamline position" },
-                { name: "Streamline Hold", type: "time", value: "25 sec", reps: 2, desc: "Lie on ground, perfect streamline, squeeze tight" }
+                { name: "TRX Plank", type: "time", value: 25, reps: 3, hints: ["Feet in TRX straps", "Hold strong plank position", "Don't let hips drop"] },
+                { name: "TRX Row", type: "reps", value: "12 reps", reps: 2, hints: ["Lean back, arms extended", "Pull chest to hands", "Squeeze shoulder blades"] },
+                { name: "TRX Y-Raise", type: "reps", value: "10 reps", reps: 2, hints: ["Arms form Y shape overhead", "Squeeze shoulder blades together", "Control the movement"] },
+                { name: "BOSU Flutter Kicks", type: "time", value: 30, reps: 3, hints: ["Back on BOSU dome", "Arms in streamline overhead", "Quick, small kicks"] },
+                { name: "BOSU Flat-Side Balance", type: "time", value: 20, reps: 2, hints: ["Stand on flat (black) side", "Hold streamline position", "Keep core engaged"] },
+                { name: "Streamline Hold", type: "time", value: 25, reps: 2, hints: ["Lie flat on ground", "Perfect streamline position", "Squeeze everything tight"] }
             ],
             6: [
-                { name: "TRX Plank", type: "time", value: "25 sec", reps: 3, desc: "Feet in TRX straps, hold strong plank" },
-                { name: "TRX Row", type: "reps", value: "12 reps", reps: 2, desc: "Moderate angle, pull chest to hands" },
-                { name: "TRX Y-Raise", type: "reps", value: "10 reps", reps: 2, desc: "Arms form Y shape overhead, control the movement" },
-                { name: "BOSU Flutter Kicks", type: "time", value: "30 sec", reps: 3, desc: "Back on BOSU, arms in streamline, quick kicks" },
-                { name: "BOSU Flat-Side Balance", type: "time", value: "25 sec", reps: 2, desc: "Stand on flat side, add arm movements" },
-                { name: "Streamline Hold", type: "time", value: "30 sec", reps: 2, desc: "Lie on ground, perfect streamline, squeeze tight" }
+                { name: "TRX Plank", type: "time", value: 25, reps: 3, hints: ["Feet in TRX straps", "Hold strong plank position", "Don't let hips drop"] },
+                { name: "TRX Row", type: "reps", value: "12 reps", reps: 2, hints: ["Moderate angle", "Pull chest to hands", "Full range of motion"] },
+                { name: "TRX Y-Raise", type: "reps", value: "10 reps", reps: 2, hints: ["Arms form Y shape overhead", "Control the movement", "Squeeze at the top"] },
+                { name: "BOSU Flutter Kicks", type: "time", value: 30, reps: 3, hints: ["Back on BOSU dome", "Arms in streamline overhead", "Quick, small kicks"] },
+                { name: "BOSU Flat-Side Balance", type: "time", value: 25, reps: 2, hints: ["Stand on flat (black) side", "Add arm movements", "Challenge your balance"] },
+                { name: "Streamline Hold", type: "time", value: 30, reps: 2, hints: ["Lie flat on ground", "Perfect streamline position", "Squeeze everything tight"] }
             ],
             7: [
-                { name: "TRX Row", type: "reps", value: "12 reps", reps: 3, desc: "Challenging angle, full range of motion" },
-                { name: "TRX Y-Raise", type: "reps", value: "12 reps", reps: 2, desc: "Control throughout, shoulder blade squeeze" },
-                { name: "TRX Fallout", type: "reps", value: "6 reps", reps: 1, desc: "Arms extend forward, control the stretch" },
-                { name: "BOSU Explosive Dolphins", type: "reps", value: "15 reps", reps: 3, desc: "Powerful, quick dolphin kicks" },
-                { name: "BOSU Single-Leg Balance", type: "time", value: "15 sec each", reps: 2, desc: "One leg on flat side, hold streamline" },
-                { name: "Side Plank", type: "time", value: "20 sec each", reps: 2, desc: "Stack feet, lift hips, straight line" }
+                { name: "TRX Row", type: "reps", value: "12 reps", reps: 3, hints: ["Challenging angle", "Full range of motion", "Squeeze at the top"] },
+                { name: "TRX Y-Raise", type: "reps", value: "12 reps", reps: 2, hints: ["Control throughout", "Shoulder blade squeeze", "Strong finish"] },
+                { name: "TRX Fallout", type: "reps", value: "6 reps", reps: 1, hints: ["Arms extend forward", "Control the stretch", "Keep core tight"] },
+                { name: "BOSU Explosive Dolphins", type: "reps", value: "15 reps", reps: 3, hints: ["Powerful, quick kicks", "Explode from the core", "Like racing dolphins"] },
+                { name: "BOSU Single-Leg Balance", type: "time", value: 15, reps: 2, hints: ["One leg on flat side", "Hold streamline position", "Switch legs each set"] },
+                { name: "Side Plank", type: "time", value: 20, reps: 2, hints: ["Stack your feet", "Lift hips high", "Straight line from head to toe"] }
             ],
             8: [
-                { name: "TRX Row", type: "reps", value: "12 reps", reps: 3, desc: "Challenging angle, full range of motion" },
-                { name: "TRX Y-Raise", type: "reps", value: "12 reps", reps: 2, desc: "Control throughout, shoulder blade squeeze" },
-                { name: "TRX Fallout", type: "reps", value: "8 reps", reps: 2, desc: "Arms extend forward, control the stretch" },
-                { name: "TRX Single-Leg Squat", type: "reps", value: "8 each", reps: 1, desc: "Hold straps for balance, single leg squat" },
-                { name: "BOSU Explosive Dolphins", type: "reps", value: "18 reps", reps: 3, desc: "Powerful, quick dolphin kicks" },
-                { name: "BOSU Single-Leg Balance", type: "time", value: "20 sec each", reps: 2, desc: "One leg on flat side, hold streamline" }
+                { name: "TRX Row", type: "reps", value: "12 reps", reps: 3, hints: ["Challenging angle", "Full range of motion", "Squeeze at the top"] },
+                { name: "TRX Y-Raise", type: "reps", value: "12 reps", reps: 2, hints: ["Control throughout", "Shoulder blade squeeze", "Strong finish"] },
+                { name: "TRX Fallout", type: "reps", value: "8 reps", reps: 2, hints: ["Arms extend forward", "Control the stretch", "Keep core tight"] },
+                { name: "TRX Single-Leg Squat", type: "reps", value: "8 each", reps: 1, hints: ["Hold straps for balance", "Single leg squat down", "Push through the heel"] },
+                { name: "BOSU Explosive Dolphins", type: "reps", value: "18 reps", reps: 3, hints: ["Powerful, quick kicks", "Explode from the core", "Like racing dolphins"] },
+                { name: "BOSU Single-Leg Balance", type: "time", value: 20, reps: 2, hints: ["One leg on flat side", "Hold streamline position", "Switch legs each set"] }
             ],
             9: [
-                { name: "TRX Row", type: "reps", value: "15 reps", reps: 3, desc: "Maximum control and power" },
-                { name: "TRX Y-Raise", type: "reps", value: "12 reps", reps: 2, desc: "Perfect form, full range" },
-                { name: "TRX Fallout", type: "reps", value: "10 reps", reps: 2, desc: "Smooth and controlled" },
-                { name: "TRX Single-Leg Squat", type: "reps", value: "8 each", reps: 2, desc: "Full depth, good balance" },
-                { name: "BOSU Explosive Dolphins", type: "reps", value: "20 reps", reps: 3, desc: "Race-ready power!" },
-                { name: "BOSU Single-Leg Balance", type: "time", value: "20 sec each", reps: 3, desc: "Perfect stability" }
+                { name: "TRX Row", type: "reps", value: "15 reps", reps: 3, hints: ["Maximum control", "Maximum power", "Perfect form"] },
+                { name: "TRX Y-Raise", type: "reps", value: "12 reps", reps: 2, hints: ["Perfect form", "Full range", "Strong and controlled"] },
+                { name: "TRX Fallout", type: "reps", value: "10 reps", reps: 2, hints: ["Smooth and controlled", "Full extension", "Core stays tight"] },
+                { name: "TRX Single-Leg Squat", type: "reps", value: "8 each", reps: 2, hints: ["Full depth", "Good balance", "Strong push up"] },
+                { name: "BOSU Explosive Dolphins", type: "reps", value: "20 reps", reps: 3, hints: ["Race-ready power!", "Maximum effort", "Fast and strong"] },
+                { name: "BOSU Single-Leg Balance", type: "time", value: 20, reps: 3, hints: ["Perfect stability", "Streamline position", "Like a statue"] }
             ]
         };
 
@@ -574,13 +755,14 @@
 
         let currentWeek = 1;
         let currentExercise = 0;
-        let timerRunning = false;
-        let timerSeconds = 30;
+        let timerState = 'ready'; // ready, countdown, running, paused, finished
+        let timerSeconds = 0;
+        let countdownSeconds = 3;
         let timerInterval = null;
 
         // Calendar state
         let calendarYear = 2026;
-        let calendarMonth = 0; // January
+        let calendarMonth = 0;
 
         function showTab(tabId) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -609,12 +791,13 @@
         function selectWeek(week, btn) {
             currentWeek = week;
             currentExercise = 0;
+            resetTimer();
             document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            renderWorkout();
+            renderExercise();
         }
 
-        function renderWorkout() {
+        function renderExercise() {
             const phase = currentWeek <= 3 ? 1 : (currentWeek <= 6 ? 2 : 3);
             const phaseName = phases[phase].name;
             
@@ -622,57 +805,162 @@
             document.getElementById('workout-subtitle').textContent = `${phaseName} Phase`;
 
             const exList = exercises[currentWeek];
-            let html = '';
-            exList.forEach((ex, i) => {
-                const gifUrl = exerciseGifs[ex.name] || '';
-                html += `
-                    <div class="exercise-card" style="${i === currentExercise ? 'border:2px solid var(--accent-green);' : ''}">
-                        <div class="exercise-demo">
-                            ${gifUrl ? `<img src="${gifUrl}" alt="${ex.name}" onerror="this.style.display='none'; this.parentNode.innerHTML='Demo';">` : 'Demo'}
-                        </div>
-                        <div class="exercise-info">
-                            <h3>${ex.name}</h3>
-                            <p>${ex.desc}</p>
-                            <div class="exercise-meta">
-                                <span class="exercise-tag ${ex.type}">${ex.value}</span>
-                                <span class="exercise-tag">× ${ex.reps} sets</span>
-                            </div>
+            const ex = exList[currentExercise];
+            const gifUrl = exerciseGifs[ex.name];
+
+            // Progress dots
+            let dotsHtml = '';
+            exList.forEach((_, i) => {
+                let dotClass = 'progress-dot';
+                if (i < currentExercise) dotClass += ' completed';
+                if (i === currentExercise) dotClass += ' current';
+                dotsHtml += `<div class="${dotClass}"></div>`;
+            });
+            document.getElementById('progress-dots').innerHTML = dotsHtml;
+
+            // Exercise container
+            const isTimedExercise = ex.type === 'time';
+            timerSeconds = isTimedExercise ? ex.value : 0;
+
+            let demoHtml = gifUrl 
+                ? `<img src="${gifUrl}" alt="${ex.name}" onerror="this.parentNode.innerHTML='<div class=\\'demo-placeholder\\'>Demo not available</div>'">`
+                : '<div class="demo-placeholder">No demo available<br>for this exercise</div>';
+
+            let hintsHtml = ex.hints.map(h => `<li>→ ${h}</li>`).join('');
+
+            let timerHtml = '';
+            if (isTimedExercise) {
+                timerHtml = `
+                    <div class="timer-section">
+                        <div class="timer-display" id="timer-display">${formatTime(ex.value)}</div>
+                        <div class="timer-label" id="timer-label">Hold for ${ex.value} seconds</div>
+                        <div class="timer-controls">
+                            <button class="timer-btn start" id="timer-btn" onclick="toggleTimer()">Start</button>
+                            <button class="timer-btn reset" onclick="resetTimer()">Reset</button>
                         </div>
                     </div>
                 `;
-            });
-            document.getElementById('exercise-list').innerHTML = html;
-            updateProgress();
+            } else {
+                timerHtml = `
+                    <div class="timer-section">
+                        <div class="timer-display">${ex.value}</div>
+                        <div class="timer-label">Complete ${ex.reps} sets</div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('exercise-container').innerHTML = `
+                <div class="exercise-demo-side">
+                    <div class="exercise-name">${ex.name}</div>
+                    <div class="demo-frame">${demoHtml}</div>
+                </div>
+                <div class="exercise-info-side">
+                    <div class="info-section">
+                        <h4>Key Points</h4>
+                        <ul class="hint-text">${hintsHtml}</ul>
+                    </div>
+                    <div class="sets-reps">
+                        <div class="stat-box">
+                            <div class="stat-value">${isTimedExercise ? ex.value + 's' : ex.value}</div>
+                            <div class="stat-label">${isTimedExercise ? 'Seconds' : 'Reps'}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">${ex.reps}</div>
+                            <div class="stat-label">Sets</div>
+                        </div>
+                    </div>
+                    ${timerHtml}
+                </div>
+            `;
+
+            // Update nav buttons
+            document.getElementById('prev-btn').disabled = currentExercise === 0;
+            document.getElementById('next-btn').disabled = currentExercise === exList.length - 1;
+            document.getElementById('complete-btn').style.display = currentExercise === exList.length - 1 ? 'block' : 'none';
         }
 
-        function updateProgress() {
-            const total = exercises[currentWeek].length;
-            const percent = Math.round((currentExercise / total) * 100);
-            document.getElementById('exercise-counter').textContent = `Exercise ${currentExercise + 1} of ${total}`;
-            document.getElementById('progress-percent').textContent = `${percent}%`;
-            document.getElementById('progress-fill').style.width = `${percent}%`;
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
         }
 
         function toggleTimer() {
-            if (timerRunning) {
+            const btn = document.getElementById('timer-btn');
+            const display = document.getElementById('timer-display');
+            const label = document.getElementById('timer-label');
+
+            if (timerState === 'ready' || timerState === 'finished') {
+                // Start 3-second countdown
+                timerState = 'countdown';
+                countdownSeconds = 3;
+                btn.textContent = 'Get Ready...';
+                btn.disabled = true;
+                display.textContent = countdownSeconds;
+                display.classList.add('countdown');
+                display.classList.remove('running', 'finished');
+                label.textContent = 'Get ready...';
+
+                timerInterval = setInterval(() => {
+                    countdownSeconds--;
+                    if (countdownSeconds > 0) {
+                        display.textContent = countdownSeconds;
+                    } else {
+                        // Start actual timer
+                        clearInterval(timerInterval);
+                        timerState = 'running';
+                        display.classList.remove('countdown');
+                        display.classList.add('running');
+                        btn.textContent = 'Pause';
+                        btn.disabled = false;
+                        btn.classList.remove('start');
+                        btn.classList.add('pause');
+                        label.textContent = 'HOLD IT!';
+                        
+                        const ex = exercises[currentWeek][currentExercise];
+                        timerSeconds = ex.value;
+                        display.textContent = formatTime(timerSeconds);
+
+                        timerInterval = setInterval(() => {
+                            timerSeconds--;
+                            display.textContent = formatTime(timerSeconds);
+                            if (timerSeconds <= 0) {
+                                clearInterval(timerInterval);
+                                timerState = 'finished';
+                                display.classList.remove('running');
+                                display.classList.add('finished');
+                                btn.textContent = 'Done! ✓';
+                                btn.classList.remove('pause');
+                                btn.classList.add('start');
+                                label.textContent = 'Great job! Rest, then do next set.';
+                            }
+                        }, 1000);
+                    }
+                }, 1000);
+            } else if (timerState === 'running') {
+                // Pause
                 clearInterval(timerInterval);
-                timerRunning = false;
-                document.getElementById('timer-start-btn').textContent = 'Start';
-            } else {
-                timerRunning = true;
-                document.getElementById('timer-start-btn').textContent = 'Pause';
+                timerState = 'paused';
+                btn.textContent = 'Resume';
+                label.textContent = 'Paused';
+            } else if (timerState === 'paused') {
+                // Resume
+                timerState = 'running';
+                btn.textContent = 'Pause';
+                label.textContent = 'HOLD IT!';
+                
                 timerInterval = setInterval(() => {
                     timerSeconds--;
-                    updateTimerDisplay();
+                    display.textContent = formatTime(timerSeconds);
                     if (timerSeconds <= 0) {
                         clearInterval(timerInterval);
-                        timerRunning = false;
-                        document.getElementById('timer-start-btn').textContent = 'Start';
-                        if (currentExercise < exercises[currentWeek].length - 1) {
-                            currentExercise++;
-                            renderWorkout();
-                        }
-                        resetTimer();
+                        timerState = 'finished';
+                        display.classList.remove('running');
+                        display.classList.add('finished');
+                        btn.textContent = 'Done! ✓';
+                        btn.classList.remove('pause');
+                        btn.classList.add('start');
+                        label.textContent = 'Great job! Rest, then do next set.';
                     }
                 }, 1000);
             }
@@ -680,16 +968,48 @@
 
         function resetTimer() {
             clearInterval(timerInterval);
-            timerRunning = false;
-            timerSeconds = 30;
-            updateTimerDisplay();
-            document.getElementById('timer-start-btn').textContent = 'Start';
+            timerState = 'ready';
+            const ex = exercises[currentWeek][currentExercise];
+            if (ex.type === 'time') {
+                timerSeconds = ex.value;
+                const display = document.getElementById('timer-display');
+                const btn = document.getElementById('timer-btn');
+                const label = document.getElementById('timer-label');
+                if (display) {
+                    display.textContent = formatTime(timerSeconds);
+                    display.classList.remove('countdown', 'running', 'finished');
+                }
+                if (btn) {
+                    btn.textContent = 'Start';
+                    btn.disabled = false;
+                    btn.classList.remove('pause');
+                    btn.classList.add('start');
+                }
+                if (label) {
+                    label.textContent = `Hold for ${ex.value} seconds`;
+                }
+            }
         }
 
-        function updateTimerDisplay() {
-            const mins = Math.floor(timerSeconds / 60);
-            const secs = timerSeconds % 60;
-            document.getElementById('timer').textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+        function prevExercise() {
+            if (currentExercise > 0) {
+                currentExercise--;
+                resetTimer();
+                renderExercise();
+            }
+        }
+
+        function nextExercise() {
+            if (currentExercise < exercises[currentWeek].length - 1) {
+                currentExercise++;
+                resetTimer();
+                renderExercise();
+            }
+        }
+
+        function completeWorkout() {
+            alert('🎉 Workout Complete! Great job, Jayden!');
+            // Could save to localStorage here
         }
 
         // Calendar functions
@@ -705,29 +1025,24 @@
             const startDayOfWeek = firstDay.getDay();
             const daysInMonth = lastDay.getDate();
             
-            // Previous month days
             const prevMonthLastDay = new Date(calendarYear, calendarMonth, 0).getDate();
             
             let html = '';
             
-            // Day headers
             dayNames.forEach(d => {
                 html += `<div class="calendar-day-header">${d}</div>`;
             });
             
-            // Previous month fill
             for (let i = startDayOfWeek - 1; i >= 0; i--) {
                 html += `<div class="calendar-day other-month">${prevMonthLastDay - i}</div>`;
             }
             
-            // Current month days
             const today = new Date();
             for (let d = 1; d <= daysInMonth; d++) {
                 const isToday = (d === today.getDate() && 
                                 calendarMonth === today.getMonth() && 
                                 calendarYear === today.getFullYear());
                 
-                // Check if this is a training day (Mon, Wed, Fri)
                 const currentDate = new Date(calendarYear, calendarMonth, d);
                 const dayOfWeek = currentDate.getDay();
                 const isTrainingDay = (dayOfWeek === 1 || dayOfWeek === 3 || dayOfWeek === 5);
@@ -739,7 +1054,6 @@
                 html += `<div class="${classes}">${d}</div>`;
             }
             
-            // Next month fill
             const remainingDays = 42 - (startDayOfWeek + daysInMonth);
             for (let d = 1; d <= remainingDays; d++) {
                 html += `<div class="calendar-day other-month">${d}</div>`;
@@ -768,7 +1082,7 @@
 
         // Initialize
         initWeekSelector();
-        renderWorkout();
+        renderExercise();
     </script>
 </body>
 </html>
