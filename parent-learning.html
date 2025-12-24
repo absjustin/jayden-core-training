@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coach Education | Jayden's Training Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.72);
+            --glass-bg-dark: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --blur: blur(20px);
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-purple: #af52de;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            color: var(--text-primary);
+        }
+        .bg-animation {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.15) 0%, transparent 50%);
+        }
+
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 16px 24px;
+        }
+        .nav-glass {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--glass-shadow);
+        }
+        .nav-back {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+        .nav-back:hover { opacity: 0.7; }
+        .nav-title { font-weight: 600; font-size: 1.1rem; }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 24px 60px;
+        }
+
+        /* Month Navigation */
+        .month-nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            padding: 6px;
+            box-shadow: var(--glass-shadow);
+            overflow-x: auto;
+        }
+        .month-btn {
+            background: transparent;
+            border: none;
+            padding: 12px 20px;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+        .month-btn:hover { color: var(--text-primary); }
+        .month-btn.active {
+            background: white;
+            color: var(--text-primary);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Content Card */
+        .content-card {
+            background: var(--glass-bg-dark);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--glass-shadow);
+            margin-bottom: 24px;
+        }
+        .content-header {
+            padding: 32px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+        .content-header h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+        .content-header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+        .content-body {
+            padding: 32px;
+        }
+
+        /* Week Section */
+        .week-section {
+            margin-bottom: 32px;
+        }
+        .week-section:last-child { margin-bottom: 0; }
+        .week-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .week-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .week-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* Topic Card */
+        .topic-card {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        .topic-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+        .topic-card ul {
+            padding-left: 20px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+        .topic-card li { margin-bottom: 4px; }
+
+        /* Resources */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+        }
+        @media (max-width: 600px) {
+            .resources-grid { grid-template-columns: 1fr; }
+        }
+        .resource-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            background: white;
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .resource-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .resource-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(103, 126, 234, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Practical Section */
+        .practical-box {
+            background: rgba(175, 82, 222, 0.1);
+            border-left: 4px solid var(--accent-purple);
+            padding: 16px 20px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin-top: 16px;
+        }
+        .practical-box h5 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent-purple);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .practical-box p {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Error Table */
+        .error-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            background: white;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            margin-top: 16px;
+        }
+        .error-table th, .error-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+        .error-table th {
+            background: rgba(0, 0, 0, 0.03);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .error-table tr:last-child td { border-bottom: none; }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: var(--radius-md);
+            margin-bottom: 24px;
+        }
+        .progress-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(var(--accent-purple) 0deg, rgba(0,0,0,0.1) 0deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .progress-circle::before {
+            content: '';
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+        }
+        .progress-circle span {
+            position: relative;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        .progress-info h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .progress-info p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <nav class="nav">
+        <div class="nav-glass">
+            <a href="index.html" class="nav-back">← Back</a>
+            <span class="nav-title">Coach Education</span>
+            <div></div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="progress-tracker">
+            <div class="progress-circle" id="progress-circle">
+                <span id="progress-percent">0%</span>
+            </div>
+            <div class="progress-info">
+                <h4>Your Learning Progress</h4>
+                <p>Complete topics to track your journey to becoming a better swim parent-coach</p>
+            </div>
+        </div>
+
+        <div class="month-nav">
+            <button class="month-btn active" onclick="showMonth(1)">Month 1</button>
+            <button class="month-btn" onclick="showMonth(2)">Month 2</button>
+            <button class="month-btn" onclick="showMonth(3)">Month 3</button>
+            <button class="month-btn" onclick="showMonth(4)">Month 4</button>
+            <button class="month-btn" onclick="showMonth(5)">Month 5</button>
+            <button class="month-btn" onclick="showMonth(6)">Month 6</button>
+            <button class="month-btn" onclick="showMonth(7)">Reference</button>
+        </div>
+
+        <!-- MONTH 1 -->
+        <div id="month1" class="month-content">
+            <div class="content-card">
+                <div class="content-header">
+                    <h2>Foundations of Swimming Science</h2>
+                    <p>Understanding the physics that make swimmers fast</p>
+                </div>
+                <div class="content-body">
+                    <div class="week-section">
+                        <div class="week-header">
+                            <span class="week-badge">Week 1-2</span>
+                            <span class="week-title">Hydrodynamics Basics</span>
+                        </div>
+                        <div class="topic-card">
+                            <h4>Key Concepts to Learn</h4>
+                            <ul>
+                                <li>Drag forces: form drag, friction drag, wave drag</li>
+                                <li>Why body position is the #1 factor in swimming speed</li>
+                                <li>Frontal area and its relationship to resistance</li>
+                                <li>The "hull speed" concept for swimmers</li>
+                            </ul>
+                        </div>
+                        <div class="topic-card">
+                            <h4>Study Resources</h4>
+                            <div class="resources-grid">
+                                <a href="#" class="resource-link">
+                                    <span class="resource-icon">▶</span>
+                                    <span>"The Science of Swimming" - Real Engineering</span>
+                                </a>
+                                <a href="#" class="resource-link">
+                                    <span class="resource-icon">▶</span>
+                                    <span>"Swimming Faster" - Dr. Gary Hall Sr.</span>
+                                </a>
+                                <a href="#" class="resource-link">
+                                    <span class="resource-icon">📖</span>
+                                    <span>Swimming Fastest by Maglischo, Ch. 1-2</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="practical-box">
+                            <h5>Practical Application</h5>
+                            <p>Watch Jayden swim and identify moments of increased drag. Use underwater video (phone in waterproof case) to analyze body position. Compare his streamline to elite 10&U swimmers on YouTube.</p>
+                        </div>
+                    </div>
+
+                    <div class="week-section">
+                        <div class="week-header">
+                            <span class="week-badge">Week 3-4</span>
+                            <span class="week-title">Propulsion Fundamentals</span>
+                        </div>
+                        <div class="topic-card">
+                            <h4>Key Concepts to Learn</h4>
+                            <ul>
+                                <li>Newton's Third Law in swimming</li>
+                                <li>"Anchoring" the hand vs. "slipping" water</li>
+                                <li>The catch phase: early vertical forearm (EVF)</li>
+                                <li>Pitch, angle, and hand acceleration</li>
+                            </ul>
+                        </div>
+                        <div class="topic-card">
+                            <h4>Key Takeaways</h4>
+                            <ul>
+                                <li><strong>The hand should "anchor"</strong> in place while the body moves past it</li>
+                                <li><strong>Acceleration through the pull</strong> is more important than raw power</li>
+                                <li><strong>The forearm</strong> is as important as the hand for propulsion</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MONTH 2 -->
+        <div id="month2" class="month-content" style="display:none;">
+            <div class="content-card">
+                <div class="content-header">
+                    <h2>Stroke Mechanics Deep Dive</h2>
+                    <p>Understanding the technical details of all four strokes</p>
+                </div>
+                <div class="content-body">
+                    <div class="week-section">
+                        <div class="week-header">
+                            <span class="week-badge">Week 5-6</span>
+                            <span class="week-title">Freestyle & Backstroke</span>
+                        </div>
+                        <div class="topic-card">
+                            <h4>Freestyle Key Points</h4>
+                            <ul>
+                                <li>Body rotation: 45-60 degrees each side</li>
+                                <li>Timing: catch begins as opposite arm exits</li>
+                                <li>Kick: 6-beat vs 2-beat, hip-initiated</li>
+                                <li>Breathing: rotation not lifting, one goggle in water</li>
+                                <li>Hand entry: shoulder-width, fingertips first</li>
+                            </ul>
+                        </div>
+                        <div class="topic-card">
+                            <h4>Backstroke Key Points</h4>
+                            <ul>
+                                <li>Rotation: shoulders 45+°, hips ~30°</li>
+                                <li>Entry: pinky first, just outside shoulder</li>
+                                <li>Pull: bent arm at 90° at deepest point</li>
+                                <li>Exit: thumb leads, quick recovery</li>
+                                <li>Head: completely still, water line at ears</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="week-section">
+                        <div class="week-header">
+                            <span class="week-badge">Week 7-8</span>
+                            <span class="week-title">Breaststroke & Butterfly</span>
+                        </div>
+                        <div class="topic-card">
+                            <h4>Breaststroke Key Points</h4>
+                            <ul>
+                                <li>Timing: pull → breathe → kick → glide (never simultaneous)</li>
+                                <li>Pull: "heart shape" outsweep then insweep</li>
+                                <li>Kick: heels to butt (not knees to chest), feet turn out</li>
+                                <li>Glide: full streamline, 2-3 count minimum</li>
+                            </ul>
+                        </div>
+                        <div class="topic-card">
+                            <h4>Butterfly Key Points</h4>
+                            <ul>
+                                <li>Undulation: initiated from chest press, not head bob</li>
+                                <li>Timing: "big kick" on entry, "small kick" on exit</li>
+                                <li>Arms: wide entry, keyhole pull, exit past hips</li>
+                                <li>Breathing: chin forward (not up)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MONTH 3 -->
+        <div id="month3" class="month-content" style="display:none;">
+            <div class="content-card">
+                <div class="content-header">
+                    <h2>Age-Group Training Science</h2>
+                    <p>What works (and doesn't) for young swimmers</p>
+                </div>
+                <div class="content-body">
+                    <div class="week-section">
+                        <div class="week-header">
+                            <span class="week-badge">Week 9-10</span>
+                            <span class="week-title">Long-Term Athlete Development</span>
+                        </div>
+                        <div class="topic-card">
+                            <h4>LTAD Stages</h4>
+                            <ul>
+                                <li><strong>FUNdamentals</strong> (ages 6-8): Basic movement, play</li>
+                                <li><strong>Learn to Train</strong> (ages 8-11): Jayden is HERE</li>
+                                <li><strong>Train to Train</strong> (ages 11-15): Building aerobic base</li>
+                                <li><strong>Train to Compete</strong> (ages 15-18): Race-specific training</li>
+                            </ul>
+                        </div>
+                        <div class="topic-card">
+                            <h4>Critical Principles for 10 & Under</h4>
+                            <ul>
+                                <li><strong>Technique before fitness</strong> - Neural pathways are forming</li>
+                                <li><strong>All four strokes</strong> - Builds complete swimmer, prevents overuse</li>
+                                <li><strong>Multi-sport exposure</strong> - Helps, not hurts, swimming</li>
+                                <li><strong>Avoid overtraining</strong> - Young bodies recover differently</li>
+                                <li><strong>Keep it fun</strong> - Burnout is the biggest threat</li>
+                            </ul>
+                        </div>
+                        <div class="practical-box">
+                            <h5>Reality Check</h5>
+                            <p>Elite 10&U times are NOT predictive of senior success. Many Olympians were average at 10, great at 16+. The goal now: fall in love with swimming, build skills.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MONTH 4 -->
+        <div id="month4" class="month-content" style="display:none;">
+            <div class="content-card">
+                <div class="content-header">
+                    <h2>Coaching Communication & Cueing</h2>
+                    <p>How to teach effectively at the 10&U level</p>
+                </div>
+                <div class="content-body">
+                    <div class="week-section">
+                        <div class="week-header">
+                            <span class="week-badge">Week 13-14</span>
+                            <span class="week-title">Effective Coaching Language</span>
+                        </div>
+                        <div class="topic-card">
+                            <h4>Motor Learning Principles</h4>
+                            <ul>
+                                <li>External focus ("push water back") beats internal focus ("contract lats")</li>
+                                <li>One cue at a time, repeat consistently</li>
+                                <li>Demonstrations + simple words = fastest learning</li>
+                                <li>Let them feel it, don't over-explain</li>
+                            </ul>
+                        </div>
+                        <table class="error-table">
+                            <thead>
+                                <tr><th>Stroke</th><th>Concept</th><th>Technical Term</th><th>Kid-Friendly Cue</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Free</td><td>High elbow catch</td><td>EVF</td><td>"Reach over the barrel"</td></tr>
+                                <tr><td>Back</td><td>Shoulder rotation</td><td>Rotation</td><td>"Show belly button to wall"</td></tr>
+                                <tr><td>Breast</td><td>Narrow kick</td><td>Heel recovery</td><td>"Heels sneak up to butt"</td></tr>
+                                <tr><td>Fly</td><td>Chest undulation</td><td>Press</td><td>"Push chest through hoop"</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="week-section">
+                        <div class="week-header">
+                            <span class="week-badge">Week 15-16</span>
+                            <span class="week-title">Video Analysis Basics</span>
+                        </div>
+                        <div class="topic-card">
+                            <h4>Why Video is Essential</h4>
+                            <ul>
+                                <li>Swimmers can't feel what they're doing wrong</li>
+                                <li>"I thought I was doing it!" is almost always true</li>
+                                <li>Immediate visual feedback accelerates learning 3-5x</li>
+                            </ul>
+                        </div>
+                        <div class="topic-card">
+                            <h4>Equipment Needed</h4>
+                            <ul>
+                                <li>Smartphone in waterproof pouch (~$15)</li>
+                                <li>Goggles strap camera (optional, ~$40)</li>
+                                <li>Slow-motion capability (most modern phones)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MONTH 5 -->
+        <div id="month5" class="month-content" style="display:none;">
+            <div class="content-card">
+                <div class="content-header">
+                    <h2>Starts, Turns & Finishes</h2>
+                    <p>The "free speed" that wins races</p>
+                </div>
+                <div class="content-body">
+                    <div class="week-section">
+                        <div class="week-header">
+                            <span class="week-badge">Week 17-18</span>
+                            <span class="week-title">Racing Starts</span>
+                        </div>
+                        <div class="topic-card">
+                            <h4>Components of a Great Start</h4>
+                            <ul>
+                                <li><strong>Stance:</strong> toes over edge, weight forward</li>
+                                <li><strong>Reaction:</strong> push with legs at the signal</li>
+                                <li><strong>Drive:</strong> explosive hip extension</li>
+                                <li><strong>Entry:</strong> streamline position, single entry hole</li>
+                                <li><strong>Underwater:</strong> dolphin kicks, breakout before 15m</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="week-section">
+                        <div class="week-header">
+                            <span class="week-badge">Week 19-20</span>
+                            <span class="week-title">Turns & Finishes</span>
+                        </div>
+                        <div class="topic-card">
+                            <h4>Flip Turn Key Points</h4>
+                            <ul>
+                                <li>Approach: last stroke at flags, accelerate into wall</li>
+                                <li>Somersault: tuck tight, chin to chest</li>
+                                <li>Push-off: feet shoulder width, 45 degrees</li>
+                                <li>Streamline: tight, underwater dolphins, breakout past flags</li>
+                            </ul>
+                        </div>
+                        <div class="topic-card">
+                            <h4>Finishes (Worth 0.1-0.3 seconds!)</h4>
+                            <ul>
+                                <li>Never glide in—accelerate through the touch</li>
+                                <li>Free/Back: head down, drive to wall</li>
+                                <li>Breast/Fly: lunge, extend arms fully</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MONTH 6 -->
+        <div id="month6" class="month-content" style="display:none;">
+            <div class="content-card">
+                <div class="content-header">
+                    <h2>Putting It All Together</h2>
+                    <p>Integration and ongoing development</p>
+                </div>
+                <div class="content-body">
+                    <div class="week-section">
+                        <div class="week-header">
+                            <span class="week-badge">Week 21-22</span>
+                            <span class="week-title">Practice Planning</span>
+                        </div>
+                        <div class="topic-card">
+                            <h4>Session Structure</h4>
+                            <ul>
+                                <li><strong>Warm-up (15-20%):</strong> easy swimming, activate muscles</li>
+                                <li><strong>Main set (60-70%):</strong> skill work, drill, some intensity</li>
+                                <li><strong>Speed/power (10-15%):</strong> short, fast, full recovery</li>
+                                <li><strong>Cool-down (10%):</strong> easy, light stretching</li>
+                            </ul>
+                        </div>
+                        <div class="topic-card">
+                            <h4>Working with Team Coaches</h4>
+                            <ul>
+                                <li>Your role: supplemental, not contradictory</li>
+                                <li>Ask: "What should we focus on at home?"</li>
+                                <li>Share: what you're observing, not what you're correcting</li>
+                                <li>Respect: their expertise and relationship with Jayden</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="week-section">
+                        <div class="week-header">
+                            <span class="week-badge">Week 23-24</span>
+                            <span class="week-title">Building Your Library</span>
+                        </div>
+                        <div class="topic-card">
+                            <h4>Essential Books</h4>
+                            <ul>
+                                <li><strong>Swimming Fastest</strong> by Ernest Maglischo</li>
+                                <li><strong>The Swimming Drill Book</strong> by Ruben Guzman</li>
+                                <li><strong>Championship Swim Training</strong> by Bill Sweetenham</li>
+                            </ul>
+                        </div>
+                        <div class="topic-card">
+                            <h4>YouTube Channels</h4>
+                            <ul>
+                                <li>Race Club (Gary Hall Sr.) - Elite technique</li>
+                                <li>Fitter & Faster - Age-group content</li>
+                                <li>Swim Smooth - Drills and common errors</li>
+                                <li>Skills NT - Beginner-friendly</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REFERENCE -->
+        <div id="month7" class="month-content" style="display:none;">
+            <div class="content-card">
+                <div class="content-header">
+                    <h2>Quick Reference: Common Errors</h2>
+                    <p>Diagnose and fix technique issues</p>
+                </div>
+                <div class="content-body">
+                    <div class="topic-card">
+                        <h4>Freestyle Errors</h4>
+                        <table class="error-table">
+                            <thead><tr><th>Error</th><th>Cause</th><th>Fix</th></tr></thead>
+                            <tbody>
+                                <tr><td>Hips sinking</td><td>Head too high</td><td>"Hide your head"</td></tr>
+                                <tr><td>Crossing over</td><td>Poor rotation</td><td>"Reach for the corners"</td></tr>
+                                <tr><td>Short pull</td><td>Exiting early</td><td>"Push past your pocket"</td></tr>
+                                <tr><td>Scissor kick</td><td>Core weakness</td><td>"Glue your legs together"</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="topic-card">
+                        <h4>Backstroke Errors</h4>
+                        <table class="error-table">
+                            <thead><tr><th>Error</th><th>Cause</th><th>Fix</th></tr></thead>
+                            <tbody>
+                                <tr><td>Hips sinking</td><td>Knees bending</td><td>"Kick from your hips"</td></tr>
+                                <tr><td>Zigzag path</td><td>Over-rotation</td><td>"Bellybutton to ceiling"</td></tr>
+                                <tr><td>Short pull</td><td>Early exit</td><td>"Paint the wall behind"</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="topic-card">
+                        <h4>Breaststroke Errors</h4>
+                        <table class="error-table">
+                            <thead><tr><th>Error</th><th>Cause</th><th>Fix</th></tr></thead>
+                            <tbody>
+                                <tr><td>Wide knees</td><td>Knee-driven kick</td><td>"Knees no wider than hips"</td></tr>
+                                <tr><td>No glide</td><td>Rushing timing</td><td>"Count 1-2-3 in streamline"</td></tr>
+                                <tr><td>Late breath</td><td>Pull timing</td><td>"Head up as hands sweep in"</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="topic-card">
+                        <h4>Butterfly Errors</h4>
+                        <table class="error-table">
+                            <thead><tr><th>Error</th><th>Cause</th><th>Fix</th></tr></thead>
+                            <tbody>
+                                <tr><td>Legs only</td><td>No undulation</td><td>"Press your chest first"</td></tr>
+                                <tr><td>Arms slapping</td><td>No press</td><td>"Reach forward, not down"</td></tr>
+                                <tr><td>One kick</td><td>Timing confusion</td><td>"Big kick in, small kick out"</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showMonth(month) {
+            document.querySelectorAll('.month-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.month-content').forEach(c => c.style.display = 'none');
+            event.target.classList.add('active');
+            document.getElementById('month' + month).style.display = 'block';
+        }
+    </script>
+</body>
+</html>

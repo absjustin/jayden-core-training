@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jayden's Training Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.72);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --blur: blur(20px);
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-blue: #0071e3;
+            --accent-green: #34c759;
+            --accent-orange: #ff9500;
+            --accent-purple: #af52de;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 70%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(5deg); }
+            66% { transform: translate(-20px, 20px) rotate(-5deg); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .header-glass {
+            display: inline-block;
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 40px 60px;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #1d1d1f 0%, #515154 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 900px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Card */
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--glass-shadow);
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            display: flex;
+            flex-direction: column;
+            min-height: 320px;
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-icon.blue {
+            background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%);
+        }
+
+        .card-icon.green {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .card-icon.purple {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .card-meta {
+            display: flex;
+            gap: 16px;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .card-tag {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            background: rgba(0, 0, 0, 0.04);
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+        .card-arrow {
+            margin-left: auto;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .card-arrow {
+            background: var(--accent-blue);
+            color: white;
+            transform: translateX(4px);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 24px;
+        }
+
+        .footer-glass {
+            display: inline-block;
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            padding: 16px 32px;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .footer p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .footer strong {
+            color: var(--text-primary);
+        }
+
+        /* Quick Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 600px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .stat {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <div class="container">
+        <header class="header">
+            <div class="header-glass">
+                <h1>Jayden's Training Hub</h1>
+                <p>Your complete swimming development platform</p>
+            </div>
+        </header>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value">10</div>
+                <div class="stat-label">Years Old</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">4</div>
+                <div class="stat-label">Strokes</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">60</div>
+                <div class="stat-label">Min Sessions</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">AAA</div>
+                <div class="stat-label">Target</div>
+            </div>
+        </div>
+
+        <div class="cards-grid">
+            <a href="swim-training.html" class="card">
+                <div class="card-icon blue">🏊</div>
+                <h2>In-Water Training</h2>
+                <p>Complete 60-minute weekly workout plans with stroke-specific drills, technique focus, and progression through 4 training phases leading to championship meets.</p>
+                <div class="card-meta">
+                    <span class="card-tag">4 Phases</span>
+                    <span class="card-tag">16 Workouts</span>
+                    <span class="card-arrow">→</span>
+                </div>
+            </a>
+
+            <a href="dryland-training.html" class="card">
+                <div class="card-icon green">💪</div>
+                <h2>Dryland Training</h2>
+                <p>9-week core strength program with BOSU ball and TRX integration. Build the foundation for powerful underwater kicks and perfect body position.</p>
+                <div class="card-meta">
+                    <span class="card-tag">9 Weeks</span>
+                    <span class="card-tag">27 Sessions</span>
+                    <span class="card-arrow">→</span>
+                </div>
+            </a>
+
+            <a href="parent-learning.html" class="card">
+                <div class="card-icon purple">📚</div>
+                <h2>Coach Education</h2>
+                <p>6-month self-study curriculum covering swimming science, stroke mechanics, age-appropriate training, and effective coaching communication.</p>
+                <div class="card-meta">
+                    <span class="card-tag">6 Months</span>
+                    <span class="card-tag">24 Weeks</span>
+                    <span class="card-arrow">→</span>
+                </div>
+            </a>
+        </div>
+
+        <footer class="footer">
+            <div class="footer-glass">
+                <p>Training for <strong>PNS Championship</strong> (July 2026) and <strong>Western Zone</strong> (August 2026)</p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

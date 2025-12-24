@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>In-Water Training | Jayden's Training Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.72);
+            --glass-bg-dark: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --blur: blur(20px);
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-blue: #0071e3;
+            --bg-gradient: linear-gradient(135deg, #00c6fb 0%, #005bea 100%);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --phase1: #3b82f6;
+            --phase2: #8b5cf6;
+            --phase3: #f59e0b;
+            --phase4: #10b981;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            color: var(--text-primary);
+        }
+        .bg-animation {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.15) 0%, transparent 50%);
+        }
+        
+        /* Navigation */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 16px 24px;
+        }
+        .nav-glass {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--glass-shadow);
+        }
+        .nav-back {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: opacity 0.2s;
+        }
+        .nav-back:hover { opacity: 0.7; }
+        .nav-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .nav-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .nav-btn {
+            background: rgba(0, 0, 0, 0.05);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .nav-btn:hover { background: rgba(0, 0, 0, 0.1); }
+        .nav-btn.active { background: var(--accent-blue); color: white; }
+
+        /* Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 24px 60px;
+        }
+
+        /* Selectors */
+        .selectors {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .selector-group {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            padding: 8px;
+            display: flex;
+            gap: 4px;
+            box-shadow: var(--glass-shadow);
+        }
+        .selector-label {
+            padding: 8px 12px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .selector-btn {
+            background: transparent;
+            border: none;
+            padding: 10px 16px;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-primary);
+        }
+        .selector-btn:hover { background: rgba(0, 0, 0, 0.05); }
+        .selector-btn.active {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .selector-btn.phase1.active { background: var(--phase1); color: white; }
+        .selector-btn.phase2.active { background: var(--phase2); color: white; }
+        .selector-btn.phase3.active { background: var(--phase3); color: white; }
+        .selector-btn.phase4.active { background: var(--phase4); color: white; }
+
+        /* Workout Card */
+        .workout-card {
+            background: var(--glass-bg-dark);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--glass-shadow);
+        }
+        .workout-header {
+            padding: 24px 32px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .workout-title h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+        .workout-title p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+        .workout-meta {
+            text-align: right;
+        }
+        .workout-duration {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .workout-duration span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+        }
+
+        /* Workout Sections */
+        .workout-body {
+            padding: 24px 32px;
+        }
+        .workout-section {
+            margin-bottom: 24px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            background: rgba(0, 0, 0, 0.03);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        }
+        .section-time {
+            background: var(--phase1);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .section-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.02em;
+        }
+        .section-stroke {
+            margin-left: auto;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--phase1);
+            text-transform: uppercase;
+        }
+        .section-body {
+            padding: 16px 20px;
+        }
+        .workout-set {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            line-height: 1.5;
+        }
+        .workout-set:last-child { border-bottom: none; }
+        .coaching-cue {
+            margin-top: 12px;
+            padding: 12px 16px;
+            background: rgba(255, 204, 0, 0.15);
+            border-left: 3px solid #ffcc00;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9rem;
+        }
+        .coaching-cue strong { color: #996600; }
+
+        /* Equipment */
+        .equipment-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: var(--radius-md);
+        }
+        .equipment-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-right: 8px;
+        }
+        .equipment-tag {
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        /* Print */
+        .print-btn {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .print-btn:hover { background: rgba(0, 0, 0, 0.05); }
+
+        @media print {
+            .nav, .selectors { display: none !important; }
+            body { background: white; }
+            .workout-card { box-shadow: none; border: 1px solid #ddd; }
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 24px;
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            padding: 4px;
+            width: fit-content;
+            box-shadow: var(--glass-shadow);
+        }
+        .tab {
+            background: transparent;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-secondary);
+        }
+        .tab:hover { color: var(--text-primary); }
+        .tab.active {
+            background: white;
+            color: var(--text-primary);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Time Standards Table */
+        .times-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            background: white;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+        .times-table th, .times-table td {
+            padding: 12px 16px;
+            text-align: center;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+        .times-table th {
+            background: rgba(0, 0, 0, 0.03);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .times-table td:first-child {
+            text-align: left;
+            font-weight: 600;
+        }
+        .times-table .aaa {
+            background: rgba(255, 204, 0, 0.2);
+            font-weight: 700;
+        }
+        .times-table input {
+            width: 70px;
+            padding: 6px 8px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+        .course-toggle {
+            margin-bottom: 16px;
+        }
+
+        /* Tracking */
+        .tracking-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        @media (max-width: 700px) {
+            .tracking-grid { grid-template-columns: 1fr; }
+        }
+        .tracking-card {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: var(--radius-md);
+            padding: 20px;
+        }
+        .tracking-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .tracking-row {
+            display: grid;
+            grid-template-columns: 60px repeat(3, 1fr);
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .tracking-row label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        .tracking-row input {
+            padding: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+        .tracking-header {
+            display: grid;
+            grid-template-columns: 60px repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .tracking-header span {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-align: center;
+            text-transform: uppercase;
+        }
+        .tracking-header span:first-child { text-align: left; }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <nav class="nav">
+        <div class="nav-glass">
+            <a href="index.html" class="nav-back">← Back</a>
+            <span class="nav-title">In-Water Training</span>
+            <div class="nav-actions">
+                <button class="print-btn" onclick="window.print()">Print</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('workouts')">Workouts</button>
+            <button class="tab" onclick="showTab('times')">Time Standards</button>
+            <button class="tab" onclick="showTab('tracking')">Tracking</button>
+            <button class="tab" onclick="showTab('cues')">Coaching Cues</button>
+        </div>
+
+        <!-- WORKOUTS TAB -->
+        <div id="workouts" class="tab-content active">
+            <div class="selectors">
+                <div class="selector-group">
+                    <span class="selector-label">Phase</span>
+                    <button class="selector-btn phase1 active" onclick="selectPhase(1)">1</button>
+                    <button class="selector-btn phase2" onclick="selectPhase(2)">2</button>
+                    <button class="selector-btn phase3" onclick="selectPhase(3)">3</button>
+                    <button class="selector-btn phase4" onclick="selectPhase(4)">4</button>
+                </div>
+                <div class="selector-group">
+                    <span class="selector-label">Week</span>
+                    <button class="selector-btn active" onclick="selectWeek(1)">FR</button>
+                    <button class="selector-btn" onclick="selectWeek(2)">BK</button>
+                    <button class="selector-btn" onclick="selectWeek(3)">BR</button>
+                    <button class="selector-btn" onclick="selectWeek(4)">FL</button>
+                </div>
+            </div>
+
+            <div id="workout-display"></div>
+        </div>
+
+        <!-- TIME STANDARDS TAB -->
+        <div id="times" class="tab-content">
+            <div class="workout-card">
+                <div class="workout-header">
+                    <div class="workout-title">
+                        <h2>USA Swimming Time Standards</h2>
+                        <p>10 & Under Boys • 2024-2028</p>
+                    </div>
+                </div>
+                <div class="workout-body">
+                    <div class="selector-group course-toggle">
+                        <button class="selector-btn active" onclick="showCourse('scy')">SCY</button>
+                        <button class="selector-btn" onclick="showCourse('lcm')">LCM</button>
+                    </div>
+                    <div id="scy-table">
+                        <table class="times-table">
+                            <thead><tr><th>Event</th><th>B</th><th>BB</th><th>A</th><th>AA</th><th class="aaa">AAA</th><th>AAAA</th><th>Your Best</th></tr></thead>
+                            <tbody>
+                                <tr><td>50 Free</td><td>38.19</td><td>34.59</td><td>31.09</td><td>29.89</td><td class="aaa">28.69</td><td>27.49</td><td><input type="text" placeholder="--"></td></tr>
+                                <tr><td>100 Free</td><td>1:27.99</td><td>1:18.89</td><td>1:09.79</td><td>1:06.79</td><td class="aaa">1:03.79</td><td>1:00.69</td><td><input type="text" placeholder="--"></td></tr>
+                                <tr><td>200 Free</td><td>3:09.49</td><td>2:50.59</td><td>2:31.59</td><td>2:25.29</td><td class="aaa">2:18.99</td><td>2:12.69</td><td><input type="text" placeholder="--"></td></tr>
+                                <tr><td>50 Back</td><td>48.29</td><td>42.89</td><td>37.59</td><td>35.79</td><td class="aaa">33.99</td><td>32.19</td><td><input type="text" placeholder="--"></td></tr>
+                                <tr><td>100 Back</td><td>1:40.69</td><td>1:30.09</td><td>1:19.59</td><td>1:16.09</td><td class="aaa">1:12.49</td><td>1:08.99</td><td><input type="text" placeholder="--"></td></tr>
+                                <tr><td>50 Breast</td><td>53.39</td><td>47.69</td><td>42.09</td><td>40.19</td><td class="aaa">38.29</td><td>36.39</td><td><input type="text" placeholder="--"></td></tr>
+                                <tr><td>100 Breast</td><td>1:54.09</td><td>1:42.29</td><td>1:30.59</td><td>1:26.59</td><td class="aaa">1:22.69</td><td>1:18.79</td><td><input type="text" placeholder="--"></td></tr>
+                                <tr><td>50 Fly</td><td>46.49</td><td>41.29</td><td>35.99</td><td>34.29</td><td class="aaa">32.59</td><td>30.79</td><td><input type="text" placeholder="--"></td></tr>
+                                <tr><td>100 Fly</td><td>1:53.49</td><td>1:38.99</td><td>1:24.39</td><td>1:19.49</td><td class="aaa">1:14.59</td><td>1:09.79</td><td><input type="text" placeholder="--"></td></tr>
+                                <tr><td>100 IM</td><td>1:39.69</td><td>1:29.69</td><td>1:19.69</td><td>1:16.39</td><td class="aaa">1:13.09</td><td>1:09.79</td><td><input type="text" placeholder="--"></td></tr>
+                                <tr><td>200 IM</td><td>3:38.59</td><td>3:15.99</td><td>2:53.49</td><td>2:45.89</td><td class="aaa">2:38.39</td><td>2:30.89</td><td><input type="text" placeholder="--"></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="lcm-table" style="display:none;">
+                        <table class="times-table">
+                            <thead><tr><th>Event</th><th>B</th><th>BB</th><th>A</th><th>AA</th><th class="aaa">AAA</th><th>AAAA</th><th>Your Best</th></tr></thead>
+                            <tbody>
+                                <tr><td>50 Free</td><td>43.89</td><td>39.79</td><td>35.69</td><td>34.39</td><td class="aaa">32.99</td><td>31.59</td><td><input type="text" placeholder="--"></td></tr>
+                                <tr><td>100 Free</td><td>1:40.99</td><td>1:30.59</td><td>1:20.19</td><td>1:16.69</td><td class="aaa">1:13.19</td><td>1:09.79</td><td><input type="text" placeholder="--"></td></tr>
+                                <tr><td>200 Free</td><td>3:36.69</td><td>3:14.99</td><td>2:53.39</td><td>2:46.09</td><td class="aaa">2:38.89</td><td>2:31.69</td><td><input type="text" placeholder="--"></td></tr>
+                                <tr><td>400 Free</td><td>7:38.29</td><td>6:52.49</td><td>6:06.59</td><td>5:51.39</td><td class="aaa">5:36.09</td><td>5:20.79</td><td><input type="text" placeholder="--"></td></tr>
+                                <tr><td>50 Back</td><td>55.39</td><td>49.29</td><td>43.09</td><td>41.09</td><td class="aaa">38.99</td><td>36.99</td><td><input type="text" placeholder="--"></td></tr>
+                                <tr><td>100 Back</td><td>1:56.69</td><td>1:44.49</td><td>1:32.29</td><td>1:28.19</td><td class="aaa">1:24.09</td><td>1:19.99</td><td><input type="text" placeholder="--"></td></tr>
+                                <tr><td>50 Breast</td><td>1:00.89</td><td>54.39</td><td>47.89</td><td>45.79</td><td class="aaa">43.59</td><td>41.49</td><td><input type="text" placeholder="--"></td></tr>
+                                <tr><td>100 Breast</td><td>2:12.89</td><td>1:59.19</td><td>1:45.49</td><td>1:40.89</td><td class="aaa">1:36.29</td><td>1:31.69</td><td><input type="text" placeholder="--"></td></tr>
+                                <tr><td>50 Fly</td><td>52.29</td><td>46.39</td><td>40.59</td><td>38.59</td><td class="aaa">36.59</td><td>34.69</td><td><input type="text" placeholder="--"></td></tr>
+                                <tr><td>100 Fly</td><td>2:09.49</td><td>1:52.89</td><td>1:36.19</td><td>1:30.69</td><td class="aaa">1:25.09</td><td>1:19.59</td><td><input type="text" placeholder="--"></td></tr>
+                                <tr><td>200 IM</td><td>4:09.49</td><td>3:43.69</td><td>3:17.89</td><td>3:09.39</td><td class="aaa">3:00.79</td><td>2:52.19</td><td><input type="text" placeholder="--"></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACKING TAB -->
+        <div id="tracking" class="tab-content">
+            <div class="workout-card">
+                <div class="workout-header">
+                    <div class="workout-title">
+                        <h2>Stroke Count & Tempo Tracking</h2>
+                        <p>Track efficiency to find optimal performance</p>
+                    </div>
+                </div>
+                <div class="workout-body">
+                    <div class="tracking-grid">
+                        <div class="tracking-card">
+                            <h3>Freestyle</h3>
+                            <div class="tracking-header"><span></span><span>Count</span><span>Tempo</span><span>Time</span></div>
+                            <div class="tracking-row"><label>50</label><input type="text" placeholder="--"><input type="text" placeholder="--"><input type="text" placeholder="--"></div>
+                            <div class="tracking-row"><label>100</label><input type="text" placeholder="--"><input type="text" placeholder="--"><input type="text" placeholder="--"></div>
+                            <div class="tracking-row"><label>200</label><input type="text" placeholder="--"><input type="text" placeholder="--"><input type="text" placeholder="--"></div>
+                        </div>
+                        <div class="tracking-card">
+                            <h3>Backstroke</h3>
+                            <div class="tracking-header"><span></span><span>Count</span><span>Tempo</span><span>Time</span></div>
+                            <div class="tracking-row"><label>50</label><input type="text" placeholder="--"><input type="text" placeholder="--"><input type="text" placeholder="--"></div>
+                            <div class="tracking-row"><label>100</label><input type="text" placeholder="--"><input type="text" placeholder="--"><input type="text" placeholder="--"></div>
+                        </div>
+                        <div class="tracking-card">
+                            <h3>Breaststroke</h3>
+                            <div class="tracking-header"><span></span><span>Count</span><span>Tempo</span><span>Time</span></div>
+                            <div class="tracking-row"><label>50</label><input type="text" placeholder="--"><input type="text" placeholder="--"><input type="text" placeholder="--"></div>
+                            <div class="tracking-row"><label>100</label><input type="text" placeholder="--"><input type="text" placeholder="--"><input type="text" placeholder="--"></div>
+                        </div>
+                        <div class="tracking-card">
+                            <h3>Butterfly</h3>
+                            <div class="tracking-header"><span></span><span>Count</span><span>Tempo</span><span>Time</span></div>
+                            <div class="tracking-row"><label>50</label><input type="text" placeholder="--"><input type="text" placeholder="--"><input type="text" placeholder="--"></div>
+                            <div class="tracking-row"><label>100</label><input type="text" placeholder="--"><input type="text" placeholder="--"><input type="text" placeholder="--"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COACHING CUES TAB -->
+        <div id="cues" class="tab-content">
+            <div class="workout-card">
+                <div class="workout-header">
+                    <div class="workout-title">
+                        <h2>Quick Reference Cues</h2>
+                        <p>One cue at a time, repeat consistently</p>
+                    </div>
+                </div>
+                <div class="workout-body">
+                    <div class="tracking-grid">
+                        <div class="tracking-card"><h3>Freestyle</h3><ul style="padding-left:20px;line-height:1.8;"><li>Reach and roll</li><li>Push water past pocket</li><li>Fingertip drag</li><li>Head down, hips up</li></ul></div>
+                        <div class="tracking-card"><h3>Backstroke</h3><ul style="padding-left:20px;line-height:1.8;"><li>Pinky in, thumb out</li><li>Belly button to sky</li><li>Paint the ceiling</li><li>Kick from hips</li></ul></div>
+                        <div class="tracking-card"><h3>Breaststroke</h3><ul style="padding-left:20px;line-height:1.8;"><li>Heart shape pull</li><li>Heels to butt, snap</li><li>Hide behind hands</li><li>Shoot like torpedo</li></ul></div>
+                        <div class="tracking-card"><h3>Butterfly</h3><ul style="padding-left:20px;line-height:1.8;"><li>Throw hands forward</li><li>Press chest, pop hips</li><li>Dolphin from chest</li><li>Big kick in, small out</li></ul></div>
+                        <div class="tracking-card"><h3>Turns</h3><ul style="padding-left:20px;line-height:1.8;"><li>Tight ball, fast spin</li><li>Touch-tuck-explode</li><li>Push off on side</li><li>5 dolphin kicks min</li></ul></div>
+                        <div class="tracking-card"><h3>Finishes</h3><ul style="padding-left:20px;line-height:1.8;"><li>Head down, drive!</li><li>Lunge at wall!</li><li>No gliding in</li><li>Sprint through touch</li></ul></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const workoutData = {
+            phases: {
+                1: { name: "Foundation", dates: "Jan-Feb 2026", color: "#3b82f6", equipment: ["Fins", "Snorkel", "Kickboard", "Pull Buoy"] },
+                2: { name: "Build", dates: "Mar-Apr 2026", color: "#8b5cf6", equipment: ["Tempo Trainer", "Resistance Belt", "Paddles", "Pull Buoy", "Fins", "Snorkel"] },
+                3: { name: "Race Prep", dates: "May-Jun 2026", color: "#f59e0b", equipment: ["Tempo Trainer", "Hydro Hip", "Hydro Fin", "Parachute", "Fins"] },
+                4: { name: "Championship", dates: "July 2026", color: "#10b981", equipment: ["Minimal - Race Feel"] }
+            },
+            strokes: { 1: "Freestyle", 2: "Backstroke", 3: "Breaststroke", 4: "Butterfly" },
+            strokeDrills: {
+                1: { name: "Freestyle", sets: ["With snorkel: 4 x 50 Catch-up drill (thumb to thumb)", "4 x 25 Fingertip drag (high elbow recovery)", "4 x 50 6-kick switch drill", "4 x 25 Fist drill (feel water with forearms)", "4 x 25 Full stroke - COUNT STROKES"], cue: "Reach and roll - long strokes, rotate shoulders" },
+                2: { name: "Backstroke", sets: ["4 x 50 One-arm backstroke (25 right / 25 left)", "4 x 25 Spin drill (6 kicks, 3 strokes)", "4 x 50 Double-arm backstroke", "4 x 25 Cup-of-water drill", "4 x 25 Full stroke - COUNT STROKES"], cue: "Pinky in, thumb out - belly button to sky" },
+                3: { name: "Breaststroke", sets: ["4 x 50 Two kicks, one pull drill", "4 x 25 Pull only with pull buoy (heart shape)", "4 x 50 Glide counting (1-2-3 in streamline)", "4 x 25 Kick on back (knees underwater)", "4 x 25 Full stroke - COUNT STROKES"], cue: "Heart shape pull, hide behind hands, shoot forward" },
+                4: { name: "Butterfly", sets: ["With fins: 4 x 50 Single-arm fly (breathe to side)", "4 x 25 3-3-3 drill", "With fins: 4 x 50 Body dolphins (arms at sides)", "4 x 25 2-2-2 drill", "4 x 25 Full stroke - COUNT STROKES"], cue: "Press chest, pop hips - throw hands forward not down" }
+            },
+            phaseSections: {
+                1: {
+                    before: [
+                        { title: "WARM-UP", time: "10", sets: ["4 x 50 Choice swim - easy, long strokes", "4 x 25 Kick (no board) - streamline, tight core"], cue: "Squeeze belly button to spine" },
+                        { title: "KICK DEVELOPMENT", time: "10", sets: ["With fins: 4 x 50 Flutter kick on back - hands at sides", "With kickboard: 4 x 25 Breaststroke kick - pause in streamline"] }
+                    ],
+                    after: [
+                        { title: "TURN STATION", time: "10", sets: ["8 x 25 with FAST turns", "4 x wall push-offs into streamline, hold for 5 kicks"], cue: "Be a torpedo - tight and straight" },
+                        { title: "COOL DOWN", time: "10", sets: ["200 easy choice + 4 x 25 drill of choice"] }
+                    ]
+                },
+                2: {
+                    before: [
+                        { title: "WARM-UP", time: "8", sets: ["300 swim (100 FR / 100 choice / 100 FR)", "4 x 25 build to fast"] },
+                        { title: "TEMPO TRAINER", time: "12", sets: ["4 x 50 at comfortable pace - note beeps", "4 x 25 at tempo minus 0.05", "4 x 25 at tempo minus 0.10"], cue: "Match hand entry to beep" }
+                    ],
+                    after: [
+                        { title: "POWER + GOLF", time: "13", sets: ["With belt: 4 x 25 FAST (rest 30s)", "With paddles: 4 x 50 pull", "GOLF: 4 x 50 - Time + Strokes = Score"] },
+                        { title: "COOL DOWN", time: "7", sets: ["200 easy + 4 x 25 easy backstroke"] }
+                    ]
+                },
+                3: {
+                    before: [
+                        { title: "WARM-UP", time: "8", sets: ["200 choice", "4 x 50: 25 drill / 25 build"] },
+                        { title: "RACE PACE SET", time: "15", sets: ["8 x 25 at race pace tempo", "First 4: with fins, Last 4: no fins", "2 x 50 at race pace (no fins)"], cue: "Hold the speed without fins" }
+                    ],
+                    after: [
+                        { title: "SPEED & POWER", time: "12", sets: ["With Hydro Hip/Fin: 4 x 25 fly kick", "4 x 25 race stroke with parachute"], cue: "This makes the race feel EASY" },
+                        { title: "TURN & FINISH", time: "10", sets: ["6 x from flags - sprint in, perfect turn, sprint out", "6 x finish practice from flags"] },
+                        { title: "COOL DOWN", time: "7", sets: ["200 easy backstroke", "Mental rehearsal"] }
+                    ]
+                },
+                4: {
+                    before: [
+                        { title: "WARM-UP", time: "10", sets: ["300 easy mix", "4 x 25 choice drill"], cue: "LIGHTER volume - quality over quantity" }
+                    ],
+                    after: [
+                        { title: "RACE FEEL", time: "15", sets: ["4 x 25 at race pace - check stroke count", "2 x 50 at race pace - even splits", "2 x 25 SPRINT - 100%"], cue: "Feel the speed!" },
+                        { title: "TURNS & STARTS", time: "12", sets: ["4 x dive + breakout + 3 strokes", "4 x turn practice", "2 x finish practice"] },
+                        { title: "MENTAL REHEARSAL", time: "8", sets: ["1 x 200 IM easy - visualize your race"] },
+                        { title: "COOL DOWN", time: "15", sets: ["Easy swimming", "Stretching in water"], cue: "You're ready. Trust your training!" }
+                    ]
+                }
+            }
+        };
+
+        let currentPhase = 1;
+        let currentWeek = 1;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function selectPhase(phase) {
+            currentPhase = phase;
+            document.querySelectorAll('.selector-btn[class*="phase"]').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            renderWorkout();
+        }
+
+        function selectWeek(week) {
+            currentWeek = week;
+            document.querySelectorAll('.selector-group:nth-child(2) .selector-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            renderWorkout();
+        }
+
+        function showCourse(course) {
+            document.querySelectorAll('.course-toggle .selector-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('scy-table').style.display = course === 'scy' ? 'block' : 'none';
+            document.getElementById('lcm-table').style.display = course === 'lcm' ? 'block' : 'none';
+        }
+
+        function renderWorkout() {
+            const phase = workoutData.phases[currentPhase];
+            const stroke = workoutData.strokeDrills[currentWeek];
+            const sections = workoutData.phaseSections[currentPhase];
+
+            let html = `
+                <div class="workout-card">
+                    <div class="workout-header">
+                        <div class="workout-title">
+                            <h2>Phase ${currentPhase}: ${phase.name}</h2>
+                            <p>${phase.dates} • Week ${currentWeek}: ${stroke.name}</p>
+                        </div>
+                        <div class="workout-meta">
+                            <div class="workout-duration">60<span> min</span></div>
+                        </div>
+                    </div>
+                    <div class="workout-body">
+                        <div class="equipment-list">
+                            <span class="equipment-label">Equipment:</span>
+                            ${phase.equipment.map(e => `<span class="equipment-tag">${e}</span>`).join('')}
+                        </div>
+            `;
+
+            // Before sections
+            sections.before.forEach(s => {
+                html += renderSection(s, phase.color);
+            });
+
+            // Stroke technique section
+            html += `
+                <div class="workout-section">
+                    <div class="section-header">
+                        <span class="section-time" style="background:${phase.color}">20 min</span>
+                        <span class="section-title">STROKE TECHNIQUE</span>
+                        <span class="section-stroke" style="color:${phase.color}">${stroke.name}</span>
+                    </div>
+                    <div class="section-body">
+                        ${stroke.sets.map(s => `<div class="workout-set">${s}</div>`).join('')}
+                        <div class="coaching-cue"><strong>Cue:</strong> "${stroke.cue}"</div>
+                    </div>
+                </div>
+            `;
+
+            // After sections
+            sections.after.forEach(s => {
+                html += renderSection(s, phase.color);
+            });
+
+            html += `</div></div>`;
+            document.getElementById('workout-display').innerHTML = html;
+        }
+
+        function renderSection(section, color) {
+            return `
+                <div class="workout-section">
+                    <div class="section-header">
+                        <span class="section-time" style="background:${color}">${section.time} min</span>
+                        <span class="section-title">${section.title}</span>
+                    </div>
+                    <div class="section-body">
+                        ${section.sets.map(s => `<div class="workout-set">${s}</div>`).join('')}
+                        ${section.cue ? `<div class="coaching-cue"><strong>Cue:</strong> "${section.cue}"</div>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Initialize
+        renderWorkout();
+    </script>
+</body>
+</html>
