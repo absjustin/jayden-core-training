@@ -393,6 +393,7 @@
     </style>
 </head>
 <body>
+    <script src="progress.js"></script>
     <div class="bg-animation"></div>
 
     <nav class="nav">
@@ -775,7 +776,16 @@
         }
 
         function completeWorkout() {
-            alert('🎉 PT Exercises Complete! Great job, Jayden!');
+            const exerciseCount = exercises.length;
+            const result = TrainingProgress.recordPTWorkout(exerciseCount, 15);
+            
+            if (result.success) {
+                if (result.newAchievements.length > 0) {
+                    alert('🎉 PT Exercises Complete!\n\nNew Achievements:\n' + result.newAchievements.join('\n'));
+                } else {
+                    alert('🎉 PT Exercises Complete! Great job, Jayden!');
+                }
+            }
         }
 
         // Initialize

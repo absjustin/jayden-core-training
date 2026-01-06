@@ -523,11 +523,12 @@
     </style>
 </head>
 <body>
+    <script src="progress.js"></script>
     <div class="bg-animation"></div>
 
     <nav class="nav">
         <div class="nav-glass">
-            <a href="index.html" class="nav-back">← Back</a>
+            <a href="dryland-plans.html" class="nav-back">← Back to Plans</a>
             <span class="nav-title">Dryland Training</span>
             <div></div>
         </div>
@@ -1008,8 +1009,16 @@
         }
 
         function completeWorkout() {
-            alert('🎉 Workout Complete! Great job, Jayden!');
-            // Could save to localStorage here
+            const exerciseCount = exercises[currentWeek].length;
+            const result = TrainingProgress.recordDrylandWorkout(currentWeek, exerciseCount, 20);
+            
+            if (result.success) {
+                if (result.newAchievements.length > 0) {
+                    alert('🎉 Workout Complete!\n\nNew Achievements:\n' + result.newAchievements.join('\n'));
+                } else {
+                    alert('🎉 Workout Complete! Great job, Jayden!');
+                }
+            }
         }
 
         // Calendar functions
@@ -1083,6 +1092,36 @@
         // Initialize
         initWeekSelector();
         renderExercise();
+        loadProgressStats();
+        
+        // Load progress stats from localStorage
+        function loadProgressStats() {
+            const summary = TrainingProgress.getSummary();
+            
+            document.getElementById('completed-count').textContent = summary.dryland.workouts;
+            document.getElementById('streak-count').textContent = summary.currentStreak;
+            document.getElementById('total-time').textContent = summary.dryland.minutes;
+            
+            // Update achievements
+            if (summary.achievements.firstDryland.unlocked) {
+                document.getElementById('ach-first').classList.add('unlocked');
+            }
+            if (summary.achievements.streak3.unlocked) {
+                document.getElementById('ach-streak3').classList.add('unlocked');
+            }
+            if (summary.achievements.drylandWeek.unlocked) {
+                document.getElementById('ach-week').classList.add('unlocked');
+            }
+            if (summary.achievements.drylandPhase1.unlocked) {
+                document.getElementById('ach-phase1').classList.add('unlocked');
+            }
+            if (summary.achievements.streak7.unlocked) {
+                document.getElementById('ach-streak7').classList.add('unlocked');
+            }
+            if (summary.achievements.drylandComplete.unlocked) {
+                document.getElementById('ach-champion').classList.add('unlocked');
+            }
+        }
     </script>
 </body>
 </html>

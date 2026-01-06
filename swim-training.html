@@ -92,6 +92,40 @@
         .nav-btn:hover { background: rgba(0, 0, 0, 0.1); }
         .nav-btn.active { background: var(--accent-blue); color: white; }
 
+        /* Complete Button */
+        .workout-complete-section {
+            padding: 24px 32px;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+            text-align: center;
+            background: rgba(255, 255, 255, 0.3);
+        }
+        .complete-workout-btn {
+            background: linear-gradient(135deg, #34c759 0%, #30d158 100%);
+            color: white;
+            border: none;
+            padding: 16px 48px;
+            border-radius: 50px;
+            font-family: inherit;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(52, 199, 89, 0.3);
+        }
+        .complete-workout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 199, 89, 0.4);
+        }
+        .completed-badge {
+            display: inline-block;
+            background: rgba(52, 199, 89, 0.15);
+            color: #34c759;
+            padding: 12px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
         /* Container */
         .container {
             max-width: 1000px;
@@ -427,6 +461,7 @@
     </style>
 </head>
 <body>
+    <script src="progress.js"></script>
     <div class="bg-animation"></div>
 
     <nav class="nav">
@@ -727,8 +762,23 @@
                 html += renderSection(s, phase.color);
             });
 
+            // Complete button
+            html += `
+                <div class="workout-complete-section">
+                    <button class="complete-workout-btn" id="complete-btn" onclick="completeWorkout()">
+                        ✓ Complete Workout
+                    </button>
+                    <div class="completed-badge" id="completed-badge" style="display:none;">
+                        ✓ Completed Today
+                    </div>
+                </div>
+            `;
+
             html += `</div></div>`;
             document.getElementById('workout-display').innerHTML = html;
+            
+            // Check if already completed today
+            checkTodayStatus();
         }
 
         function renderSection(section, color) {
@@ -748,6 +798,35 @@
 
         // Initialize
         renderWorkout();
+        
+        // Complete workout function
+        function completeWorkout() {
+            const stroke = workoutData.strokeDrills[currentWeek].name;
+            const result = TrainingProgress.recordSwimWorkout(currentPhase, currentWeek, stroke, 60);
+            
+            if (result.success) {
+                // Show completed badge
+                document.getElementById('complete-btn').style.display = 'none';
+                document.getElementById('completed-badge').style.display = 'inline-block';
+                
+                // Show achievements
+                if (result.newAchievements.length > 0) {
+                    alert('🎉 Workout Complete!\n\nNew Achievements:\n' + result.newAchievements.join('\n'));
+                } else {
+                    alert('🎉 Workout Complete! Great job, Jayden!');
+                }
+            }
+        }
+        
+        // Check if workout already completed today
+        function checkTodayStatus() {
+            if (TrainingProgress.completedToday('swim')) {
+                const btn = document.getElementById('complete-btn');
+                const badge = document.getElementById('completed-badge');
+                if (btn) btn.style.display = 'none';
+                if (badge) badge.style.display = 'inline-block';
+            }
+        }
     </script>
 </body>
 </html>

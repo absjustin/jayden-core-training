@@ -281,6 +281,50 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
+
+        /* Activity Bar */
+        .activity-bar {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            padding: 16px 24px;
+            box-shadow: var(--glass-shadow);
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .activity-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .activity-dots {
+            display: flex;
+            gap: 8px;
+        }
+        .activity-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+        .activity-dot.active {
+            background: var(--accent-green);
+            color: white;
+            font-weight: 600;
+        }
+        .activity-dot.today {
+            box-shadow: 0 0 0 2px var(--accent-blue);
+        }
     </style>
 </head>
 <body>
@@ -296,21 +340,27 @@
 
         <div class="stats">
             <div class="stat">
-                <div class="stat-value">10</div>
-                <div class="stat-label">Years Old</div>
+                <div class="stat-value" id="stat-workouts">0</div>
+                <div class="stat-label">Workouts</div>
             </div>
             <div class="stat">
-                <div class="stat-value">4</div>
-                <div class="stat-label">Strokes</div>
+                <div class="stat-value" id="stat-streak">0</div>
+                <div class="stat-label">Day Streak</div>
             </div>
             <div class="stat">
-                <div class="stat-value">60</div>
-                <div class="stat-label">Min Sessions</div>
+                <div class="stat-value" id="stat-hours">0</div>
+                <div class="stat-label">Total Hours</div>
             </div>
             <div class="stat">
                 <div class="stat-value">AAA</div>
                 <div class="stat-label">Target</div>
             </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="activity-bar" id="activity-bar">
+            <div class="activity-label">Last 7 days:</div>
+            <div class="activity-dots" id="activity-dots"></div>
         </div>
 
         <div class="cards-grid">
@@ -354,5 +404,38 @@
             </div>
         </footer>
     </div>
+
+    <script src="progress.js"></script>
+    <script>
+        function loadProgress() {
+            const summary = TrainingProgress.getSummary();
+            
+            // Update stats
+            document.getElementById('stat-workouts').textContent = summary.totalWorkouts;
+            document.getElementById('stat-streak').textContent = summary.currentStreak;
+            document.getElementById('stat-hours').textContent = summary.totalHours;
+            
+            // Update activity dots
+            const today = new Date();
+            const dayNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+            let dotsHtml = '';
+            
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toISOString().split('T')[0];
+                const dayName = dayNames[date.getDay()];
+                const isActive = summary.recentDates.includes(dateStr);
+                const isToday = i === 0;
+                
+                dotsHtml += `<div class="activity-dot ${isActive ? 'active' : ''} ${isToday ? 'today' : ''}" title="${dateStr}">${dayName}</div>`;
+            }
+            
+            document.getElementById('activity-dots').innerHTML = dotsHtml;
+        }
+        
+        // Load on page load
+        loadProgress();
+    </script>
 </body>
 </html>
