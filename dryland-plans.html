@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dryland Training Plans | Jayden's Training Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.72);
+            --glass-bg-dark: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --blur: blur(20px);
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-green: #34c759;
+            --accent-orange: #ff9500;
+            --accent-blue: #007aff;
+            --accent-purple: #af52de;
+            --bg-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            color: var(--text-primary);
+        }
+        .bg-animation {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.15) 0%, transparent 50%);
+        }
+
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 16px 24px;
+        }
+        .nav-glass {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--glass-shadow);
+        }
+        .nav-back {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: opacity 0.2s;
+        }
+        .nav-back:hover { opacity: 0.7; }
+        .nav-title { font-weight: 600; font-size: 1.1rem; }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 24px 60px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 12px;
+        }
+        .page-header p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .plan-card {
+            background: var(--glass-bg-dark);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--glass-shadow);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .plan-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .plan-icon {
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .plan-icon.core {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        .plan-icon.pt {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .plan-icon::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2) 0%, transparent 60%);
+        }
+
+        .plan-content {
+            padding: 24px;
+        }
+        .plan-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+        .plan-badge.core {
+            background: rgba(16, 185, 129, 0.15);
+            color: #059669;
+        }
+        .plan-badge.pt {
+            background: rgba(139, 92, 246, 0.15);
+            color: #7c3aed;
+        }
+        .plan-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+        .plan-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .plan-stats {
+            display: flex;
+            gap: 20px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+        }
+        .plan-stat {
+            display: flex;
+            flex-direction: column;
+        }
+        .plan-stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .plan-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .plan-arrow {
+            position: absolute;
+            right: 24px;
+            bottom: 24px;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.2s;
+        }
+        .plan-card:hover .plan-arrow {
+            background: rgba(0, 0, 0, 0.1);
+            transform: translateX(4px);
+        }
+
+        .plan-card-inner {
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <nav class="nav">
+        <div class="nav-glass">
+            <a href="index.html" class="nav-back">← Back to Hub</a>
+            <span class="nav-title">Dryland Training</span>
+            <div></div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>🏋️ Dryland Training</h1>
+            <p>Choose a training program to get started</p>
+        </div>
+
+        <div class="plans-grid">
+            <!-- Core + BOSU Training Plan -->
+            <a href="dryland-training.html" class="plan-card">
+                <div class="plan-card-inner">
+                    <div class="plan-icon core">💪</div>
+                    <div class="plan-content">
+                        <span class="plan-badge core">9-Week Program</span>
+                        <h2 class="plan-title">Core + BOSU Training</h2>
+                        <p class="plan-description">
+                            Complete swimming-specific core strength program with BOSU ball and TRX integration. 
+                            Progressive phases from foundation to advanced power.
+                        </p>
+                        <div class="plan-stats">
+                            <div class="plan-stat">
+                                <span class="plan-stat-value">9</span>
+                                <span class="plan-stat-label">Weeks</span>
+                            </div>
+                            <div class="plan-stat">
+                                <span class="plan-stat-value">3</span>
+                                <span class="plan-stat-label">Phases</span>
+                            </div>
+                            <div class="plan-stat">
+                                <span class="plan-stat-value">6</span>
+                                <span class="plan-stat-label">Exercises/Day</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="plan-arrow">→</div>
+                </div>
+            </a>
+
+            <!-- PT Training Plan -->
+            <a href="pt-training.html" class="plan-card">
+                <div class="plan-card-inner">
+                    <div class="plan-icon pt">🩺</div>
+                    <div class="plan-content">
+                        <span class="plan-badge pt">PT Prescribed</span>
+                        <h2 class="plan-title">Physical Therapy Plan</h2>
+                        <p class="plan-description">
+                            Targeted exercises from Jayden's physical therapist focusing on hip stability, 
+                            scapular strength, and core control with isometric holds.
+                        </p>
+                        <div class="plan-stats">
+                            <div class="plan-stat">
+                                <span class="plan-stat-value">6</span>
+                                <span class="plan-stat-label">Exercises</span>
+                            </div>
+                            <div class="plan-stat">
+                                <span class="plan-stat-value">~15</span>
+                                <span class="plan-stat-label">Minutes</span>
+                            </div>
+                            <div class="plan-stat">
+                                <span class="plan-stat-value">Daily</span>
+                                <span class="plan-stat-label">Frequency</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="plan-arrow">→</div>
+                </div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

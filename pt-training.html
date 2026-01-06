@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PT Training | Jayden's Training Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.72);
+            --glass-bg-dark: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --blur: blur(20px);
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-green: #34c759;
+            --accent-orange: #ff9500;
+            --accent-red: #ff3b30;
+            --accent-purple: #af52de;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            color: var(--text-primary);
+        }
+        .bg-animation {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.15) 0%, transparent 50%);
+        }
+
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 16px 24px;
+        }
+        .nav-glass {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--glass-shadow);
+        }
+        .nav-back {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: opacity 0.2s;
+        }
+        .nav-back:hover { opacity: 0.7; }
+        .nav-title { font-weight: 600; font-size: 1.1rem; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 60px;
+        }
+
+        /* Main workout card */
+        .workout-card {
+            background: var(--glass-bg-dark);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--glass-shadow);
+            margin-bottom: 24px;
+        }
+        .workout-header {
+            padding: 20px 32px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .workout-title h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+        .workout-title p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        /* Progress indicator */
+        .progress-dots {
+            display: flex;
+            gap: 8px;
+        }
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+        .progress-dot.completed { background: var(--accent-green); }
+        .progress-dot.current { 
+            background: var(--accent-orange); 
+            transform: scale(1.2);
+            box-shadow: 0 0 0 4px rgba(255, 149, 0, 0.2);
+        }
+
+        /* Exercise display - horizontal split */
+        .exercise-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 450px;
+        }
+        @media (max-width: 768px) {
+            .exercise-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Left side - Demo */
+        .exercise-demo-side {
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.02);
+            border-right: 1px solid rgba(0, 0, 0, 0.06);
+        }
+        @media (max-width: 768px) {
+            .exercise-demo-side {
+                border-right: none;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+                padding: 24px;
+            }
+        }
+        .exercise-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+        }
+        .demo-frame {
+            width: 100%;
+            max-width: 320px;
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .demo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .demo-placeholder {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Right side - Info & Timer */
+        .exercise-info-side {
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-section {
+            margin-bottom: 24px;
+        }
+        .info-section h4 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+        .hint-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+            list-style: none;
+            padding: 0;
+        }
+        .hint-text li {
+            margin-bottom: 8px;
+            padding-left: 8px;
+        }
+
+        /* Sets & Reps display */
+        .sets-reps {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-box {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .stat-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Timer section */
+        .timer-section {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .timer-display {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+        .timer-display.countdown {
+            color: var(--accent-orange);
+        }
+        .timer-display.running {
+            color: var(--accent-green);
+        }
+        .timer-display.finished {
+            color: var(--accent-red);
+        }
+        .timer-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+        .timer-btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .timer-btn.start { 
+            background: var(--accent-green); 
+            color: white; 
+        }
+        .timer-btn.start:hover { 
+            background: #2db84d; 
+            transform: scale(1.02);
+        }
+        .timer-btn.pause { 
+            background: var(--accent-orange); 
+            color: white; 
+        }
+        .timer-btn.reset { 
+            background: rgba(0, 0, 0, 0.08); 
+            color: var(--text-primary); 
+        }
+        .timer-btn.reset:hover { 
+            background: rgba(0, 0, 0, 0.12); 
+        }
+        .timer-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Rep counter for hold exercises */
+        .rep-counter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .rep-label {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+        .rep-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-purple);
+        }
+
+        /* Navigation buttons */
+        .exercise-nav {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 32px;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+            background: rgba(255, 255, 255, 0.3);
+        }
+        .nav-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--text-primary);
+        }
+        .nav-btn:hover:not(:disabled) {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        .nav-btn.complete {
+            background: var(--accent-green);
+            color: white;
+        }
+        .nav-btn.complete:hover {
+            background: #2db84d;
+        }
+
+        /* Instructions card */
+        .instructions-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--glass-shadow);
+        }
+        .instructions-card h3 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-purple);
+            margin-bottom: 8px;
+        }
+        .instructions-card p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <nav class="nav">
+        <div class="nav-glass">
+            <a href="dryland-plans.html" class="nav-back">← Back to Plans</a>
+            <span class="nav-title">PT Training</span>
+            <div></div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="instructions-card">
+            <h3>🩺 Physical Therapy Exercises</h3>
+            <p>Complete these exercises daily as prescribed by your PT. For exercises with holds, use the timer for each rep. Focus on proper form over speed.</p>
+        </div>
+
+        <div class="workout-card">
+            <div class="workout-header">
+                <div class="workout-title">
+                    <h2 id="workout-title">PT Exercise Routine</h2>
+                    <p id="workout-subtitle">Daily prescribed exercises</p>
+                </div>
+                <div class="progress-dots" id="progress-dots"></div>
+            </div>
+
+            <div class="exercise-container" id="exercise-container">
+                <!-- Will be populated by JS -->
+            </div>
+
+            <div class="exercise-nav">
+                <button class="nav-btn" id="prev-btn" onclick="prevExercise()">← Previous</button>
+                <button class="nav-btn complete" id="complete-btn" onclick="completeWorkout()">Complete Workout ✓</button>
+                <button class="nav-btn" id="next-btn" onclick="nextExercise()">Next →</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // PT Exercise data
+        const exercises = [
+            {
+                name: "Sidelying Hip Abduction at Wall",
+                sets: 2,
+                reps: 15,
+                holdTime: null,
+                perSide: false,
+                gif: "https://i0.wp.com/post.medicalnewstoday.com/wp-content/uploads/sites/3/2022/02/HL-08.02.LyingAbduction.gif?w=315&h=840",
+                hints: [
+                    "Lie on your side with back against wall",
+                    "Keep hips stacked and core tight",
+                    "Lift top leg up toward ceiling",
+                    "Don't let hips roll backward"
+                ]
+            },
+            {
+                name: "Single Leg Bridge",
+                sets: 2,
+                reps: 15,
+                holdTime: null,
+                perSide: true,
+                gif: "https://api.smartworkout.app/asset/image/32de4cbd-0f56-4d59-9aec-a1fb661d5350",
+                hints: [
+                    "Lie on back, one foot flat on floor",
+                    "Extend other leg straight out",
+                    "Push through heel to lift hips",
+                    "Squeeze glutes at the top"
+                ]
+            },
+            {
+                name: "Isometric Dead Bug",
+                sets: 2,
+                reps: 5,
+                holdTime: 30,
+                perSide: false,
+                gif: "https://media2.giphy.com/media/aIyZ9Ra6pyo5ZOHQsm/giphy.gif",
+                hints: [
+                    "Lie on back, arms up, knees at 90°",
+                    "Press lower back into floor",
+                    "Extend opposite arm and leg",
+                    "Hold position for 30 seconds each rep"
+                ]
+            },
+            {
+                name: "Prone W Scapular Retraction",
+                sets: 2,
+                reps: 10,
+                holdTime: 5,
+                perSide: false,
+                gif: "https://iris.hattiesburgclinic.com/patadv/exkit/Orthopedic/Images/0290000956shld107m.png",
+                hints: [
+                    "Lie face down on floor or bench",
+                    "Arms form a W shape",
+                    "Squeeze shoulder blades together",
+                    "Lift arms and hold 5 seconds each rep"
+                ]
+            },
+            {
+                name: "Bird Dog",
+                sets: 2,
+                reps: 10,
+                holdTime: 5,
+                perSide: true,
+                gif: "https://media.post.rvohealth.io/wp-content/uploads/sites/2/2021/02/NarrowVibrantHawk-size_restricted.gif",
+                hints: [
+                    "Start on hands and knees",
+                    "Extend opposite arm and leg",
+                    "Keep back flat like a table",
+                    "Hold 5 seconds, then switch sides"
+                ]
+            },
+            {
+                name: "Forward T",
+                sets: 1,
+                reps: 10,
+                holdTime: 5,
+                perSide: false,
+                gif: null,
+                hints: [
+                    "Stand or lie face down",
+                    "Arms extended forward in T position",
+                    "Squeeze shoulder blades back",
+                    "Hold 5 seconds each rep"
+                ]
+            }
+        ];
+
+        let currentExercise = 0;
+        let timerState = 'ready';
+        let timerSeconds = 0;
+        let countdownSeconds = 3;
+        let timerInterval = null;
+        let currentRep = 1;
+
+        function renderExercise() {
+            const ex = exercises[currentExercise];
+
+            // Progress dots
+            let dotsHtml = '';
+            exercises.forEach((_, i) => {
+                let dotClass = 'progress-dot';
+                if (i < currentExercise) dotClass += ' completed';
+                if (i === currentExercise) dotClass += ' current';
+                dotsHtml += `<div class="${dotClass}"></div>`;
+            });
+            document.getElementById('progress-dots').innerHTML = dotsHtml;
+
+            // Demo
+            let demoHtml = ex.gif 
+                ? `<img src="${ex.gif}" alt="${ex.name}" onerror="this.parentNode.innerHTML='<div class=\\'demo-placeholder\\'>Demo not available</div>'">`
+                : '<div class="demo-placeholder">No demo available<br>for this exercise</div>';
+
+            // Hints
+            let hintsHtml = ex.hints.map(h => `<li>→ ${h}</li>`).join('');
+
+            // Determine display text for reps
+            let repsDisplay = ex.reps;
+            if (ex.perSide) {
+                repsDisplay = ex.reps + ' each';
+            }
+
+            // Timer or simple display
+            let timerHtml = '';
+            if (ex.holdTime) {
+                // Exercise with hold timer
+                timerHtml = `
+                    <div class="timer-section">
+                        <div class="rep-counter">
+                            <span class="rep-label">Rep</span>
+                            <span class="rep-number" id="current-rep">${currentRep}</span>
+                            <span class="rep-label">of ${ex.reps}${ex.perSide ? ' each side' : ''}</span>
+                        </div>
+                        <div class="timer-display" id="timer-display">${formatTime(ex.holdTime)}</div>
+                        <div class="timer-label" id="timer-label">Hold for ${ex.holdTime} seconds</div>
+                        <div class="timer-controls">
+                            <button class="timer-btn start" id="timer-btn" onclick="toggleTimer()">Start Hold</button>
+                            <button class="timer-btn reset" onclick="resetTimer()">Reset</button>
+                        </div>
+                    </div>
+                `;
+                timerSeconds = ex.holdTime;
+            } else {
+                // Simple rep exercise
+                timerHtml = `
+                    <div class="timer-section">
+                        <div class="timer-display">${repsDisplay}</div>
+                        <div class="timer-label">Complete ${ex.sets} sets</div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('exercise-container').innerHTML = `
+                <div class="exercise-demo-side">
+                    <div class="exercise-name">${ex.name}</div>
+                    <div class="demo-frame">${demoHtml}</div>
+                </div>
+                <div class="exercise-info-side">
+                    <div class="info-section">
+                        <h4>Key Points</h4>
+                        <ul class="hint-text">${hintsHtml}</ul>
+                    </div>
+                    <div class="sets-reps">
+                        <div class="stat-box">
+                            <div class="stat-value">${repsDisplay}</div>
+                            <div class="stat-label">Reps</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">${ex.sets}</div>
+                            <div class="stat-label">Sets</div>
+                        </div>
+                        ${ex.holdTime ? `
+                        <div class="stat-box">
+                            <div class="stat-value">${ex.holdTime}s</div>
+                            <div class="stat-label">Hold</div>
+                        </div>
+                        ` : ''}
+                    </div>
+                    ${timerHtml}
+                </div>
+            `;
+
+            // Update nav buttons
+            document.getElementById('prev-btn').disabled = currentExercise === 0;
+            document.getElementById('next-btn').disabled = currentExercise === exercises.length - 1;
+            document.getElementById('complete-btn').style.display = currentExercise === exercises.length - 1 ? 'block' : 'none';
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function toggleTimer() {
+            const btn = document.getElementById('timer-btn');
+            const display = document.getElementById('timer-display');
+            const label = document.getElementById('timer-label');
+            const ex = exercises[currentExercise];
+
+            if (timerState === 'ready' || timerState === 'finished') {
+                // Start 3-second countdown
+                timerState = 'countdown';
+                countdownSeconds = 3;
+                btn.textContent = 'Get Ready...';
+                btn.disabled = true;
+                display.textContent = countdownSeconds;
+                display.classList.add('countdown');
+                display.classList.remove('running', 'finished');
+                label.textContent = 'Get ready...';
+
+                timerInterval = setInterval(() => {
+                    countdownSeconds--;
+                    if (countdownSeconds > 0) {
+                        display.textContent = countdownSeconds;
+                    } else {
+                        // Start actual timer
+                        clearInterval(timerInterval);
+                        timerState = 'running';
+                        display.classList.remove('countdown');
+                        display.classList.add('running');
+                        btn.textContent = 'Pause';
+                        btn.disabled = false;
+                        btn.classList.remove('start');
+                        btn.classList.add('pause');
+                        label.textContent = 'HOLD IT!';
+                        
+                        timerSeconds = ex.holdTime;
+                        display.textContent = formatTime(timerSeconds);
+
+                        timerInterval = setInterval(() => {
+                            timerSeconds--;
+                            display.textContent = formatTime(timerSeconds);
+                            if (timerSeconds <= 0) {
+                                clearInterval(timerInterval);
+                                timerState = 'finished';
+                                display.classList.remove('running');
+                                display.classList.add('finished');
+                                
+                                // Check if more reps needed
+                                const totalReps = ex.perSide ? ex.reps * 2 : ex.reps;
+                                if (currentRep < totalReps) {
+                                    currentRep++;
+                                    document.getElementById('current-rep').textContent = currentRep;
+                                    btn.textContent = 'Next Rep';
+                                    label.textContent = `Great! ${totalReps - currentRep + 1} reps remaining`;
+                                } else {
+                                    btn.textContent = 'Set Done! ✓';
+                                    label.textContent = 'Excellent! Rest, then do next set if needed.';
+                                }
+                                btn.classList.remove('pause');
+                                btn.classList.add('start');
+                            }
+                        }, 1000);
+                    }
+                }, 1000);
+            } else if (timerState === 'running') {
+                // Pause
+                clearInterval(timerInterval);
+                timerState = 'paused';
+                btn.textContent = 'Resume';
+                label.textContent = 'Paused';
+            } else if (timerState === 'paused') {
+                // Resume
+                timerState = 'running';
+                btn.textContent = 'Pause';
+                label.textContent = 'HOLD IT!';
+                
+                timerInterval = setInterval(() => {
+                    timerSeconds--;
+                    display.textContent = formatTime(timerSeconds);
+                    if (timerSeconds <= 0) {
+                        clearInterval(timerInterval);
+                        timerState = 'finished';
+                        display.classList.remove('running');
+                        display.classList.add('finished');
+                        
+                        const ex = exercises[currentExercise];
+                        const totalReps = ex.perSide ? ex.reps * 2 : ex.reps;
+                        if (currentRep < totalReps) {
+                            currentRep++;
+                            document.getElementById('current-rep').textContent = currentRep;
+                            btn.textContent = 'Next Rep';
+                            label.textContent = `Great! ${totalReps - currentRep + 1} reps remaining`;
+                        } else {
+                            btn.textContent = 'Set Done! ✓';
+                            label.textContent = 'Excellent! Rest, then do next set if needed.';
+                        }
+                        btn.classList.remove('pause');
+                        btn.classList.add('start');
+                    }
+                }, 1000);
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerState = 'ready';
+            currentRep = 1;
+            const ex = exercises[currentExercise];
+            if (ex.holdTime) {
+                timerSeconds = ex.holdTime;
+                const display = document.getElementById('timer-display');
+                const btn = document.getElementById('timer-btn');
+                const label = document.getElementById('timer-label');
+                const repDisplay = document.getElementById('current-rep');
+                if (display) {
+                    display.textContent = formatTime(timerSeconds);
+                    display.classList.remove('countdown', 'running', 'finished');
+                }
+                if (btn) {
+                    btn.textContent = 'Start Hold';
+                    btn.disabled = false;
+                    btn.classList.remove('pause');
+                    btn.classList.add('start');
+                }
+                if (label) {
+                    label.textContent = `Hold for ${ex.holdTime} seconds`;
+                }
+                if (repDisplay) {
+                    repDisplay.textContent = '1';
+                }
+            }
+        }
+
+        function prevExercise() {
+            if (currentExercise > 0) {
+                currentExercise--;
+                currentRep = 1;
+                resetTimer();
+                renderExercise();
+            }
+        }
+
+        function nextExercise() {
+            if (currentExercise < exercises.length - 1) {
+                currentExercise++;
+                currentRep = 1;
+                resetTimer();
+                renderExercise();
+            }
+        }
+
+        function completeWorkout() {
+            alert('🎉 PT Exercises Complete! Great job, Jayden!');
+        }
+
+        // Initialize
+        renderExercise();
+    </script>
+</body>
+</html>
