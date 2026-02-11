@@ -1,11 +1,9 @@
 name = "jayden-core-training"
 compatibility_date = "2025-01-01"
-pages_build_output_dir = "./dist"
 
-# OpenRouter API - will be set via `wrangler secret put OPENROUTER_API_KEY`
-# Or via Cloudflare Dashboard
+# For Pages with Functions, we serve static files from root
+# No build output directory needed
 
 [vars]
-# Public variables that can be exposed to the client
 OPENROUTER_SITE_URL = "https://jayden-core-training.pages.dev"
 OPENROUTER_SITE_NAME = "Jayden Core Training"
