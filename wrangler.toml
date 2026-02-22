@@ -9,4 +9,4 @@ OPENROUTER_SITE_NAME = "Jayden Core Training"
 [[d1_databases]]
 binding = "MATH_TUTOR_DB"
 database_name = "math-tutor-db"
-database_id = "YOUR_DATABASE_ID"  # Get this after creating the database
+database_id = "332f7159-1638-4bbf-a3d8-a41420088362"
