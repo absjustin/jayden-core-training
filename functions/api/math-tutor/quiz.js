@@ -25,7 +25,7 @@ export async function onRequest({ request, env }) {
       isCorrect ? 1 : 0
     ).run();
 
-    // Update user progress
+    // Update user progress - use bind().run() pattern
     await env.MATH_TUTOR_DB.prepare(`
       INSERT INTO user_progress (id, user_id, topic_id, status, last_accessed_at, started_at)
       VALUES (?, ?, ?, 'in_progress', datetime('now'), datetime('now'))
@@ -42,13 +42,13 @@ export async function onRequest({ request, env }) {
     let repetitionCount = 1;
 
     // Get existing review schedule if any
-    const existing = await env.MATH_TUTOR_DB.prepare(`
+    const existingResult = await env.MATH_TUTOR_DB.prepare(`
       SELECT * FROM review_schedule WHERE user_id = ? AND topic_id = ?
-    `).get(userId, topicId);
+    `).bind(userId, topicId).first();
 
-    if (existing) {
-      easeFactor = existing.ease_factor;
-      repetitionCount = existing.repetition_count;
+    if (existingResult) {
+      easeFactor = existingResult.ease_factor;
+      repetitionCount = existingResult.repetition_count;
 
       if (isCorrect) {
         // Correct answer - increase interval (SM-2)
@@ -57,7 +57,7 @@ export async function onRequest({ request, env }) {
         } else if (repetitionCount === 1) {
           intervalDays = 6;
         } else {
-          intervalDays = Math.round(existing.interval_days * easeFactor);
+          intervalDays = Math.round(existingResult.interval_days * easeFactor);
         }
         repetitionCount++;
       } else {
@@ -69,18 +69,18 @@ export async function onRequest({ request, env }) {
       // Update existing schedule
       await env.MATH_TUTOR_DB.prepare(`
         UPDATE review_schedule
-        SET next_review_at = datetime('now', '+${intervalDays} days'),
+        SET next_review_at = datetime('now', '+' || ? || ' days'),
             interval_days = ?, ease_factor = ?, repetition_count = ?,
             last_reviewed_at = datetime('now')
         WHERE user_id = ? AND topic_id = ?
-      `).bind(intervalDays, easeFactor, repetitionCount, userId, topicId).run();
+      ).bind(intervalDays, intervalDays, easeFactor, repetitionCount, userId, topicId).run();
     } else {
       // New review item
       nextReviewDate.setDate(nextReviewDate.getDate() + intervalDays);
       await env.MATH_TUTOR_DB.prepare(`
         INSERT INTO review_schedule (id, user_id, topic_id, next_review_at, interval_days, ease_factor, repetition_count, last_reviewed_at)
-        VALUES (?, ?, ?, datetime('now', '+${intervalDays} days'), ?, ?, ?, datetime('now'))
-      `).bind(crypto.randomUUID(), userId, topicId, intervalDays, easeFactor, repetitionCount).run();
+        VALUES (?, ?, ?, datetime('now', '+' || ? || ' days'), ?, ?, ?, datetime('now'))
+      ).bind(crypto.randomUUID(), userId, topicId, intervalDays, intervalDays, easeFactor, repetitionCount).run();
     }
 
     return new Response(

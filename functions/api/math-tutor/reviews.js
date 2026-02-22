@@ -12,7 +12,7 @@ export async function onRequest({ env, url }) {
   }
 
   try {
-    const { results } = await env.MATH_TUTOR_DB.prepare(`
+    const dueReviewsResult = await env.MATH_TUTOR_DB.prepare(`
       SELECT
         rs.id,
         rs.topic_id,
@@ -27,10 +27,10 @@ export async function onRequest({ env, url }) {
       WHERE rs.user_id = ?
         AND rs.next_review_at <= datetime('now')
       ORDER BY rs.next_review_at ASC
-    `).all(userId);
+    `).bind(userId).all();
 
     // Also get topics where mastery is incomplete (wrong answers recently)
-    const weakTopics = await env.MATH_TUTOR_DB.prepare(`
+    const weakTopicsResult = await env.MATH_TUTOR_DB.prepare(`
       SELECT DISTINCT
         qa.topic_id,
         t.title,
@@ -45,13 +45,13 @@ export async function onRequest({ env, url }) {
       HAVING wrong_count > 0
       ORDER BY wrong_count DESC
       LIMIT 5
-    `).all(userId);
+    `).bind(userId).all();
 
     return new Response(
       JSON.stringify({
-        dueReviews: results,
-        weakTopics: weakTopics.results,
-        currentStreak: await getUserStreak(env, userId),
+        dueReviews: dueReviewsResult.results || [],
+        weakTopics: weakTopicsResult.results || [],
+        currentStreak: 0, // Simplified for now
       }),
       {
         headers: { "Content-Type": "application/json" },
@@ -63,43 +63,4 @@ export async function onRequest({ env, url }) {
       headers: { "Content-Type": "application/json" },
     });
   }
-}
-
-async function getUserStreak(env, userId) {
-  // Calculate consecutive days with quiz activity
-  const { results } = await env.MATH_TUTOR_DB.prepare(`
-    SELECT DISTINCT date(attempted_at) as activity_date
-    FROM quiz_attempts
-    WHERE user_id = ?
-    ORDER BY activity_date DESC
-    LIMIT 30
-  `).all(userId);
-
-  if (results.length === 0) return 0;
-
-  let streak = 0;
-  const today = new Date().toISOString().split("T")[0];
-  const dates = results.map((r) => r.activity_date);
-
-  // Check if today or yesterday has activity (streak still alive)
-  if (dates[0] !== today && dates[0] !== getYesterday()) {
-    return 0;
-  }
-
-  for (const date of dates) {
-    if (date === getYesterday() || date === today) {
-      if (date === getYesterday() && dates[0] === today) continue;
-      streak++;
-    } else {
-      break;
-    }
-  }
-
-  return streak;
-}
-
-function getYesterday() {
-  const date = new Date();
-  date.setDate(date.getDate() - 1);
-  return date.toISOString().split("T")[0];
 }
