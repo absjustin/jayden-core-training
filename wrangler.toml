@@ -1,6 +1,9 @@
 name = "jayden-core-training"
 compatibility_date = "2025-01-01"
 
+# Pages configuration
+pages_build_output_dir = "."
+
 [vars]
 OPENROUTER_SITE_URL = "https://jayden-core-training.pages.dev"
 OPENROUTER_SITE_NAME = "Jayden Core Training"
