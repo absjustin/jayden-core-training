@@ -2,25 +2,23 @@
 // Returns topic details, learning materials, and quiz questions
 
 export async function onRequest({ env, params }) {
-  const topicId = params.id;
+  const topicId = params.id || 'ch1';
 
   try {
-    // Get topic info - using raw query approach
-    const topicResults = await env.MATH_TUTOR_DB.prepare(
-      "SELECT * FROM topics WHERE id = ?"
-    ).all(topicId);
-
+    // Use raw SQL to debug
+    const stmt = env.MATH_TUTOR_DB.prepare("SELECT * FROM topics WHERE id = ?");
+    const topicResults = await stmt.bind(topicId).all();
+    
     if (!topicResults.results || topicResults.results.length === 0) {
-      return new Response(JSON.stringify({ error: "Topic not found" }), {
+      return new Response(JSON.stringify({ error: "Topic not found", debug: { topicId } }), {
         status: 404,
         headers: { "Content-Type": "application/json" },
       });
     }
 
     // Get quiz questions
-    const quizResults = await env.MATH_TUTOR_DB.prepare(
-      "SELECT id, question, question_type, options, difficulty FROM quiz_questions WHERE topic_id = ? ORDER BY difficulty, id"
-    ).all(topicId);
+    const quizStmt = env.MATH_TUTOR_DB.prepare("SELECT id, question, question_type, options, difficulty FROM quiz_questions WHERE topic_id = ?");
+    const quizResults = await quizStmt.bind(topicId).all();
 
     return new Response(
       JSON.stringify({
@@ -32,7 +30,10 @@ export async function onRequest({ env, params }) {
       }
     );
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message, stack: error.stack }), {
+    return new Response(JSON.stringify({ 
+      error: error.message,
+      debug: { topicId, params }
+    }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
     });
