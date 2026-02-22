@@ -5,19 +5,19 @@ export async function onRequest({ env, params }) {
   const { id } = params;
 
   try {
-    // Get topic info - use first() instead of get()
+    // Get topic info - bind params differently
     const topicResult = await env.MATH_TUTOR_DB.prepare(`
       SELECT * FROM topics WHERE id = ?
-    `).bind(id).first();
+    `).all(id);
 
-    if (!topicResult) {
+    const topic = topicResult.results?.[0];
+
+    if (!topic) {
       return new Response(JSON.stringify({ error: "Topic not found" }), {
         status: 404,
         headers: { "Content-Type": "application/json" },
       });
     }
-
-    const topic = topicResult;
 
     // Get learning materials
     const materials = await env.MATH_TUTOR_DB.prepare(`
