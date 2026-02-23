@@ -73,14 +73,14 @@ export async function onRequest({ request, env }) {
             interval_days = ?, ease_factor = ?, repetition_count = ?,
             last_reviewed_at = datetime('now')
         WHERE user_id = ? AND topic_id = ?
-      ).bind(intervalDays, intervalDays, easeFactor, repetitionCount, userId, topicId).run();
+      `).bind(intervalDays, intervalDays, easeFactor, repetitionCount, userId, topicId).run();
     } else {
       // New review item
       nextReviewDate.setDate(nextReviewDate.getDate() + intervalDays);
       await env.MATH_TUTOR_DB.prepare(`
         INSERT INTO review_schedule (id, user_id, topic_id, next_review_at, interval_days, ease_factor, repetition_count, last_reviewed_at)
         VALUES (?, ?, ?, datetime('now', '+' || ? || ' days'), ?, ?, ?, datetime('now'))
-      ).bind(crypto.randomUUID(), userId, topicId, intervalDays, intervalDays, easeFactor, repetitionCount).run();
+      `).bind(crypto.randomUUID(), userId, topicId, intervalDays, intervalDays, easeFactor, repetitionCount).run();
     }
 
     return new Response(

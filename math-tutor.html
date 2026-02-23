@@ -629,12 +629,137 @@
         });
         const data = await response.json();
 
-        // Remove typing and add response
+        // Remove typing indicator
         document.querySelector('.ai-typing')?.remove();
-        addChatMessage('assistant', data.message || "I'm Max, your math friend! I'm here to help you learn. Try asking me a question! 😊");
+
+        // Add response message
+        addChatMessage('assistant', data.message);
+
+        // Render any visualizations
+        if (data.visuals && data.visuals.length > 0) {
+          await renderVisualizations(data.visuals);
+        }
       } catch (e) {
         document.querySelector('.ai-typing')?.remove();
         addChatMessage('assistant', "Oops! I'm having trouble connecting right now. But remember - mistakes are just learning opportunities! Try again in a moment. 😊");
+      }
+    }
+
+    async function renderVisualizations(visuals) {
+      const container = document.getElementById('chatMessages');
+      
+      for (const visual of visuals) {
+        const visualContainer = document.createElement('div');
+        visualContainer.className = 'chat-visualization slide-in my-4 p-4 bg-white rounded-xl shadow-md';
+        
+        const loadingHtml = `
+          <div class="flex items-center gap-2 text-purple-600">
+            <i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i>
+            <span class="text-sm">Loading ${visual.type}...</span>
+          </div>
+        `;
+        visualContainer.innerHTML = loadingHtml;
+        container.appendChild(visualContainer);
+        lucide.createIcons();
+
+        try {
+          // Fetch the visualization from our API
+          const params = new URLSearchParams({ type: visual.type });
+          
+          // Parse description and add params
+          const desc = visual.description;
+          if (desc.includes('_to_')) {
+            const rangeMatch = desc.match(/(\d+)_to_(\d+)/);
+            if (rangeMatch) {
+              params.set('start', rangeMatch[1]);
+              params.set('end', rangeMatch[2]);
+            }
+          }
+          if (desc.includes('_split_into_')) {
+            const fracMatch = desc.match(/_split_into_(\d+)_with_(\d+)_shaded/);
+            if (fracMatch) {
+              params.set('denominator', fracMatch[1]);
+              params.set('numerator', fracMatch[2]);
+              params.set('shape', 'circle');
+            }
+          }
+          if (desc.includes('_out_of_')) {
+            const fracMatch = desc.match(/rect_(\d+)_out_of_(\d+)/);
+            if (fracMatch) {
+              params.set('numerator', fracMatch[1]);
+              params.set('denominator', fracMatch[2]);
+              params.set('shape', 'rectangle');
+            }
+          }
+          if (desc.includes('+') || desc.includes('＋')) {
+            const nums = desc.match(/(\d+)[+＋](\d+)/);
+            if (nums) {
+              params.set('type', 'vertical_addition');
+              params.set('num1', nums[1]);
+              params.set('num2', nums[2]);
+            }
+          }
+          if (desc.includes('−') || desc.includes('-')) {
+            const nums = desc.match(/(\d+)[−-](\d+)/);
+            if (nums) {
+              params.set('type', 'vertical_subtraction');
+              params.set('num1', nums[1]);
+              params.set('num2', nums[2]);
+            }
+          }
+          if (desc.includes('×') || desc.includes('x')) {
+            const nums = desc.match(/(\d+)[×x](\d+)/);
+            if (nums) {
+              params.set('type', 'vertical_multiplication');
+              params.set('num1', nums[1]);
+              params.set('num2', nums[2]);
+            }
+          }
+          if (desc.includes('÷') || desc.includes('/')) {
+            const nums = desc.match(/(\d+)[÷/](\d+)/);
+            if (nums) {
+              params.set('type', 'vertical_division');
+              params.set('num1', nums[1]);
+              params.set('num2', nums[2]);
+            }
+          }
+          if (desc.includes('grid')) {
+            const gridMatch = desc.match(/(\d+)x(\d+)_grid/);
+            if (gridMatch) {
+              params.set('type', 'area_model');
+              params.set('rows', gridMatch[1]);
+              params.set('cols', gridMatch[2]);
+            }
+          }
+          if (desc.includes('array')) {
+            const arrayMatch = desc.match(/(\d+)_by_(\d+)/);
+            if (arrayMatch) {
+              params.set('type', 'array');
+              params.set('rows', arrayMatch[1]);
+              params.set('cols', arrayMatch[2]);
+            }
+          }
+
+          const vizResponse = await fetch(`/api/math-tutor/visualize?${params}`);
+          if (vizResponse.ok) {
+            const svgText = await vizResponse.text();
+            visualContainer.innerHTML = svgText;
+            // Add description label
+            const label = document.createElement('p');
+            label.className = 'text-center text-sm text-gray-500 mt-2';
+            label.textContent = visual.description.replace(/_/g, ' ');
+            visualContainer.appendChild(label);
+          }
+        } catch (e) {
+          visualContainer.innerHTML = `
+            <div class="text-center text-gray-500 text-sm py-2">
+              📊 ${visual.type}: ${visual.description.replace(/_/g, ' ')}
+            </div>
+          `;
+        }
+        
+        container.scrollTop = container.scrollHeight;
+        lucide.createIcons();
       }
     }
 
@@ -644,11 +769,12 @@
       bubble.className = `chat-bubble glass-card p-4 rounded-2xl ${role === 'user' ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' : ''}`;
       if (isTyping) bubble.classList.add('ai-typing');
 
+      // Simple text content (visualizations are added separately)
       const icon = role === 'user' ? '🧒' : '🧮';
       bubble.innerHTML = `
         <div class="flex items-start gap-2">
           <span class="text-2xl">${icon}</span>
-          <p class="${role === 'user' ? 'text-white' : 'text-gray-700'}">${content}</p>
+          <div class="${role === 'user' ? 'text-white' : 'text-gray-700'}">${content}</div>
         </div>
       `;
 

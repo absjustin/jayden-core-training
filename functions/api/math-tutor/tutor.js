@@ -9,7 +9,7 @@ export async function onRequest({ request, env }) {
     });
   }
 
-  const { userId, topicId, messages, context } = await request.json();
+  const { userId, topicId, messages, context, generateVisual } = await request.json();
 
   if (!messages || !Array.isArray(messages)) {
     return new Response(JSON.stringify({ error: "messages array required" }), {
@@ -19,15 +19,51 @@ export async function onRequest({ request, env }) {
   }
 
   try {
-    // Build system prompt for math tutor
-    const systemPrompt = `You are a patient, encouraging math tutor for a 4th grader.
-    - Be friendly, supportive, and use age-appropriate language
-    - Use concrete examples and analogies they can understand
-    - Break down complex problems into smaller steps
-    - Celebrate their progress and effort
-    - If they make a mistake, gently guide them to the right answer without making them feel bad
-    - Use humor and fun examples when possible
-    ${context ? `\n\nCurrent topic context: ${JSON.stringify(context)}` : ""}`;
+    // Enhanced system prompt following AI tutoring best practices
+    const systemPrompt = `You are Max, a friendly math tutor for Jayden, a 10-year-old competitive swimmer training for championship meets.
+
+## Your Teaching Style
+
+1. **START WITH A HOOK** - Begin with a fun scenario, puzzle, or swimming-related analogy before formal explanations
+
+2. **USE THE TWO-PASS APPROACH**:
+   - First pass: Give a technically correct, step-by-step explanation
+   - Second pass: Make it engaging with analogies, "what if" questions, and connections to swimming
+
+3. **ANCHOR TO JAYDEN'S WORLD**:
+   - Compare math concepts to swimming (e.g., "Multiplication is like doing the same stroke multiple times!")
+   - Use pool lengths, race times, and practice scenarios as examples
+   - Celebrate effort like a coach would celebrate good technique
+
+4. **STRUCTURE YOUR RESPONSES**:
+   - 🎯 Hook/Scenario first
+   - 📊 Visual (if requested - describe what SVG diagram would help)
+   - 💡 Step-by-step explanation with examples
+   - 🏊 Connection to swimming
+   - 🎮 Quick practice or "what if" question
+
+5. **HANDLING MISTAKES**:
+   - If Jayden gets something wrong: "Great try! Think of it this way..."
+   - Never make him feel bad about mistakes
+   - Mistakes are "perfect practice opportunities"
+
+6. **VISUAL DIAGRAMS** (IMPORTANT):
+   - When a diagram would help, describe it clearly using structured format
+   - For math visualizations, prefer: number lines, fraction bars, area models, arrays, geometric shapes
+   - Use the format: \`[VISUAL:type:description]\` so the frontend can render appropriate SVG
+   - Examples:
+     - \`[VISUAL:number_line:0_to_1_with_marks_at_0.25_0.5_0.75]\`
+     - \`[VISUAL:area_model:3x4_grid_with_6_cells_shaded]\`
+     - \`[VISUAL:vertical_addition:356+478]\`
+     - \`[VISUAL:fraction_bar:pie_split_into_8_with_3_shaded]\`
+
+7. **VERTICAL CALCULATIONS (竖式)**:
+   - When showing addition/subtraction/multiplication/division, use vertical format
+   - Mark carries/borrows clearly with small numbers
+   - Show step-by-step progression
+
+Keep responses concise but engaging. Use emojis appropriately but not excessively.
+${context ? `\n\nCurrent topic context: ${JSON.stringify(context)}` : ""}`;
 
     // Prepare messages for OpenRouter
     const openRouterMessages = [
@@ -53,7 +89,20 @@ export async function onRequest({ request, env }) {
     }
 
     const data = await response.json();
-    const assistantMessage = data.choices[0].message.content;
+    let assistantMessage = data.choices[0].message.content;
+
+    // Parse visual requests from the message
+    let visuals = [];
+    const visualPattern = /\[VISUAL:(\w+):([^\]]+)\]/g;
+    let match;
+    while ((match = visualPattern.exec(assistantMessage)) !== null) {
+      visuals.push({
+        type: match[1],
+        description: match[2],
+      });
+      // Remove from message
+      assistantMessage = assistantMessage.replace(match[0], '');
+    }
 
     // Save conversation to database (optional, for context)
     if (userId) {
@@ -78,6 +127,7 @@ export async function onRequest({ request, env }) {
     return new Response(
       JSON.stringify({
         message: assistantMessage,
+        visuals: visuals,
         usage: data.usage,
       }),
       {
